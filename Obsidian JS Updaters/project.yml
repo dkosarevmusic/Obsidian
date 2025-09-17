@@ -1,0 +1,18 @@
+# --- КОНФИГУРАЦИЯ СКРИПТА ---
+
+# Укажите АБСОЛЮТНЫЙ путь к вашему хранилищу Obsidian
+vault_path: "D:/Obsidian/dkosarevmusic"
+
+# Укажите путь к файлу-шаблону (может быть относительным от папки со скриптом)
+reference_file_path: "G:/Other computers/Dell_2025/Coding/Obsidian JS scripts/utility_Complition Checker_Project.md"
+
+# Список имен файлов в хранилище, которые нужно обработать в любом случае
+special_file_names:
+  - "utility_Complition Checker_Project.md"
+
+# Список типов, которые нужно искать в поле 'type' в frontmatter
+target_types:
+  - 'project'
+
+# Имя файла для отчета
+report_file_name: "current_script_report.md"

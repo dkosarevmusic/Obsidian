@@ -1,0 +1,25 @@
+/* heading-spectral-depth.css */
+
+/* Preview/Live Preview */
+.markdown-preview-view h2 {
+  color: hsl(0, 75%, 55%);    /* Уровень 2: красный */
+}
+.markdown-preview-view h3 {
+  color: hsl(30, 75%, 55%);   /* Уровень 3: оранжевый */
+}
+.markdown-preview-view h4 {
+  color: hsl(60, 75%, 55%);   /* Уровень 4: жёлтый */
+}
+.markdown-preview-view h5 {
+  color: hsl(120, 65%, 45%);  /* Уровень 5: зелёный */
+}
+.markdown-preview-view h6 {
+  color: hsl(240, 65%, 55%); /* Уровень 6: синий */
+}
+
+/* Source Mode */
+.cm-s-obsidian span.cm-header-2 { color: hsl(0, 75%, 55%) !important; }
+.cm-s-obsidian span.cm-header-3 { color: hsl(30, 75%, 55%) !important; }
+.cm-s-obsidian span.cm-header-4 { color: hsl(60, 75%, 55%) !important; }
+.cm-s-obsidian span.cm-header-5 { color: hsl(120, 65%, 45%) !important; }
+.cm-s-obsidian span.cm-header-6 { color: hsl(240, 65%, 55%) !important; }
