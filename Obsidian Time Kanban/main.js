@@ -54,7 +54,7 @@ TKB.renderKanban = function(dv) {
         // Используем "цепочку" сравнений. Если результат не 0, возвращаем его.
         return (
             // 1. По дате (основной ключ).
-            (TKB.toDate(a.date)?.ts || 0) - (TKB.toDate(b.date)?.ts || 0) ||
+            (TKB.toDate(a.date)?.getTime() || 0) - (TKB.toDate(b.date)?.getTime() || 0) ||
             
             // 2. По статусу "important" (важные задачи всегда выше в своей группе).
             ((b.status?.includes('important') || false) - (a.status?.includes('important') || false)) ||
