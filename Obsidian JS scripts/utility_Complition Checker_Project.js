@@ -10,6 +10,13 @@ async function renderProjectCompletion(dv, app) {
     };
     // Порядок, в котором статусы будут отображаться в итоговой таблице.
     const DISPLAY_ORDER = ['in progress', 'not started', 'done', 'postpone', 'cancelled'];
+    // Карта для быстрого поиска ключа статуса по его имени или ключу.
+    // Позволяет унифицировать обработку 'in progress' и 'inprogress'.
+    const STATUS_LOOKUP = {};
+    for (const [name, config] of Object.entries(STATUSES)) {
+        STATUS_LOOKUP[name] = config.key;
+        STATUS_LOOKUP[config.key] = config.key;
+    }
 
     // --- ОСНОВНАЯ ЛОГИКА ---
 
@@ -40,7 +47,12 @@ async function renderProjectCompletion(dv, app) {
     // 3. АГРЕГАЦИЯ ДАННЫХ
     // Инициализируем счетчики для всех статусов нулями.
     const totalCounts = Object.fromEntries(Object.values(STATUSES).map(s => [s.key, 0]));
-    const cancelledSources = new Set(); // Для хранения ссылок на файлы с отмененными задачами
+    const statusSources = {
+        inprogress: new Set(),
+        notstarted: new Set(),
+        postpone: new Set(),
+        cancelled: new Set()
+    };
 
     for (const p of sourcePages) {
         const fm = p.file.frontmatter;
@@ -55,8 +67,8 @@ async function renderProjectCompletion(dv, app) {
             for (const statusInfo of Object.values(STATUSES)) {
                 const count = parseInt(fm[statusInfo.fmKey], 10) || 0;
                 totalCounts[statusInfo.key] += count;
-                if (statusInfo.key === 'cancelled' && count > 0) {
-                    cancelledSources.add(p.file.name); // Используем имя файла вместо ссылки
+                if (count > 0 && statusSources.hasOwnProperty(statusInfo.key)) {
+                    statusSources[statusInfo.key].add(p.file.path);
                 }
             }
         } else if (typeof fm.tasks === 'string' && fm.tasks.includes('/')) {
@@ -75,17 +87,14 @@ async function renderProjectCompletion(dv, app) {
             const uncompleted = total - done;
             if (uncompleted > 0) {
                 // 2. Определяем статус для НЕВЫПОЛНЕННЫХ задач из поля 'status' этого же файла.
-                let statusKey = 'notstarted'; // Статус по умолчанию.
+                // Используем карту для быстрого и короткого определения статуса.
                 const statusValue = (Array.isArray(fm.status) ? fm.status[0] : fm.status)?.toLowerCase();
+                const statusKey = STATUS_LOOKUP[statusValue] || 'notstarted';
 
-                if (statusValue) {
-                    const statusInfo = STATUSES[statusValue] || Object.values(STATUSES).find(s => s.key === statusValue);
-                    if (statusInfo) statusKey = statusInfo.key;
-                }
                 // 3. Добавляем невыполненные задачи в счетчик найденного статуса.
                 totalCounts[statusKey] += uncompleted;
-                if (statusKey === 'cancelled') {
-                    cancelledSources.add(p.file.name); // Используем имя файла вместо ссылки
+                if (statusSources.hasOwnProperty(statusKey)) {
+                    statusSources[statusKey].add(p.file.path);
                 }
             }
         }
@@ -130,35 +139,83 @@ async function renderProjectCompletion(dv, app) {
         dv.paragraph('<hr />');
 
         // 6.3. Детальная статистика по статусам
-        const tableRows = [];
-        const cellStyle = "border: none; background: transparent;";
+        // Используем flexbox вместо таблицы для надежной работы выпадающих списков.
+        const flexRows = [];
         for (const statusName of DISPLAY_ORDER) {
             const statusInfo = STATUSES[statusName];
             const count = totalCounts[statusInfo.key];
 
             if (count > 0) {
-                const statusCell = `<td style="${cellStyle} padding-right: 1em;">${statusInfo.emoji}&nbsp;${statusInfo.name}:</td>`;
-                let progressCell;
+                const statusCell = `<div style="width: 120px; flex-shrink: 0;">${statusInfo.emoji}&nbsp;${statusInfo.name}:</div>`;
+                let progressContent = '';
+
+                const sourceSet = statusSources[statusInfo.key];
+                let fileNamesString = '';
+                if (sourceSet && sourceSet.size > 0) {
+                    const fileListItems = Array.from(sourceSet)
+                        .sort() // Сортируем для единообразия
+                        .map(path => { // ... (код для создания ссылок остается без изменений)
+                            const linkTarget = path.replace(/\.md$/, '');
+                            const linkText = linkTarget.includes('/') ? linkTarget.substring(linkTarget.lastIndexOf('/') + 1) : linkTarget;
+                            return `<li><a data-href="${linkTarget}" href="${linkTarget}" class="internal-link">${linkText}</a></li>`;
+                        })
+                        .join('');
+                    
+                    // <details> с абсолютно позиционированным списком.
+                    // Это работает надежнее в flexbox-контейнере, чем в таблице.
+                    fileNamesString = `
+                        <div style="position: relative; display: inline-block; vertical-align: middle; margin-left: 8px; top: -0.07em;">
+                            <details>
+                                <summary style="cursor: pointer; font-size: 0.8em; color: var(--text-normal); list-style: none; display: inline-block; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 5px; padding: 2px 8px; line-height: 1.2;">
+                                    <b>in ${sourceSet.size} files</b>
+                                </summary>
+                                <ul style="position: absolute; top: 100%; left: 0; z-index: 10; width: max-content; max-width: 400px; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 0.4em; padding: 0.5em 0.5em 0.5em 0em; margin-top: 0.3em; list-style-type: disc; text-align: left;">
+                                    ${fileListItems}
+                                </ul>
+                            </details>
+                        </div>`.replace(/\n\s*/g, '');
+                }
+
                 if (statusInfo.key === 'cancelled') {
-                    const fileNames = Array.from(cancelledSources).map(name => `• ${name}`).join(' ');
-                    progressCell = `<td style="${cellStyle}"><b>${count}</b>&nbsp;&nbsp;${fileNames ? `(${fileNames})` : ''}</td>`;
+                    progressContent = `<b>${count}</b>${fileNamesString}`;
                 } else {
-                    // Для незавершенных статусов используем в качестве знаменателя только оставшиеся задачи.
-                    // Для статуса "Done" используем общий знаменатель (без отмененных).
                     const isRemainingStatus = ['inprogress', 'notstarted', 'postpone'].includes(statusInfo.key);
                     const denominator = isRemainingStatus ? totalRemaining : totalForProgress;
-                    const progressTag = denominator > 0
-                        ? `<progress value="${count}" max="${denominator}"></progress>`
-                        : '';
-                    progressCell = `<td style="${cellStyle} vertical-align: middle;">${progressTag}&nbsp;<b>${count}/${denominator || 0}</b></td>`;
+                    const progressTag = denominator > 0 ? `<progress style="position: relative; top: 0.1em;" value="${count}" max="${denominator}"></progress>` : '';
+                    progressContent = `${progressTag}&nbsp;<b>${count}/${denominator || 0}</b>${fileNamesString}`;
                 }
-                tableRows.push(`<tr>${statusCell}${progressCell}</tr>`);
+                const progressCell = `<div style="display: flex; align-items: center;">${progressContent}</div>`;
+                flexRows.push(`<div style="display: flex; align-items: center;">${statusCell}${progressCell}</div>`);
             }
         }
 
-        if (tableRows.length > 0) {
-            const tableHtml = `<table style="border-spacing: 0; border-collapse: collapse; border: none;"><tbody>${tableRows.join('')}</tbody></table>`;
-            dv.el('div', tableHtml);
+        if (flexRows.length > 0) {
+            const flexContainerHtml = `<div style="display: flex; flex-direction: column; gap: 4px;">${flexRows.join('')}</div>`;
+            dv.el('div', flexContainerHtml);
+
+            // --- ЛОГИКА ЗАКРЫТИЯ ВЫПАДАЮЩИХ СПИСКОВ ПРИ КЛИКЕ ВНЕ ИХ ---
+            const allDetails = dv.container.querySelectorAll('details');
+
+            allDetails.forEach(details => {
+                // Эта функция будет обрабатывать клики вне элемента
+                const clickOutsideHandler = (event) => {
+                    if (details.open && !details.contains(event.target)) {
+                        details.removeAttribute('open'); // Закрываем, что вызовет 'toggle'
+                    }
+                };
+
+                details.addEventListener('toggle', () => {
+                    if (details.open) {
+                        // Когда список открыт, добавляем глобальный слушатель.
+                        // setTimeout нужен, чтобы этот обработчик не сработал на тот же клик,
+                        // который и открыл список.
+                        setTimeout(() => document.addEventListener('click', clickOutsideHandler), 0);
+                    } else {
+                        // Когда список закрыт, удаляем глобальный слушатель.
+                        document.removeEventListener('click', clickOutsideHandler);
+                    }
+                });
+            });
         }
 
         // Финальный разделитель
