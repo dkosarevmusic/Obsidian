@@ -160,7 +160,7 @@ async function renderProjectCompletion(dv, app) {
                     // <details> с абсолютно позиционированным списком.
                     // Это работает надежнее в flexbox-контейнере, чем в таблице.
                     fileNamesString = `
-                        <div style="position: relative; display: inline-block; vertical-align: middle; margin-left: 8px;">
+                        <div style="position: relative; display: inline-block; vertical-align: middle; margin-left: 8px; top: -0.07em;">
                             <details>
                                 <summary style="cursor: pointer; font-size: 0.8em; color: var(--text-normal); list-style: none; display: inline-block; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 5px; padding: 2px 8px; line-height: 1.2;">
                                     <b>in ${sourceSet.size} files</b>
@@ -177,7 +177,7 @@ async function renderProjectCompletion(dv, app) {
                 } else {
                     const isRemainingStatus = ['inprogress', 'notstarted', 'postpone'].includes(statusInfo.key);
                     const denominator = isRemainingStatus ? totalRemaining : totalForProgress;
-                    const progressTag = denominator > 0 ? `<progress value="${count}" max="${denominator}"></progress>` : '';
+                    const progressTag = denominator > 0 ? `<progress style="position: relative; top: 0.1em;" value="${count}" max="${denominator}"></progress>` : '';
                     progressContent = `${progressTag}&nbsp;<b>${count}/${denominator || 0}</b>${fileNamesString}`;
                 }
                 const progressCell = `<div style="display: flex; align-items: center;">${progressContent}</div>`;
