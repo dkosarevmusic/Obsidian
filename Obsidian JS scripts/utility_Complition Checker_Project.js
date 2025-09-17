@@ -165,7 +165,7 @@ async function renderProjectCompletion(dv, app) {
                                 <summary style="cursor: pointer; font-size: 0.8em; color: var(--text-normal); list-style: none; display: inline-block; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 5px; padding: 2px 8px; line-height: 1.2;">
                                     <b>in ${sourceSet.size} files</b>
                                 </summary>
-                                <ul style="position: absolute; top: 100%; left: 0; z-index: 10; width: max-content; max-width: 400px; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 6px; padding: 8px 8px 8px 25px; margin-top: 5px; list-style-type: disc; text-align: left;">
+                                <ul style="position: absolute; top: 100%; left: 0; z-index: 10; width: max-content; max-width: 400px; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 6px; padding: 8px 8px 8px 0px; margin-top: 5px; list-style-type: disc; text-align: left;">
                                     ${fileListItems}
                                 </ul>
                             </details>
