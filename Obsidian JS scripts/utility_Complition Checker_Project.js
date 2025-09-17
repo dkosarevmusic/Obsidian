@@ -162,8 +162,8 @@ async function renderProjectCompletion(dv, app) {
                     fileNamesString = `
                         <div style="position: relative; display: inline-block; vertical-align: middle; margin-left: 8px;">
                             <details>
-                                <summary style="cursor: pointer; font-size: 0.8em; color: var(--text-muted); list-style: none; display: inline-block;">
-                                    (in ${sourceSet.size} files)
+                                <summary style="cursor: pointer; font-size: 0.8em; color: var(--text-normal); list-style: none; display: inline-block; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 5px; padding: 2px 8px; line-height: 1.2;">
+                                    <b>in ${sourceSet.size} files</b>
                                 </summary>
                                 <ul style="position: absolute; top: 100%; left: 0; z-index: 10; width: max-content; max-width: 400px; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 6px; padding: 8px 8px 8px 25px; margin-top: 5px; list-style-type: disc; text-align: left;">
                                     ${fileListItems}
@@ -188,6 +188,30 @@ async function renderProjectCompletion(dv, app) {
         if (flexRows.length > 0) {
             const flexContainerHtml = `<div style="display: flex; flex-direction: column; gap: 4px;">${flexRows.join('')}</div>`;
             dv.el('div', flexContainerHtml);
+
+            // --- ЛОГИКА ЗАКРЫТИЯ ВЫПАДАЮЩИХ СПИСКОВ ПРИ КЛИКЕ ВНЕ ИХ ---
+            const allDetails = dv.container.querySelectorAll('details');
+
+            allDetails.forEach(details => {
+                // Эта функция будет обрабатывать клики вне элемента
+                const clickOutsideHandler = (event) => {
+                    if (details.open && !details.contains(event.target)) {
+                        details.removeAttribute('open'); // Закрываем, что вызовет 'toggle'
+                    }
+                };
+
+                details.addEventListener('toggle', () => {
+                    if (details.open) {
+                        // Когда список открыт, добавляем глобальный слушатель.
+                        // setTimeout нужен, чтобы этот обработчик не сработал на тот же клик,
+                        // который и открыл список.
+                        setTimeout(() => document.addEventListener('click', clickOutsideHandler), 0);
+                    } else {
+                        // Когда список закрыт, удаляем глобальный слушатель.
+                        document.removeEventListener('click', clickOutsideHandler);
+                    }
+                });
+            });
         }
 
         // Финальный разделитель
