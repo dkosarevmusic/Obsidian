@@ -10,6 +10,13 @@ async function renderProjectCompletion(dv, app) {
     };
     // Порядок, в котором статусы будут отображаться в итоговой таблице.
     const DISPLAY_ORDER = ['in progress', 'not started', 'done', 'postpone', 'cancelled'];
+    // Карта для быстрого поиска ключа статуса по его имени или ключу.
+    // Позволяет унифицировать обработку 'in progress' и 'inprogress'.
+    const STATUS_LOOKUP = {};
+    for (const [name, config] of Object.entries(STATUSES)) {
+        STATUS_LOOKUP[name] = config.key;
+        STATUS_LOOKUP[config.key] = config.key;
+    }
 
     // --- ОСНОВНАЯ ЛОГИКА ---
 
@@ -80,17 +87,14 @@ async function renderProjectCompletion(dv, app) {
             const uncompleted = total - done;
             if (uncompleted > 0) {
                 // 2. Определяем статус для НЕВЫПОЛНЕННЫХ задач из поля 'status' этого же файла.
-                let statusKey = 'notstarted'; // Статус по умолчанию.
+                // Используем карту для быстрого и короткого определения статуса.
                 const statusValue = (Array.isArray(fm.status) ? fm.status[0] : fm.status)?.toLowerCase();
+                const statusKey = STATUS_LOOKUP[statusValue] || 'notstarted';
 
-                if (statusValue) {
-                    const statusInfo = STATUSES[statusValue] || Object.values(STATUSES).find(s => s.key === statusValue);
-                    if (statusInfo) statusKey = statusInfo.key;
-                }
                 // 3. Добавляем невыполненные задачи в счетчик найденного статуса.
                 totalCounts[statusKey] += uncompleted;
                 if (statusSources.hasOwnProperty(statusKey)) {
-                    statusSources[statusInfo.key].add(p.file.path);
+                    statusSources[statusKey].add(p.file.path);
                 }
             }
         }
@@ -165,7 +169,7 @@ async function renderProjectCompletion(dv, app) {
                                 <summary style="cursor: pointer; font-size: 0.8em; color: var(--text-normal); list-style: none; display: inline-block; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 5px; padding: 2px 8px; line-height: 1.2;">
                                     <b>in ${sourceSet.size} files</b>
                                 </summary>
-                                <ul style="position: absolute; top: 100%; left: 0; z-index: 10; width: max-content; max-width: 400px; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 6px; padding: 8px 8px 8px 0px; margin-top: 5px; list-style-type: disc; text-align: left;">
+                                <ul style="position: absolute; top: 100%; left: 0; z-index: 10; width: max-content; max-width: 400px; background-color: var(--background-secondary); border: 1px solid var(--background-modifier-border); border-radius: 0.4em; padding: 0.5em 0.5em 0.5em 0em; margin-top: 0.3em; list-style-type: disc; text-align: left;">
                                     ${fileListItems}
                                 </ul>
                             </details>
