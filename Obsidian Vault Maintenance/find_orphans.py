@@ -3,6 +3,7 @@ import re
 import collections
 import json
 import time
+import hashlib
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -33,10 +34,21 @@ WIKI_RE = re.compile(r'\[\[([^\]\|#]+)')
 INLINE_RE = re.compile(r'\[.*?\]\(([^)\s#?]+)')
 # Регулярные выражения для анализа "виртуальных" ссылок
 QUERY_BLOCK_RE = re.compile(r'```(?:dataview|base).*?\n(.*?)\n```', re.DOTALL | re.IGNORECASE)
-DATAVIEW_FILTER_RE = re.compile(r'wikilinks\.contains\(link\("([^"]+)"\)\)')
+# Ищет `wikilinks.contains(link("..."))` и `wikilinks.contains(link(this.file.name))`
+DATAVIEW_FILTER_RE = re.compile(r'wikilinks\.contains\(link\((?:"([^"]+)"|this\.file\.name)\)\)')
 FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?)\n---', re.DOTALL)
 FM_WIKILINKS_SECTION_RE = re.compile(r'^wikilinks:(.*?)(?=\n^\S|\Z)', re.MULTILINE | re.DOTALL)
 FM_WIKILINK_ITEM_RE = re.compile(r'\[\[([^\]\|#]+)\]\]')
+
+def _get_script_hash() -> str:
+    """Вычисляет хэш SHA256 текущего файла скрипта для автоматической инвалидации кэша."""
+    try:
+        with open(__file__, 'rb') as f:
+            script_content = f.read()
+        return hashlib.sha256(script_content).hexdigest()
+    except Exception:
+        # Резервный вариант на случай ошибки хеширования, гарантирующий повторный анализ.
+        return str(time.time())
 
 
 def build_file_index(vault_path: Path, ignored_folders: list[str], cache_file_name: str, report_file_name: str, ignore_root_files: bool) -> dict[str, Path]:
@@ -192,7 +204,8 @@ def analyze_file_content(content: str, file_path: Path, vault_path: Path, file_i
     dataview_hubs_found = []
     for block in QUERY_BLOCK_RE.finditer(content):
         for match in DATAVIEW_FILTER_RE.finditer(block.group(1)):
-            hub_name = match.group(1).strip()
+            # match.group(1) - это имя хаба для link("...") или None для link(this.file.name)
+            hub_name = match.group(1).strip() if match.group(1) else file_path.stem
             dataview_hubs_found.append(hub_name)
 
     # Данные для кэширования (пути сохраняются как строки)
@@ -210,17 +223,27 @@ def _load_cache(cache_path: Path) -> dict:
     if not cache_path.exists():
         return {}
     try:
+        current_hash = _get_script_hash()
         with open(cache_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            cache_data = json.load(f)
+        # Проверяем хэш скрипта. Если он не совпадает, считаем кэш невалидным.
+        if cache_data.get("script_hash") != current_hash:
+            print("  ℹ️  Логика скрипта изменилась. Будет произведен полный анализ.")
+            return {}
+        return cache_data.get("files", {}) # Возвращаем только словарь с файлами
     except (json.JSONDecodeError, IOError):
         print("  ⚠️  Не удалось прочитать кэш, будет произведен полный анализ.")
         return {}
 
 def _save_cache(cache_path: Path, cache_data: dict):
     """Сохраняет данные в файл кэша."""
+    full_cache_content = {
+        "script_hash": _get_script_hash(),
+        "files": cache_data
+    }
     try:
         with open(cache_path, 'w', encoding='utf-8') as f:
-            json.dump(cache_data, f, indent=2)
+            json.dump(full_cache_content, f, indent=2)
         print(f"✅ Кэш успешно сохранен в: {cache_path}")
     except Exception as e:
         print(f"  ⚠️  Не удалось сохранить кэш: {e}")
@@ -278,14 +301,14 @@ def _build_link_graph(all_files: list[Path], analysis_data: dict, vault_path: Pa
                 file_graph[target_path]["in_links"].add(md_file)
 
         for hub_name in data["dataview_hubs"]:
-            dataview_hubs[os.path.normcase(hub_name)].append(md_file)
+            dataview_hubs[hub_name.lower()].append(md_file)
         for hub_name in data["fm_wikilinks"]:
-            dataview_link_targets[os.path.normcase(hub_name)].append(md_file)
+            dataview_link_targets[hub_name.lower()].append(md_file)
 
     virtual_links_count = 0
-    for hub_name_norm, aggregator_files in dataview_hubs.items():
-        if hub_name_norm in dataview_link_targets:
-            target_files = dataview_link_targets[hub_name_norm]
+    for hub_name_lower, aggregator_files in dataview_hubs.items():
+        if hub_name_lower in dataview_link_targets:
+            target_files = dataview_link_targets[hub_name_lower]
             for aggregator_file in aggregator_files:
                 for target_file in target_files:
                     file_graph[target_file]["in_links"].add(aggregator_file)
