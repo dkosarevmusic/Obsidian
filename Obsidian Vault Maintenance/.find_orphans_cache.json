@@ -174,7 +174,7 @@
     }
   },
   "Life Manager/MDs/02. Video Software Learn.md": {
-    "mtime": 1757346404.3136356,
+    "mtime": 1758527413.3297558,
     "analysis": {
       "valid_links": [
         "Files/External/DaVinci Resolve.pdf",
@@ -441,6 +441,23 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Video Production Learn"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/2-13.md": {
+    "mtime": 1758514291.36177,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/IMP Singles.md",
+        "Life Manager/MDs/Locura Choir Idea 1.md",
+        "Life Manager/MDs/Locura Lead Idea 1.md",
+        "Life Manager/MDs/Locura Synth idea 2.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "IMP Singles"
       ],
       "dataview_hubs": []
     }
@@ -845,7 +862,7 @@
     }
   },
   "Life Manager/MDs/AI Learning Resources.md": {
-    "mtime": 1757346404.3198943,
+    "mtime": 1757494654.5637107,
     "analysis": {
       "valid_links": [
         "Files/External/22365_3_Prompt Engineering_v7 (1).pdf",
@@ -860,7 +877,7 @@
     }
   },
   "Life Manager/MDs/AI Tools to try.md": {
-    "mtime": 1757346404.2878563,
+    "mtime": 1757494638.3828886,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/AI.md"
@@ -874,7 +891,7 @@
     }
   },
   "Life Manager/MDs/AI.md": {
-    "mtime": 1757346677.906058,
+    "mtime": 1758527579.2568095,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -988,7 +1005,7 @@
     }
   },
   "Life Manager/MDs/Algorithms Wiki.md": {
-    "mtime": 1747040918.318362,
+    "mtime": 1758062789.4079177,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/(py) \u0410\u043b\u0433\u043e\u0440\u0438\u0442\u043c \u042d\u0432\u043a\u043b\u0438\u0434\u0430 \u043d\u0430 \u043f\u0440\u043e\u0441\u0442\u043e\u0439 \u0444\u0443\u043d\u043a\u0446\u0438\u0438.md",
@@ -1015,6 +1032,20 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Music Library"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Alien Earth Series.md": {
+    "mtime": 1758173669.1982121,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Films.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Films"
       ],
       "dataview_hubs": []
     }
@@ -1076,7 +1107,7 @@
     }
   },
   "Life Manager/MDs/Alters.md": {
-    "mtime": 1750742775.9597766,
+    "mtime": 1757808410.44439,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -1458,7 +1489,7 @@
     }
   },
   "Life Manager/MDs/ArchViz Learn.md": {
-    "mtime": 1757351305.042953,
+    "mtime": 1757500644.6154103,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -1490,7 +1521,7 @@
     }
   },
   "Life Manager/MDs/ArchViz YouTube Authors.md": {
-    "mtime": 1757346404.2717812,
+    "mtime": 1757501336.5644004,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/ArchViz Learn.md"
@@ -1532,7 +1563,7 @@
     }
   },
   "Life Manager/MDs/Around Art.md": {
-    "mtime": 1757350583.2789533,
+    "mtime": 1757494668.71906,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -1565,7 +1596,7 @@
     }
   },
   "Life Manager/MDs/Arrangement WIKI.md": {
-    "mtime": 1755661150.4228659,
+    "mtime": 1757494730.47398,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Music Production Learn.md"
@@ -1733,7 +1764,7 @@
     }
   },
   "Life Manager/MDs/Audio Plugins Database.md": {
-    "mtime": 1757076624.8253837,
+    "mtime": 1758006794.7353716,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Music Production Learn.md"
@@ -1749,7 +1780,7 @@
     }
   },
   "Life Manager/MDs/Audio Plugins Learn.md": {
-    "mtime": 1757482120.516508,
+    "mtime": 1758514291.3417697,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/ADAPTIVERB.md",
@@ -1810,7 +1841,7 @@
     }
   },
   "Life Manager/MDs/Audio Plugins Research.md": {
-    "mtime": 1757350081.1768425,
+    "mtime": 1758452620.8043692,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Music Production Learn.md"
@@ -1838,7 +1869,7 @@
     }
   },
   "Life Manager/MDs/Audio Setup Tasks.md": {
-    "mtime": 1757482120.4931877,
+    "mtime": 1758514291.3377697,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/BASSROOM.md",
@@ -2048,7 +2079,7 @@
     }
   },
   "Life Manager/MDs/Basilisk.md": {
-    "mtime": 1757482171.780756,
+    "mtime": 1758452607.5243695,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/DKS Singles.md",
@@ -2318,6 +2349,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/BFS Finder.md": {
+    "mtime": 1758523694.65792,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/BIAS Amp 2.md": {
     "mtime": 1747040920.778362,
     "analysis": {
@@ -2375,7 +2420,7 @@
     }
   },
   "Life Manager/MDs/Bicycle Spider 17.md": {
-    "mtime": 1757357199.492494,
+    "mtime": 1757862360.565197,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Sport.md"
@@ -2811,7 +2856,7 @@
     }
   },
   "Life Manager/MDs/Body Elements Tasks.md": {
-    "mtime": 1757346324.8004138,
+    "mtime": 1757500692.8047044,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Health.md"
@@ -2996,9 +3041,10 @@
     }
   },
   "Life Manager/MDs/Budget Planner.md": {
-    "mtime": 1757463562.3911254,
+    "mtime": 1757957762.946912,
     "analysis": {
       "valid_links": [
+        "Files/External/jakub-zerdzicki-LgE3whpa5VA-unsplash.jpg",
         "Life Manager/MDs/Finance.md"
       ],
       "broken_links": [],
@@ -3325,7 +3371,7 @@
     }
   },
   "Life Manager/MDs/Cheap rocks test.md": {
-    "mtime": 1747040921.630362,
+    "mtime": 1758527514.647753,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Spirit Explore.md"
@@ -3507,7 +3553,7 @@
     }
   },
   "Life Manager/MDs/Clair Obscur. Expedition 33.md": {
-    "mtime": 1747040921.762362,
+    "mtime": 1757808411.8951697,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -3609,7 +3655,7 @@
     }
   },
   "Life Manager/MDs/Code Self-learning.md": {
-    "mtime": 1757347174.1252322,
+    "mtime": 1758527369.9974315,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -3783,6 +3829,21 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Completion count system.md": {
+    "mtime": 1758523694.2427356,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Filled checkboxes counter for taskhub.md",
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Confidenza.md": {
     "mtime": 1747040921.8823621,
     "analysis": {
@@ -3798,7 +3859,7 @@
     }
   },
   "Life Manager/MDs/Content collections.md": {
-    "mtime": 1757491437.309229,
+    "mtime": 1757844114.8161378,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -3864,7 +3925,7 @@
     }
   },
   "Life Manager/MDs/Cooking Learn.md": {
-    "mtime": 1757350848.690953,
+    "mtime": 1757495229.8089774,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -3948,7 +4009,7 @@
     }
   },
   "Life Manager/MDs/Creative Process Diary.md": {
-    "mtime": 1757482171.7692537,
+    "mtime": 1758514291.3537698,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Around Art.md"
@@ -3962,7 +4023,7 @@
     }
   },
   "Life Manager/MDs/Creativity Learn.md": {
-    "mtime": 1757357182.520494,
+    "mtime": 1758452620.7923694,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Around Art.md",
@@ -3976,6 +4037,20 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Around Art"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Cronos The New Dawn.md": {
+    "mtime": 1757808386.022123,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Videogames.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Videogames"
       ],
       "dataview_hubs": []
     }
@@ -4080,7 +4155,7 @@
     }
   },
   "Life Manager/MDs/CSL Hub.md": {
-    "mtime": 1757346404.318866,
+    "mtime": 1758062786.727918,
     "analysis": {
       "valid_links": [
         "Files/External/Bhargava Aditya - Grokking Algorithms, 2nd Edition - 2024.pdf",
@@ -4140,7 +4215,7 @@
     }
   },
   "Life Manager/MDs/CVS Tasks.md": {
-    "mtime": 1757346324.7822144,
+    "mtime": 1757500687.081275,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Health.md"
@@ -4255,6 +4330,22 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Dated Task Control dev.md": {
+    "mtime": 1758523694.4746995,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [
+        "utility_Dated Task Control"
+      ],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Day Shift.md": {
     "mtime": 1747040922.406362,
     "analysis": {
@@ -4340,7 +4431,7 @@
     }
   },
   "Life Manager/MDs/Death Stranding 1-2.md": {
-    "mtime": 1756810258.13993,
+    "mtime": 1758103248.8975353,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -4522,7 +4613,7 @@
     }
   },
   "Life Manager/MDs/Dental Tasks.md": {
-    "mtime": 1757350521.6349533,
+    "mtime": 1757558838.9772215,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Health.md"
@@ -4674,7 +4765,7 @@
     }
   },
   "Life Manager/MDs/Digital Order.md": {
-    "mtime": 1757492841.9562924,
+    "mtime": 1757495256.3350704,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -4786,7 +4877,7 @@
     }
   },
   "Life Manager/MDs/DISCHARGE Playlist AI Recreation.md": {
-    "mtime": 1757482120.527829,
+    "mtime": 1758514291.3497698,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Music Sound-Design Wiki.md"
@@ -4982,7 +5073,7 @@
     }
   },
   "Life Manager/MDs/DKS Sirens.md": {
-    "mtime": 1757482120.5043802,
+    "mtime": 1758514291.34577,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/D.KOSAREV.md",
@@ -4997,7 +5088,7 @@
     }
   },
   "Life Manager/MDs/DO Tasks.md": {
-    "mtime": 1757346324.785378,
+    "mtime": 1757500885.2265797,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Digital Order.md"
@@ -5518,7 +5609,7 @@
     }
   },
   "Life Manager/MDs/Electronics and controllers.md": {
-    "mtime": 1757346158.7802663,
+    "mtime": 1757501344.2466652,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -5684,7 +5775,7 @@
     }
   },
   "Life Manager/MDs/ENT Tasks.md": {
-    "mtime": 1757346889.9357042,
+    "mtime": 1758097842.227045,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Health.md"
@@ -5839,6 +5930,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/EWM Club IKRA.md": {
+    "mtime": 1758454015.6523688,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/FUN Events.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "FUN Events"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Excalibur.md": {
     "mtime": 1747040924.390362,
     "analysis": {
@@ -5877,6 +5982,22 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Audio Plugins Database"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Explore Dataview.md": {
+    "mtime": 1758523696.526282,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/GPT-\u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f Dataview.md",
+        "Life Manager/MDs/Obsidian Features.md",
+        "Life Manager/MDs/\u041a\u043d\u043e\u043f\u043a\u0438 \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0444\u0438\u043b\u044c\u0442\u0440\u0430\u043c\u0438 dataview.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
       ],
       "dataview_hubs": []
     }
@@ -5933,6 +6054,20 @@
       "has_external_links": true,
       "fm_wikilinks": [
         "Audio Plugins Database"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/F1 2025.md": {
+    "mtime": 1758175317.5878575,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Films.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Films"
       ],
       "dataview_hubs": []
     }
@@ -6114,12 +6249,16 @@
     }
   },
   "Life Manager/MDs/File properties in PARENT file.md": {
-    "mtime": 1747040924.682362,
+    "mtime": 1758523693.529385,
     "analysis": {
-      "valid_links": [],
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
       "broken_links": [],
       "has_external_links": false,
-      "fm_wikilinks": [],
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
       "dataview_hubs": []
     }
   },
@@ -6136,7 +6275,7 @@
     }
   },
   "Life Manager/MDs/Films.md": {
-    "mtime": 1757483266.9647155,
+    "mtime": 1758329491.067158,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Content collections.md"
@@ -6328,7 +6467,7 @@
     }
   },
   "Life Manager/MDs/Finance.md": {
-    "mtime": 1757357423.876494,
+    "mtime": 1757500644.6505103,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -7010,7 +7149,7 @@
     }
   },
   "Life Manager/MDs/Fun Books.md": {
-    "mtime": 1757346324.7806034,
+    "mtime": 1757500644.6547956,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Content collections.md"
@@ -7026,7 +7165,7 @@
     }
   },
   "Life Manager/MDs/FUN Events.md": {
-    "mtime": 1757482462.7083483,
+    "mtime": 1758453956.476369,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/IRL Fun.md"
@@ -7154,7 +7293,7 @@
     }
   },
   "Life Manager/MDs/Game Development Learn.md": {
-    "mtime": 1757351043.018953,
+    "mtime": 1757500644.6584365,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -7248,6 +7387,20 @@
       "broken_links": [],
       "has_external_links": false,
       "fm_wikilinks": [],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Github Learn.md": {
+    "mtime": 1758079595.7350175,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Code Self-learning.md"
+      ],
+      "broken_links": [],
+      "has_external_links": true,
+      "fm_wikilinks": [
+        "Code Self-learning"
+      ],
       "dataview_hubs": []
     }
   },
@@ -7824,7 +7977,7 @@
     }
   },
   "Life Manager/MDs/Health.md": {
-    "mtime": 1757483955.443956,
+    "mtime": 1758092338.3784912,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -7996,7 +8149,7 @@
     }
   },
   "Life Manager/MDs/HK Purchases.md": {
-    "mtime": 1757472470.8461914,
+    "mtime": 1758025937.9811847,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Housekeep.md"
@@ -8136,7 +8289,7 @@
     }
   },
   "Life Manager/MDs/Housekeep.md": {
-    "mtime": 1757473686.968294,
+    "mtime": 1757948813.123796,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -8327,8 +8480,22 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/IMP Calendar Creation.md": {
+    "mtime": 1758013274.769438,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/IMP Optimization.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "IMP Optimization"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/IMP Covers.md": {
-    "mtime": 1757346404.2894275,
+    "mtime": 1757494547.2336864,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/IMP.md"
@@ -8341,12 +8508,67 @@
       "dataview_hubs": []
     }
   },
-  "Life Manager/MDs/IMP Singles.md": {
-    "mtime": 1757346404.2999048,
+  "Life Manager/MDs/IMP MEET 1.md": {
+    "mtime": 1757948565.639143,
     "analysis": {
       "valid_links": [
-        "Life Manager/MDs/IMP.md",
-        "Life Manager/MDs/Locura.md"
+        "Life Manager/MDs/IMP Meets.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "IMP Meets"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/IMP Meets.md": {
+    "mtime": 1757951590.6616116,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/IMP.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "IMP"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/IMP Optimization.md": {
+    "mtime": 1758013273.30143,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/IMP.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "IMP"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/IMP References to Telegram.md": {
+    "mtime": 1758009644.119501,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/IMP Optimization.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "IMP Optimization"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/IMP Singles.md": {
+    "mtime": 1758092389.1707585,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/IMP.md"
       ],
       "broken_links": [],
       "has_external_links": false,
@@ -8357,7 +8579,7 @@
     }
   },
   "Life Manager/MDs/IMP.md": {
-    "mtime": 1757347203.8955092,
+    "mtime": 1758013279.6369102,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -8445,7 +8667,7 @@
     }
   },
   "Life Manager/MDs/Infection Tasks.md": {
-    "mtime": 1757346324.7843273,
+    "mtime": 1757500925.7826316,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Health.md"
@@ -8687,7 +8909,7 @@
     }
   },
   "Life Manager/MDs/IRL Fun.md": {
-    "mtime": 1757462651.2446582,
+    "mtime": 1757500644.6735938,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -8900,7 +9122,7 @@
     }
   },
   "Life Manager/MDs/Joints Tasks.md": {
-    "mtime": 1757346324.790192,
+    "mtime": 1758062162.479918,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Health.md"
@@ -8957,6 +9179,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Jurassic Park Rebirth.md": {
+    "mtime": 1757612864.6977794,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Films.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Films"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Jussi.md": {
     "mtime": 1747040926.330362,
     "analysis": {
@@ -8971,7 +9207,7 @@
       "dataview_hubs": []
     }
   },
-  "Life Manager/MDs/just think about it.md": {
+  "Life Manager/MDs/just think about Mermaid.md": {
     "mtime": 1747040926.3383622,
     "analysis": {
       "valid_links": [],
@@ -9066,7 +9302,7 @@
     }
   },
   "Life Manager/MDs/Karaoke Library.md": {
-    "mtime": 1757348622.7466955,
+    "mtime": 1758499017.7505674,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Apparat - Hailing from The Edge.md",
@@ -9090,7 +9326,9 @@
         "Life Manager/MDs/son lux - all the right things.md",
         "Life Manager/MDs/son lux - plans we made.md"
       ],
-      "broken_links": [],
+      "broken_links": [
+        "low roar - give me an answer"
+      ],
       "has_external_links": false,
       "fm_wikilinks": [
         "IRL Fun"
@@ -9099,7 +9337,7 @@
     }
   },
   "Life Manager/MDs/Karaoke night ikra.md": {
-    "mtime": 1756274056.0990198,
+    "mtime": 1758452607.5283694,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/FUN Events.md",
@@ -9198,7 +9436,7 @@
     }
   },
   "Life Manager/MDs/Khan Math Plan.md": {
-    "mtime": 1757476414.6727076,
+    "mtime": 1758518213.6694345,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Math.md"
@@ -9269,7 +9507,7 @@
     }
   },
   "Life Manager/MDs/Kingdom Come Deliverance 2.md": {
-    "mtime": 1747040926.4543622,
+    "mtime": 1757808418.6580603,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -9391,6 +9629,20 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Music Library"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/KRAFTUR.md": {
+    "mtime": 1758006756.046718,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Audio Plugins Database.md"
+      ],
+      "broken_links": [],
+      "has_external_links": true,
+      "fm_wikilinks": [
+        "Audio Plugins Database"
       ],
       "dataview_hubs": []
     }
@@ -9578,7 +9830,7 @@
     }
   },
   "Life Manager/MDs/Last of us games 1-2.md": {
-    "mtime": 1756810258.1575584,
+    "mtime": 1758103248.910566,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -9620,7 +9872,7 @@
     }
   },
   "Life Manager/MDs/Latin.md": {
-    "mtime": 1757347084.1649184,
+    "mtime": 1757500644.6804893,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -9666,6 +9918,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Leshij Bitwig Setup 1.md": {
+    "mtime": 1757951506.5816038,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/IMP Optimization.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "IMP Optimization"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Levitating gyro.md": {
     "mtime": 1754296438.3270173,
     "analysis": {
@@ -9705,9 +9971,10 @@
     }
   },
   "Life Manager/MDs/Life.md": {
-    "mtime": 1757386848.2908468,
+    "mtime": 1757504185.0197258,
     "analysis": {
       "valid_links": [
+        "Files/External/jeremy-bishop-EwKXn5CapA4-unsplash.jpg",
         "Life Manager/MDs/Views.md"
       ],
       "broken_links": [],
@@ -9777,9 +10044,10 @@
     }
   },
   "Life Manager/MDs/List of DBs.md": {
-    "mtime": 1757387484.8948464,
+    "mtime": 1757504860.2590444,
     "analysis": {
       "valid_links": [
+        "Files/External/martin-adams-_OZCl4XcpRw-unsplash.jpg",
         "Life Manager/MDs/Views.md"
       ],
       "broken_links": [],
@@ -9910,20 +10178,6 @@
     "analysis": {
       "valid_links": [
         "Files/External/Voice 250821_180757.m4a"
-      ],
-      "broken_links": [],
-      "has_external_links": false,
-      "fm_wikilinks": [],
-      "dataview_hubs": []
-    }
-  },
-  "Life Manager/MDs/Locura.md": {
-    "mtime": 1756902709.0103652,
-    "analysis": {
-      "valid_links": [
-        "Life Manager/MDs/Locura Choir Idea 1.md",
-        "Life Manager/MDs/Locura Lead Idea 1.md",
-        "Life Manager/MDs/Locura Synth idea 2.md"
       ],
       "broken_links": [],
       "has_external_links": false,
@@ -10538,7 +10792,7 @@
     }
   },
   "Life Manager/MDs/Math.md": {
-    "mtime": 1757350840.594953,
+    "mtime": 1757495216.11354,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -10790,7 +11044,7 @@
     }
   },
   "Life Manager/MDs/Metal Gear Solid Delta. Snake Eater.md": {
-    "mtime": 1756632655.867303,
+    "mtime": 1757808423.4083543,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -10799,6 +11053,20 @@
       "has_external_links": true,
       "fm_wikilinks": [
         "Videogames"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Metronomy.md": {
+    "mtime": 1757494884.785641,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Music Library.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Music Library"
       ],
       "dataview_hubs": []
     }
@@ -10931,6 +11199,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Minecraft.md": {
+    "mtime": 1758378763.7504919,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Films.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Films"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Mirror.md": {
     "mtime": 1747040931.894362,
     "analysis": {
@@ -10988,12 +11270,11 @@
     }
   },
   "Life Manager/MDs/Mission Control.md": {
-    "mtime": 1757480655.2191901,
+    "mtime": 1758061963.307918,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Pins.md",
         "Life Manager/MDs/Project Manager.md",
-        "Life Manager/MDs/Time KanBan.md",
         "Life Manager/MDs/Today Manager.md",
         "Life Manager/MDs/Views Picker.md",
         "Life Manager/MDs/Views.md"
@@ -11051,7 +11332,7 @@
     }
   },
   "Life Manager/MDs/Mixing and Mastering WIKI.md": {
-    "mtime": 1757146152.1088657,
+    "mtime": 1757494916.7619524,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Music Production Learn.md"
@@ -11139,7 +11420,7 @@
     }
   },
   "Life Manager/MDs/Model Building.md": {
-    "mtime": 1757347110.679111,
+    "mtime": 1757500644.6839063,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -11509,7 +11790,7 @@
     }
   },
   "Life Manager/MDs/Movings.md": {
-    "mtime": 1757346158.7630785,
+    "mtime": 1757501478.9018972,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -11584,7 +11865,7 @@
     }
   },
   "Life Manager/MDs/Mr. Frenkie Export.md": {
-    "mtime": 1753150245.8575034,
+    "mtime": 1758014051.736,
     "analysis": {
       "valid_links": [],
       "broken_links": [],
@@ -11594,7 +11875,7 @@
     }
   },
   "Life Manager/MDs/MrFrenkie Content.md": {
-    "mtime": 1757448662.1649659,
+    "mtime": 1758426811.9508603,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md",
@@ -11763,7 +12044,7 @@
     }
   },
   "Life Manager/MDs/Music Library Tasks.md": {
-    "mtime": 1757350005.0780659,
+    "mtime": 1758452620.8003693,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Content collections.md"
@@ -11777,7 +12058,7 @@
     }
   },
   "Life Manager/MDs/Music Library.md": {
-    "mtime": 1757468270.1550248,
+    "mtime": 1758522185.5484815,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Content collections.md"
@@ -11807,7 +12088,7 @@
     }
   },
   "Life Manager/MDs/Music Production Learn.md": {
-    "mtime": 1757350542.8469534,
+    "mtime": 1757494923.2877192,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -11825,7 +12106,7 @@
     }
   },
   "Life Manager/MDs/Music Sound-Design Sources.md": {
-    "mtime": 1757482120.481011,
+    "mtime": 1758514291.34577,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/MrFrenkie Content.md",
@@ -11840,7 +12121,7 @@
     }
   },
   "Life Manager/MDs/Music Sound-Design Wiki.md": {
-    "mtime": 1757350437.03699,
+    "mtime": 1757500644.691156,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Music Production Learn.md"
@@ -11871,7 +12152,7 @@
     }
   },
   "Life Manager/MDs/Music Theory Wiki.md": {
-    "mtime": 1757346324.8020084,
+    "mtime": 1757494973.0714602,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Music Production Learn.md"
@@ -12312,7 +12593,7 @@
     }
   },
   "Life Manager/MDs/Nobody 2.md": {
-    "mtime": 1756813520.6924267,
+    "mtime": 1757894500.8300662,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Films.md"
@@ -12438,6 +12719,21 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Music Library"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Notes System Dev.md": {
+    "mtime": 1758523829.0277884,
+    "analysis": {
+      "valid_links": [
+        "Dev Notes/Notes System.canvas",
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
       ],
       "dataview_hubs": []
     }
@@ -12653,31 +12949,13 @@
     }
   },
   "Life Manager/MDs/Obsidian Features.md": {
-    "mtime": 1757350022.4316516,
+    "mtime": 1758523936.4241843,
     "analysis": {
       "valid_links": [
-        "Dev Notes/Notes System.canvas",
-        "Life Manager/MDs/File properties in PARENT file.md",
-        "Life Manager/MDs/Filled checkboxes counter for taskhub.md",
-        "Life Manager/MDs/GPT-\u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f Dataview.md",
-        "Life Manager/MDs/Obsidian.md",
-        "Life Manager/MDs/Testing Time Kanban.md",
-        "Life Manager/MDs/Time KanBan BackUp.md",
-        "Life Manager/MDs/Time KanBan Doc.md",
-        "Life Manager/MDs/Time KanBan Ideas.md",
-        "Life Manager/MDs/Time KanBan.md",
-        "Life Manager/MDs/color codes for notes system.md",
-        "Life Manager/MDs/just think about it.md",
-        "Life Manager/MDs/\u041a\u043d\u043e\u043f\u043a\u0438 \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0444\u0438\u043b\u044c\u0442\u0440\u0430\u043c\u0438 dataview.md",
-        "Life Manager/MDs/\u0441\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u043a\u0430 \u0437\u0430\u0434\u0430\u0447.md"
+        "Life Manager/MDs/Obsidian.md"
       ],
-      "broken_links": [
-        "BFS Finder",
-        "Lost MDs",
-        "Orphanes Finder",
-        "utility_Dated Task Control"
-      ],
-      "has_external_links": true,
+      "broken_links": [],
+      "has_external_links": false,
       "fm_wikilinks": [
         "Obsidian"
       ],
@@ -12685,7 +12963,7 @@
     }
   },
   "Life Manager/MDs/Obsidian Initial Setup.md": {
-    "mtime": 1757346324.7980475,
+    "mtime": 1757500906.4120967,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Obsidian.md"
@@ -12700,8 +12978,22 @@
       ]
     }
   },
+  "Life Manager/MDs/Obsidian Inspiration.md": {
+    "mtime": 1758523696.9612818,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": true,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Obsidian Optimization.md": {
-    "mtime": 1757492989.0033655,
+    "mtime": 1758527697.3458734,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Algorithms Wiki.md",
@@ -12716,6 +13008,7 @@
         "Life Manager/MDs/Music Production Learn.md",
         "Life Manager/MDs/Music Sound-Design Sources.md",
         "Life Manager/MDs/Music Theory Learn.md",
+        "Life Manager/MDs/Obsidian Features.md",
         "Life Manager/MDs/Obsidian.md",
         "Life Manager/MDs/TC DB.md",
         "Life Manager/MDs/Views.md",
@@ -12740,8 +13033,24 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Obsidian Plugins Explore 2025.md": {
+    "mtime": 1758523696.9110005,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md",
+        "Life Manager/MDs/Obsidian Plugins.md",
+        "Life Manager/MDs/just think about Mermaid.md"
+      ],
+      "broken_links": [],
+      "has_external_links": true,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Obsidian Plugins.md": {
-    "mtime": 1757346404.2935,
+    "mtime": 1758452620.8123693,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Obsidian.md"
@@ -12755,7 +13064,7 @@
     }
   },
   "Life Manager/MDs/Obsidian.md": {
-    "mtime": 1757491680.5577614,
+    "mtime": 1758062848.9799178,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -12873,6 +13182,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Orphanes Finder.md": {
+    "mtime": 1758523694.5574129,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Other Desert Cities.md": {
     "mtime": 1747040933.158362,
     "analysis": {
@@ -12929,6 +13252,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Oxygen 2021.md": {
+    "mtime": 1757811260.2980711,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Films.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Films"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Ozone 11.md": {
     "mtime": 1747040933.190362,
     "analysis": {
@@ -12958,7 +13295,7 @@
     }
   },
   "Life Manager/MDs/Paint Learn.md": {
-    "mtime": 1757350609.0509531,
+    "mtime": 1758527401.378968,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -13448,7 +13785,7 @@
     }
   },
   "Life Manager/MDs/Physics.md": {
-    "mtime": 1757351088.294953,
+    "mtime": 1757500644.6972034,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -13892,7 +14229,7 @@
     }
   },
   "Life Manager/MDs/Prog Tools Wiki.md": {
-    "mtime": 1747040933.786362,
+    "mtime": 1758062792.6879177,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Code Self-learning.md"
@@ -13906,15 +14243,30 @@
     }
   },
   "Life Manager/MDs/Project Manager.md": {
-    "mtime": 1757386856.8868468,
+    "mtime": 1757578460.1029425,
     "analysis": {
       "valid_links": [
+        "Files/External/alphabag-Rua207zYcWg-unsplash.jpg",
         "Life Manager/MDs/Views.md"
       ],
       "broken_links": [],
       "has_external_links": false,
       "fm_wikilinks": [
         "Views"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Project-subproject system reimagine.md": {
+    "mtime": 1758523694.1340184,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
       ],
       "dataview_hubs": []
     }
@@ -13961,7 +14313,7 @@
     }
   },
   "Life Manager/MDs/Psychology Learn.md": {
-    "mtime": 1757351066.094953,
+    "mtime": 1757500644.6999679,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -14035,9 +14387,10 @@
     }
   },
   "Life Manager/MDs/Purchase Tables.md": {
-    "mtime": 1757483608.8545883,
+    "mtime": 1757505606.2268612,
     "analysis": {
       "valid_links": [
+        "Files/External/christian-wiediger-Yep-psEeB9Y-unsplash.jpg",
         "Life Manager/MDs/Views.md"
       ],
       "broken_links": [],
@@ -14227,7 +14580,7 @@
     }
   },
   "Life Manager/MDs/Random HK.md": {
-    "mtime": 1757403751.289985,
+    "mtime": 1757500644.7036169,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Housekeep.md"
@@ -14240,21 +14593,6 @@
       "dataview_hubs": [
         "Random HK"
       ]
-    }
-  },
-  "Life Manager/MDs/Random Links.md": {
-    "mtime": 1757346404.310471,
-    "analysis": {
-      "valid_links": [
-        "Life Manager/MDs/Content collections.md",
-        "Life Manager/MDs/\u0425\u043c.md"
-      ],
-      "broken_links": [],
-      "has_external_links": true,
-      "fm_wikilinks": [
-        "Content collections"
-      ],
-      "dataview_hubs": []
     }
   },
   "Life Manager/MDs/Random.md": {
@@ -14550,7 +14888,7 @@
     }
   },
   "Life Manager/MDs/Release Calendars.md": {
-    "mtime": 1756635338.1255891,
+    "mtime": 1757648364.4869938,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Content collections.md"
@@ -14592,7 +14930,7 @@
     }
   },
   "Life Manager/MDs/Renovation.md": {
-    "mtime": 1757357472.8084939,
+    "mtime": 1757500644.7068262,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -15071,6 +15409,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Royal Blood.md": {
+    "mtime": 1757581945.8865397,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Music Library.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Music Library"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/royksopp.md": {
     "mtime": 1747040934.522362,
     "analysis": {
@@ -15115,7 +15467,7 @@
     }
   },
   "Life Manager/MDs/RTH.md": {
-    "mtime": 1757346158.7967443,
+    "mtime": 1757501454.5914361,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -15249,16 +15601,18 @@
     }
   },
   "Life Manager/MDs/Samsung Galaxy Fit3.md": {
-    "mtime": 1753663738.3731163,
+    "mtime": 1757494001.9831297,
     "analysis": {
       "valid_links": [
-        "Files/External/Samsung Galaxy Fit3.png",
-        "Life Manager/MDs/Samsung Galaxy Watch8 LTE 44mm.md",
         "Life Manager/MDs/TC DB.md"
       ],
-      "broken_links": [],
+      "broken_links": [
+        "Files/External/Samsung Galaxy Fit3.png"
+      ],
       "has_external_links": false,
-      "fm_wikilinks": [],
+      "fm_wikilinks": [
+        "TC DB"
+      ],
       "dataview_hubs": []
     }
   },
@@ -15931,6 +16285,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/Sinners.md": {
+    "mtime": 1758329494.0050948,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Films.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Films"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/Siversun Pickups.md": {
     "mtime": 1747040935.514362,
     "analysis": {
@@ -15969,6 +16337,20 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Audio Plugins Database"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Sketch (film).md": {
+    "mtime": 1757612886.7904963,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Films.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Films"
       ],
       "dataview_hubs": []
     }
@@ -16231,7 +16613,7 @@
     }
   },
   "Life Manager/MDs/Software Purchases.md": {
-    "mtime": 1757346324.8030658,
+    "mtime": 1757500644.712073,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Digital Order.md"
@@ -16396,6 +16778,20 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Audio Plugins Database"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Sourcehub type.md": {
+    "mtime": 1758523693.9676125,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
       ],
       "dataview_hubs": []
     }
@@ -16573,10 +16969,25 @@
       "dataview_hubs": []
     }
   },
-  "Life Manager/MDs/Spendings DB.md": {
-    "mtime": 1757485090.589299,
+  "Life Manager/MDs/Spendings DB dev.md": {
+    "mtime": 1758523693.7553763,
     "analysis": {
       "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Spendings DB.md": {
+    "mtime": 1757505513.561902,
+    "analysis": {
+      "valid_links": [
+        "Files/External/torbjorn-helgesen-KXfiLw0HrvU-unsplash.jpg",
         "Life Manager/MDs/Finance.md"
       ],
       "broken_links": [],
@@ -16630,7 +17041,7 @@
     }
   },
   "Life Manager/MDs/Spirit Explore.md": {
-    "mtime": 1757347055.1121879,
+    "mtime": 1758527482.356356,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -16837,7 +17248,7 @@
     }
   },
   "Life Manager/MDs/Star Craft 2 Trilogy.md": {
-    "mtime": 1747040935.998362,
+    "mtime": 1757808426.2180831,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -16851,7 +17262,7 @@
     }
   },
   "Life Manager/MDs/STAR WARS Jedi Survivor.md": {
-    "mtime": 1747040936.006362,
+    "mtime": 1757808430.2440472,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -17293,7 +17704,7 @@
     }
   },
   "Life Manager/MDs/Superman 2025.md": {
-    "mtime": 1757416726.5067275,
+    "mtime": 1758439501.7706099,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Films.md"
@@ -17384,7 +17795,7 @@
     }
   },
   "Life Manager/MDs/Surviving.md": {
-    "mtime": 1757346158.8030667,
+    "mtime": 1757501444.4278722,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -17612,15 +18023,31 @@
     }
   },
   "Life Manager/MDs/Task Manager.md": {
-    "mtime": 1757486383.3312418,
+    "mtime": 1757504454.7310388,
     "analysis": {
       "valid_links": [
+        "Files/External/kier-in-sight-archives-p7iaoHjWDbI-unsplash.jpg",
         "Life Manager/MDs/Views.md"
       ],
       "broken_links": [],
       "has_external_links": false,
       "fm_wikilinks": [
         "Views"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Task Science.md": {
+    "mtime": 1758523694.3936045,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md",
+        "Life Manager/MDs/Time KanBan Ideas.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
       ],
       "dataview_hubs": []
     }
@@ -17653,10 +18080,25 @@
       "dataview_hubs": []
     }
   },
-  "Life Manager/MDs/TC DB.md": {
-    "mtime": 1757489013.999502,
+  "Life Manager/MDs/tc db dev.md": {
+    "mtime": 1758523694.794099,
     "analysis": {
       "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/TC DB.md": {
+    "mtime": 1757505696.9274685,
+    "analysis": {
+      "valid_links": [
+        "Files/External/emanuel-ekstrom-hxlkmdspoa0-unsplash.jpg",
         "Life Manager/MDs/Tech & Comfort.md"
       ],
       "broken_links": [],
@@ -17670,7 +18112,7 @@
     }
   },
   "Life Manager/MDs/TC Purchases.md": {
-    "mtime": 1757490100.6735277,
+    "mtime": 1758016090.9614396,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Tech & Comfort.md"
@@ -17857,16 +18299,6 @@
       "fm_wikilinks": [
         "YouTube channels"
       ],
-      "dataview_hubs": []
-    }
-  },
-  "Life Manager/MDs/Testing Time Kanban.md": {
-    "mtime": 1757478228.8554053,
-    "analysis": {
-      "valid_links": [],
-      "broken_links": [],
-      "has_external_links": false,
-      "fm_wikilinks": [],
       "dataview_hubs": []
     }
   },
@@ -18207,6 +18639,20 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Music Library"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/The Gorge 2025.md": {
+    "mtime": 1757811219.1733506,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Films.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Films"
       ],
       "dataview_hubs": []
     }
@@ -18797,13 +19243,21 @@
       "dataview_hubs": []
     }
   },
-  "Life Manager/MDs/Time KanBan BackUp.md": {
-    "mtime": 1757473916.4872947,
+  "Life Manager/MDs/Time KanBan Dev.md": {
+    "mtime": 1758523694.2993956,
     "analysis": {
-      "valid_links": [],
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md",
+        "Life Manager/MDs/Time KanBan Doc.md",
+        "Life Manager/MDs/Time KanBan Ideas.md",
+        "Life Manager/MDs/color codes for notes system.md",
+        "Life Manager/MDs/\u0441\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u043a\u0430 \u0437\u0430\u0434\u0430\u0447.md"
+      ],
       "broken_links": [],
       "has_external_links": false,
-      "fm_wikilinks": [],
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
       "dataview_hubs": []
     }
   },
@@ -18828,9 +19282,10 @@
     }
   },
   "Life Manager/MDs/Time KanBan.md": {
-    "mtime": 1757478766.9985123,
+    "mtime": 1757504012.3760352,
     "analysis": {
       "valid_links": [
+        "Files/External/my-profit-tutor-v30bSAWzp4I-unsplash 1.jpg",
         "Life Manager/MDs/Views.md"
       ],
       "broken_links": [],
@@ -18868,7 +19323,7 @@
     }
   },
   "Life Manager/MDs/Today Manager.md": {
-    "mtime": 1757476445.289018,
+    "mtime": 1758012067.5607104,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Views.md"
@@ -19835,7 +20290,7 @@
     }
   },
   "Life Manager/MDs/Video Production Learn.md": {
-    "mtime": 1757350573.2629533,
+    "mtime": 1758527421.6056643,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -19863,7 +20318,7 @@
     }
   },
   "Life Manager/MDs/Videogames.md": {
-    "mtime": 1757491322.139841,
+    "mtime": 1757808444.3624847,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Content collections.md"
@@ -19879,7 +20334,7 @@
     }
   },
   "Life Manager/MDs/Views Picker.md": {
-    "mtime": 1757458406.3733573,
+    "mtime": 1757505096.6280618,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Views.md"
@@ -20257,7 +20712,7 @@
     }
   },
   "Life Manager/MDs/Walking soft start.md": {
-    "mtime": 1757346404.2868145,
+    "mtime": 1757893171.81163,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Sport.md"
@@ -20285,7 +20740,7 @@
     }
   },
   "Life Manager/MDs/Warhammer 40,000. Dawn of War - Definitive Edition.md": {
-    "mtime": 1755959826.2572846,
+    "mtime": 1757808434.1700141,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Videogames.md"
@@ -20313,7 +20768,7 @@
     }
   },
   "Life Manager/MDs/Water Pump Runs.md": {
-    "mtime": 1757400665.6934075,
+    "mtime": 1758499028.9305675,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Regular HK.md"
@@ -20511,10 +20966,39 @@
       "dataview_hubs": []
     }
   },
-  "Life Manager/MDs/Wikis.md": {
-    "mtime": 1757492427.4131658,
+  "Life Manager/MDs/Wiki files review.md": {
+    "mtime": 1758523694.7126245,
     "analysis": {
       "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Wikis system.md": {
+    "mtime": 1758523693.6404972,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Obsidian Features.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Obsidian Features"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Wikis.md": {
+    "mtime": 1757505080.5862644,
+    "analysis": {
+      "valid_links": [
+        "Files/External/clay-banks-5JQAKBU0vG8-unsplash.jpg",
         "Life Manager/MDs/Views.md"
       ],
       "broken_links": [],
@@ -20593,6 +21077,34 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Films"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Wolfmother.md": {
+    "mtime": 1757581931.5305395,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Music Library.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Music Library"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/Woodkid.md": {
+    "mtime": 1758522208.4256964,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Music Library.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Music Library"
       ],
       "dataview_hubs": []
     }
@@ -20819,6 +21331,21 @@
       ]
     }
   },
+  "Life Manager/MDs/YouTube.md": {
+    "mtime": 1758378763.7561731,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Content collections.md",
+        "Life Manager/MDs/\u0425\u043c.md"
+      ],
+      "broken_links": [],
+      "has_external_links": true,
+      "fm_wikilinks": [
+        "Content collections"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/yves tumor.md": {
     "mtime": 1747040937.826362,
     "analysis": {
@@ -20919,7 +21446,7 @@
     }
   },
   "Life Manager/MDs/\u0410\u0432\u0433\u0443\u0441\u0442 2025. \u043a\u0443\u0447\u0430 \u0431\u044b\u0442\u0430 \u0432\u043c\u0435\u0441\u0442\u043e \u0434\u0435\u043b\u0430.md": {
-    "mtime": 1757346404.301984,
+    "mtime": 1758387788.7262504,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Diary.md"
@@ -21044,6 +21571,18 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u0410\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0438\u0441\u0442\u043e\u0440\u0438\u044f 9.md": {
+    "mtime": 1757795653.239693,
+    "analysis": {
+      "valid_links": [
+        "Files/External/Alternativehistory9_small.pdf"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u0410\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0418\u0441\u0442\u043e\u0440\u0438\u044f.md": {
     "mtime": 1754823896.0117471,
     "analysis": {
@@ -21093,6 +21632,30 @@
       "fm_wikilinks": [
         "Family DB"
       ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u0411\u0430\u0437\u043e\u0432\u0430\u044f \u0442\u043e\u043d\u043a\u0430\u044f \u0434\u043b\u0438\u043d\u043d\u043e\u0440\u0443\u043a\u0430\u0432\u043a\u0430.md": {
+    "mtime": 1757668110.054043,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Clothes Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Clothes Purchases"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u0411\u0430\u043b\u0430\u043d\u0441 \u043c\u0435\u0436\u0434\u0443 \u0440\u0430\u0431\u043e\u0442\u043e\u0439 \u0438 \u0436\u0438\u0437\u043d\u044c\u044e.md": {
+    "mtime": 1758370579.5643027,
+    "analysis": {
+      "valid_links": [],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [],
       "dataview_hubs": []
     }
   },
@@ -21280,7 +21843,7 @@
     }
   },
   "Life Manager/MDs/\u0412\u043b\u0430\u0436\u043d\u044b\u0435 \u0441\u0430\u043b\u0444\u0435\u0442\u043a\u0438 2.md": {
-    "mtime": 1755220730.6977415,
+    "mtime": 1757898474.9149847,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -21294,7 +21857,7 @@
     }
   },
   "Life Manager/MDs/\u0412\u041c\u0420\u041f Docs.md": {
-    "mtime": 1757474968.7447293,
+    "mtime": 1758082488.6816473,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u0412\u041c\u0420\u041f.md"
@@ -21328,7 +21891,7 @@
     }
   },
   "Life Manager/MDs/\u0412\u041c\u0420\u041f.md": {
-    "mtime": 1757493219.3317277,
+    "mtime": 1758082452.0972412,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Life.md"
@@ -21463,20 +22026,6 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Budget Planner"
-      ],
-      "dataview_hubs": []
-    }
-  },
-  "Life Manager/MDs/\u0413\u0435\u043d\u0435\u0440\u0430\u043b\u044c\u043d\u0430\u044f \u0443\u0431\u043e\u0440\u043a\u0430.md": {
-    "mtime": 1757482171.832626,
-    "analysis": {
-      "valid_links": [
-        "Life Manager/MDs/Housekeep.md"
-      ],
-      "broken_links": [],
-      "has_external_links": false,
-      "fm_wikilinks": [
-        "Housekeep"
       ],
       "dataview_hubs": []
     }
@@ -21676,6 +22225,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u0414\u043e\u043c\u0438\u043a\u0438 \u0434\u043b\u044f \u0442\u0430\u0440\u0430\u043d\u043a\u0430\u043d\u043e\u0432.md": {
+    "mtime": 1758439046.18661,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/HK Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "HK Purchases"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u0414\u043e\u0441\u043a\u0438 \u0440\u0430\u0437\u0434\u0435\u043b\u043e\u0447\u043d\u044b\u0435 2025.md": {
     "mtime": 1753949749.0613165,
     "analysis": {
@@ -21700,6 +22263,20 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "YouTube channels"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u0415\u0449\u0435 2 \u043f\u043e\u0434\u0443\u0448\u043a\u0435 \u0434\u043b\u044f \u0442\u0430\u0431\u0443\u0440\u0435\u0442\u043e\u043a.md": {
+    "mtime": 1758439084.04661,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/TC Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "TC Purchases"
       ],
       "dataview_hubs": []
     }
@@ -21801,7 +22378,7 @@
     }
   },
   "Life Manager/MDs/\u0417\u041f \u0412\u041c\u0420\u041f2.md": {
-    "mtime": 1755220636.4897416,
+    "mtime": 1757957775.570912,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -22132,7 +22709,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u0432\u0430\u0440\u0442\u0438\u0440\u0430 2.md": {
-    "mtime": 1757463572.7231255,
+    "mtime": 1757957748.078912,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -22222,7 +22799,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u043d\u0438\u0433\u0438 \u0410\u043b\u0435\u043a\u0441\u0430\u043d\u0434\u0440\u0430 \u041a\u043e\u0440\u043e\u043b\u044f.md": {
-    "mtime": 1757346404.3061948,
+    "mtime": 1757795632.375693,
     "analysis": {
       "valid_links": [
         "Files/External/AK_Traktat.pdf",
@@ -22237,7 +22814,8 @@
         "Life Manager/MDs/\u0410\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0418\u0441\u0442\u043e\u0440\u0438\u044f 6.md",
         "Life Manager/MDs/\u0410\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0418\u0441\u0442\u043e\u0440\u0438\u044f 7.md",
         "Life Manager/MDs/\u0410\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0418\u0441\u0442\u043e\u0440\u0438\u044f.md",
-        "Life Manager/MDs/\u0410\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0438\u0441\u0442\u043e\u0440\u0438\u044f 8.md"
+        "Life Manager/MDs/\u0410\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0438\u0441\u0442\u043e\u0440\u0438\u044f 8.md",
+        "Life Manager/MDs/\u0410\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u043d\u0430\u044f \u0438\u0441\u0442\u043e\u0440\u0438\u044f 9.md"
       ],
       "broken_links": [],
       "has_external_links": true,
@@ -22272,7 +22850,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421 1.md": {
-    "mtime": 1757206778.5638535,
+    "mtime": 1758515667.1537693,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u041a\u041d\u0421.md"
@@ -22286,7 +22864,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421 2.md": {
-    "mtime": 1757361411.8625143,
+    "mtime": 1758515662.7377694,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u041a\u041d\u0421.md"
@@ -22300,7 +22878,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421 3.md": {
-    "mtime": 1754996247.7717476,
+    "mtime": 1758515659.9457693,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u041a\u041d\u0421.md"
@@ -22314,7 +22892,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421 4.md": {
-    "mtime": 1756810697.0100694,
+    "mtime": 1758102875.0707028,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u041a\u041d\u0421.md"
@@ -22328,7 +22906,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421 5.md": {
-    "mtime": 1756810258.1757274,
+    "mtime": 1758518191.3913226,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u041a\u041d\u0421.md"
@@ -22342,7 +22920,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421 6.md": {
-    "mtime": 1756167941.2008848,
+    "mtime": 1758515680.5257692,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u041a\u041d\u0421.md"
@@ -22356,7 +22934,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421 7.md": {
-    "mtime": 1756505013.0164244,
+    "mtime": 1758515676.4817693,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u041a\u041d\u0421.md"
@@ -22370,7 +22948,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421 8.md": {
-    "mtime": 1756810577.0839932,
+    "mtime": 1758515671.5897694,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u041a\u041d\u0421.md"
@@ -22384,7 +22962,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u041d\u0421.md": {
-    "mtime": 1757493196.4601612,
+    "mtime": 1758515686.2737694,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u0412\u041c\u0420\u041f.md"
@@ -22414,7 +22992,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u043e\u043b\u0435\u0441\u0430 2.md": {
-    "mtime": 1755141149.851285,
+    "mtime": 1757914819.0827017,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -22423,6 +23001,20 @@
       "has_external_links": false,
       "fm_wikilinks": [
         "Budget Planner"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u041a\u043e\u043d\u0441\u0443\u043b\u044c\u0442\u0430\u0446\u0438\u044f \u043f\u043e \u043b\u0435\u0432\u043e\u043c\u0443 \u043a\u043e\u043b\u0435\u043d\u0443 2025 2.md": {
+    "mtime": 1758514745.5177696,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Joints Tasks.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Joints Tasks"
       ],
       "dataview_hubs": []
     }
@@ -22443,7 +23035,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u043e\u043d\u0441\u0443\u043b\u044c\u0442\u0430\u0446\u0438\u044f \u043f\u043e \u043f\u043e\u0432\u043e\u0434\u0443 \u0431\u043e\u043b\u0435\u0439 \u0432 \u0446\u0435\u043b\u044b\u0445 \u0441\u0443\u0441\u0442\u0430\u0432\u0430\u0445.md": {
-    "mtime": 1756026339.3245952,
+    "mtime": 1758062092.6159182,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Joints Tasks.md"
@@ -22471,7 +23063,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u043e\u043d\u0441\u0443\u043b\u044c\u0442\u0430\u0446\u0438\u044f \u0442\u0440\u0430\u0432\u043c\u0430\u0442\u043e\u043b\u043e\u0433\u0430 \u043f\u043e \u043b\u0435\u0432\u043e\u043c\u0443 \u043a\u043e\u043b\u0435\u043d\u0443 2025.md": {
-    "mtime": 1755049717.242887,
+    "mtime": 1758062103.1519182,
     "analysis": {
       "valid_links": [
         "Files/External/Adobe Scan Aug 13, 2025.pdf",
@@ -22525,7 +23117,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u0440\u0443\u043f\u0430 2.md": {
-    "mtime": 1755141147.515285,
+    "mtime": 1757914817.4347017,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -22549,7 +23141,7 @@
     }
   },
   "Life Manager/MDs/\u041a\u0443\u043b\u0438\u043d\u0430\u0440\u043d\u044b\u0435 \u043f\u0435\u0440\u0435\u0434\u0430\u0447\u0438 \u0438 \u043a\u043d\u0438\u0433\u0438.md": {
-    "mtime": 1757346404.261621,
+    "mtime": 1757495239.5431943,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Cooking Learn.md"
@@ -22792,7 +23384,7 @@
     }
   },
   "Life Manager/MDs/\u041c\u0430\u0441\u043b\u043e 2.md": {
-    "mtime": 1755141145.183285,
+    "mtime": 1757914815.5067017,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -22858,7 +23450,7 @@
     }
   },
   "Life Manager/MDs/\u041c\u0438\u043a\u0440\u043e\u0442\u0435\u043c\u044b \u0434\u043b\u044f \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u043d\u043e\u0433\u043e \u043a\u043b\u0443\u0431\u0430.md": {
-    "mtime": 1757462639.7566583,
+    "mtime": 1758427611.7293258,
     "analysis": {
       "valid_links": [],
       "broken_links": [],
@@ -23001,7 +23593,7 @@
     }
   },
   "Life Manager/MDs/\u041d\u0430\u043f\u043e\u043b\u043d\u0438\u0442\u044c \u043c\u044b\u043b\u043e \u041a\u041d\u0421.md": {
-    "mtime": 1756167976.6048849,
+    "mtime": 1758103248.8812478,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Regular HK.md"
@@ -23015,7 +23607,7 @@
     }
   },
   "Life Manager/MDs/\u041d\u0430\u0441\u0442\u043e\u043b\u043a\u0430 \u0418\u0433\u0440\u0430 \u043d\u0430 \u043c\u0438\u043b\u043b\u0438\u0430\u0440\u0434.md": {
-    "mtime": 1756004208.852109,
+    "mtime": 1758329671.7090254,
     "analysis": {
       "valid_links": [
         "Files/External/FAQ_25.pdf",
@@ -23092,7 +23684,7 @@
     }
   },
   "Life Manager/MDs/\u041e\u0432\u043e\u0449\u0438 2.md": {
-    "mtime": 1752541521.9682262,
+    "mtime": 1757914814.3027017,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -23116,6 +23708,16 @@
       "fm_wikilinks": [
         "Budget Planner"
       ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u041e\u043a\u0440\u0443\u0436\u0435\u043d\u0438\u0435, \u043a\u0440\u0438\u0442\u0438\u043a\u0430, \u0447\u0443\u0436\u043e\u0435 \u043c\u043d\u0435\u043d\u0438\u0435. \u041a\u0430\u043a \u044d\u0442\u043e \u043d\u0430 \u043d\u0430\u0441 \u0432\u043b\u0438\u044f\u0435\u0442.md": {
+    "mtime": 1758525535.0743368,
+    "analysis": {
+      "valid_links": [],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [],
       "dataview_hubs": []
     }
   },
@@ -23215,7 +23817,7 @@
     }
   },
   "Life Manager/MDs/\u041e\u0442\u043d\u0435\u0441\u0442\u0438 \u043f\u0430\u043a\u0435\u0442\u044b \u0432 \u041a\u041d\u0421.md": {
-    "mtime": 1756274056.1068456,
+    "mtime": 1758452607.5283694,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Regular HK.md"
@@ -23257,7 +23859,7 @@
     }
   },
   "Life Manager/MDs/\u041e\u0442\u043d\u0435\u0441\u0442\u0438 \u0442\u0443\u0430\u043b\u0435\u0442\u043a\u0443 \u0432 \u041a\u041d\u0421.md": {
-    "mtime": 1756274056.113625,
+    "mtime": 1757763236.348684,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Regular HK.md"
@@ -23290,8 +23892,22 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u041f\u0435\u043f\u0435\u043b\u044c\u043d\u0438\u0446\u0430.md": {
+    "mtime": 1758439510.13461,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/HK Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "HK Purchases"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u041f\u0435\u0440\u0435\u0432\u0435\u0440\u043d\u0443\u0442\u044c \u043c\u0430\u0442\u0440\u0430\u0441 horizontal.md": {
-    "mtime": 1750498377.126247,
+    "mtime": 1758515197.3417695,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Regular HK.md"
@@ -23419,8 +24035,36 @@
       "dataview_hubs": []
     }
   },
-  "Life Manager/MDs/\u041f\u043b\u0430\u043d\u043e\u0432\u044b\u0439 \u043f\u0440\u0438\u0435\u043c \u043f\u043e \u0438\u043c\u043f\u043b\u0430\u043d\u0442\u0443 \u041b\u041d6 1.md": {
-    "mtime": 1757482171.7932892,
+  "Life Manager/MDs/\u041f\u043b\u0430\u043d \u0443\u0431\u043e\u0440\u043a\u0438.md": {
+    "mtime": 1758514291.3577697,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Housekeep.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Housekeep"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u041f\u043b\u0430\u043d\u043e\u0432\u044b\u0439 \u043f\u043e \u0438\u043c\u043f\u043b\u0430\u043d\u0442\u0443 \u041b\u041d6 2.md": {
+    "mtime": 1757558858.0652213,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Dental Tasks.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Dental Tasks"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u041f\u043b\u0430\u043d\u043e\u0432\u044b\u0439 \u043f\u0440\u0438\u0435\u043c \u043f\u043e \u0438\u043c\u043f\u043b\u0430\u043d\u0442\u0443 \u041b\u041d6 1 (\u0441\u043d\u044f\u0442\u0438\u0435 \u0448\u0432\u043e\u0432).md": {
+    "mtime": 1757558798.5132215,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Dental Tasks.md"
@@ -23463,6 +24107,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u041f\u043e\u0434\u043f\u0438\u0441\u0430\u0442\u044c \u0441\u043f\u0438\u0441\u043e\u043a \u043d\u0430 \u044d\u0432\u0430\u043a\u0443\u0430\u0446\u0438\u044e.md": {
+    "mtime": 1758148261.8883238,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/\u0412\u041c\u0420\u041f Docs.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "\u0412\u041c\u0420\u041f Docs"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u041f\u043e\u0434\u0440\u044f\u0434.md": {
     "mtime": 1756531858.5670257,
     "analysis": {
@@ -23477,8 +24135,36 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u041f\u043e\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0434\u043b\u044f \u043d\u043e\u0436\u0435\u0439.md": {
+    "mtime": 1758439056.16661,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/HK Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "HK Purchases"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u041f\u043e\u0434\u0441\u0442\u0430\u0432\u043a\u0430 \u0434\u043b\u044f \u0441\u0442\u043e\u043b\u043e\u0432\u044b\u0445 \u043f\u0440\u0438\u0431\u043e\u0440\u043e\u0432 \u043c\u043d\u043e\u0433\u043e\u043e\u0442\u0441\u0435\u0447\u043d\u0430\u044f.md": {
+    "mtime": 1758439063.2826102,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/HK Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "HK Purchases"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u041f\u043e\u0434\u0443\u0448\u043a\u0430 \u0434\u043b\u044f \u0441\u0442\u0443\u043b\u0430 2025.md": {
-    "mtime": 1755150207.5886202,
+    "mtime": 1758016100.7587318,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/TC Purchases.md"
@@ -23631,6 +24317,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u041f\u043e\u0445\u043e\u0434 \u043d\u0430 \u0422\u043e\u0431\u0438\u0437\u0438\u043d\u0430 1.md": {
+    "mtime": 1758155117.0179298,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/FUN Events.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "FUN Events"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u041f\u043e\u0447\u0435\u043c\u0443 \u0432\u043e\u043f\u0440\u043e\u0441 \u043e \u0446\u0430\u0440\u0441\u043a\u0438\u0445 \u0434\u043e\u043b\u0433\u0430\u0445 \u0441\u0442\u0430\u043b \u0446\u0435\u043d\u0442\u0440\u0430\u043b\u044c\u043d\u044b\u043c \u043d\u0430 \u043a\u043e\u043d\u0444\u0435\u0440\u0435\u043d\u0446\u0438\u0438.md": {
     "mtime": 1747040967.510362,
     "analysis": {
@@ -23754,9 +24454,10 @@
     }
   },
   "Life Manager/MDs/\u041f\u0440\u043e\u0432\u0435\u0440\u0438\u0442\u044c \u043c\u043e\u0447\u0435\u0432\u0443\u044e \u043a\u0438\u0441\u043b\u043e\u0442\u0443.md": {
-    "mtime": 1756704060.908329,
+    "mtime": 1758516064.153769,
     "analysis": {
       "valid_links": [
+        "Files/External/ticket-39769045.pdf",
         "Life Manager/MDs/Body Elements Tasks.md"
       ],
       "broken_links": [],
@@ -23833,31 +24534,19 @@
       "dataview_hubs": []
     }
   },
-  "Life Manager/MDs/\u041f\u0440\u044f\u043c \u043f\u0440\u0438\u043a\u043e\u043b\u044c\u043d\u0430\u044f \u0444\u0443\u0442\u0431\u043e\u043b\u043a\u0430.md": {
-    "mtime": 1757482349.4368792,
-    "analysis": {
-      "valid_links": [
-        "Life Manager/MDs/Clothes Purchases.md"
-      ],
-      "broken_links": [],
-      "has_external_links": false,
-      "fm_wikilinks": [
-        "Clothes Purchases"
-      ],
-      "dataview_hubs": []
-    }
-  },
   "Life Manager/MDs/\u0420\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u043d\u044b\u0439 \u043a\u043b\u0443\u0431 IKRA.md": {
-    "mtime": 1757482446.479367,
+    "mtime": 1758370554.5523028,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/FUN Events.md",
         "Life Manager/MDs/falling in reverse music videos.md",
+        "Life Manager/MDs/\u0411\u0430\u043b\u0430\u043d\u0441 \u043c\u0435\u0436\u0434\u0443 \u0440\u0430\u0431\u043e\u0442\u043e\u0439 \u0438 \u0436\u0438\u0437\u043d\u044c\u044e.md",
         "Life Manager/MDs/\u0413\u043b\u043e\u0431\u0430\u043b\u044c\u043d\u044b\u0439 \u0440\u0435\u0439\u0442\u0438\u043d\u0433 \u0432\u0441\u0435\u0433\u043e.md",
         "Life Manager/MDs/\u041a\u0430\u043a \u043f\u0435\u0440\u0435\u0441\u0442\u0430\u0442\u044c \u043f\u0440\u043e\u043a\u0440\u0430\u0441\u0442\u0438\u043d\u0438\u0440\u043e\u0432\u0430\u0442\u044c.md",
         "Life Manager/MDs/\u041c\u0438\u043a\u0440\u043e\u0442\u0435\u043c\u044b \u0434\u043b\u044f \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u043d\u043e\u0433\u043e \u043a\u043b\u0443\u0431\u0430.md",
         "Life Manager/MDs/\u041c\u0438\u0441\u0442\u0438\u043a\u0430 \u0432 \u0436\u0438\u0437\u043d\u0438 \u0438 \u043c\u0430\u0433\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u043c\u044b\u0448\u043b\u0435\u043d\u0438\u0435.md",
         "Life Manager/MDs/\u041c\u043e\u0438 \u043b\u044e\u0431\u0438\u043c\u044b\u0435 \u043f\u0440\u043e\u0438\u0437\u0432\u0435\u0434\u0435\u043d\u0438\u044f \u0438\u0441\u043a\u0443\u0441\u0441\u0442\u0432\u0430.md",
+        "Life Manager/MDs/\u041e\u043a\u0440\u0443\u0436\u0435\u043d\u0438\u0435, \u043a\u0440\u0438\u0442\u0438\u043a\u0430, \u0447\u0443\u0436\u043e\u0435 \u043c\u043d\u0435\u043d\u0438\u0435. \u041a\u0430\u043a \u044d\u0442\u043e \u043d\u0430 \u043d\u0430\u0441 \u0432\u043b\u0438\u044f\u0435\u0442.md",
         "Life Manager/MDs/\u0421\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0435 \u0442\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438.md",
         "Life Manager/MDs/\u042d\u043a\u0441\u043f\u043e\u0440\u0442 \u0442\u0435\u043c \u0440\u0430\u0437\u0433\u043e\u0432\u043e\u0440\u043d\u043e\u0433\u043e \u043a\u043b\u0443\u0431\u0430.md"
       ],
@@ -23907,6 +24596,20 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u0420\u0435\u0446\u0438\u0434\u0438\u0432 \u043b\u0435\u0432\u043e\u0433\u043e \u043a\u043e\u043b\u0435\u043d\u0430 \u043f\u043e\u0441\u043b\u0435 \u0441\u043f\u043e\u0440\u0442\u0438\u0432\u043d\u043e\u0439 \u0445\u043e\u0434\u044c\u0431\u044b.md": {
+    "mtime": 1758062117.159918,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/Joints Tasks.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "Joints Tasks"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u0420\u043e\u043c\u0430.md": {
     "mtime": 1749357733.4642906,
     "analysis": {
@@ -23935,8 +24638,22 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u0420\u043e\u0441\u043f\u0438\u0441\u044c \u0437\u0430 \u044d\u043b\u0435\u043a\u0442\u0440\u043e\u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442.md": {
+    "mtime": 1757892649.23163,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/\u0412\u041c\u0420\u041f Docs.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "\u0412\u041c\u0420\u041f Docs"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u0421\u0430\u043b\u0444\u0435\u0442\u043a\u0438 \u0434\u043b\u044f \u0443\u0431\u043e\u0440\u043a\u0438.md": {
-    "mtime": 1757482171.8134298,
+    "mtime": 1757647866.6909938,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/HK Purchases.md"
@@ -24048,7 +24765,7 @@
     }
   },
   "Life Manager/MDs/\u0421\u0435\u043d\u0442\u044f\u0431\u0440\u044c 2025. \u0410\u043a\u0442\u0438\u0432\u0438\u0440\u0443\u0435\u043c\u0441\u044f \u0438 \u0443\u0447\u0438\u043c\u0441\u044f \u043d\u0430 \u043e\u0448\u0438\u0431\u043a\u0430\u0445.md": {
-    "mtime": 1757472306.3570268,
+    "mtime": 1758517445.0417686,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Diary.md",
@@ -24062,8 +24779,22 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u0421\u043a\u043e\u0432\u043e\u0440\u043e\u0434\u043a\u0430 \u0434\u043b\u044f \u0441\u043f\u0435\u0446\u0438\u0439.md": {
+    "mtime": 1757954788.1063166,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/HK Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "HK Purchases"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u0421\u043a\u043e\u0440\u043e\u0432\u043e\u0434\u0430 \u0441 \u043a\u0440\u044b\u0448\u043a\u043e\u0439 2025.md": {
-    "mtime": 1755138293.6507807,
+    "mtime": 1757954763.577873,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/HK Purchases.md"
@@ -24077,7 +24808,7 @@
     }
   },
   "Life Manager/MDs/\u0421\u043d\u0438\u043c\u043e\u043a \u043b\u0435\u0432\u043e\u0433\u043e \u043a\u043e\u043b\u0435\u043d\u0430 2.md": {
-    "mtime": 1753763659.0554495,
+    "mtime": 1758062109.8039181,
     "analysis": {
       "valid_links": [
         "Files/External/Adobe Scan Jul 29, 2025.pdf",
@@ -24107,7 +24838,7 @@
     }
   },
   "Life Manager/MDs/\u0421\u043d\u0438\u043c\u043e\u043a \u043c\u0435\u043d\u0438\u0441\u043a\u0430 \u043b\u0435\u0432\u043e\u0433\u043e \u043a\u043e\u043b\u0435\u043d\u0430.md": {
-    "mtime": 1747040991.062362,
+    "mtime": 1758062126.027918,
     "analysis": {
       "valid_links": [
         "Files/External/\u041a\u043e\u0441\u0430\u0440\u0435\u0432 \u0414.\u0410..pdf",
@@ -24136,7 +24867,7 @@
     }
   },
   "Life Manager/MDs/\u0421\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u044b\u0435 \u0442\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438.md": {
-    "mtime": 1757134032.3872268,
+    "mtime": 1757593998.5474992,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u0413\u041f\u0422 - \u0440\u0430\u0439 \u0438\u043f\u043e\u0445\u043e\u043d\u0434\u0440\u0438\u043a\u0430.md"
@@ -24408,7 +25139,7 @@
     }
   },
   "Life Manager/MDs/\u0422\u0435\u043b\u0435\u0441\u043d\u044b\u0439 \u0442\u0440\u0435\u043d\u0438\u043d\u0433 \u0441\u043e \u0417\u043b\u0430\u0442\u043e\u0439.md": {
-    "mtime": 1756810489.000616,
+    "mtime": 1757763173.1493893,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/FUN Events.md"
@@ -24437,7 +25168,7 @@
     }
   },
   "Life Manager/MDs/\u0422\u0443\u0430\u043b\u0435\u0442\u043d\u0430\u044f \u0431\u0443\u043c\u0430\u0433\u0430.md": {
-    "mtime": 1755141030.971285,
+    "mtime": 1757914816.3587017,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -24560,7 +25291,7 @@
     }
   },
   "Life Manager/MDs/\u0423\u0448\u043d\u044b\u0435 \u043f\u0430\u043b\u043e\u0447\u043a\u0438.md": {
-    "mtime": 1757482171.8229606,
+    "mtime": 1757647881.8909938,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/HK Purchases.md"
@@ -24660,7 +25391,7 @@
     }
   },
   "Life Manager/MDs/\u0427\u0430\u0439-\u043a\u043e\u0444\u0435 2.md": {
-    "mtime": 1752541520.5802262,
+    "mtime": 1757911605.155838,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Budget Planner.md"
@@ -24688,7 +25419,7 @@
     }
   },
   "Life Manager/MDs/\u0427\u0442\u043e \u0442\u043e \u043f\u043e \u043c\u0435\u0434\u043e\u0441\u043c\u043e\u0442\u0440\u0443 \u0443 \u0434\u0438\u0441\u043f\u0435\u0442\u0447\u0435\u0440\u0430.md": {
-    "mtime": 1757482171.8417733,
+    "mtime": 1757545265.9627528,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/\u0412\u041c\u0420\u041f Docs.md"
@@ -24701,8 +25432,36 @@
       "dataview_hubs": []
     }
   },
+  "Life Manager/MDs/\u0428\u0432\u0430\u0431\u0440\u0430 \u0434\u043b\u044f \u043e\u043a\u043e\u043d.md": {
+    "mtime": 1758439070.31061,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/HK Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "HK Purchases"
+      ],
+      "dataview_hubs": []
+    }
+  },
+  "Life Manager/MDs/\u0428\u0432\u0430\u0431\u0440\u0430 \u0434\u043b\u044f \u043f\u043e\u043b\u043e\u0432.md": {
+    "mtime": 1758439076.22261,
+    "analysis": {
+      "valid_links": [
+        "Life Manager/MDs/HK Purchases.md"
+      ],
+      "broken_links": [],
+      "has_external_links": false,
+      "fm_wikilinks": [
+        "HK Purchases"
+      ],
+      "dataview_hubs": []
+    }
+  },
   "Life Manager/MDs/\u0428\u0442\u0430\u043d\u044b \u0438 \u0434\u043b\u044f \u0442\u0430\u043d\u0446\u0435\u0432 \u0438 \u0434\u043b\u044f \u0443\u043b\u0438\u0446\u044b.md": {
-    "mtime": 1757482299.5107658,
+    "mtime": 1757668079.2500432,
     "analysis": {
       "valid_links": [
         "Life Manager/MDs/Clothes Purchases.md"
