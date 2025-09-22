@@ -27,6 +27,14 @@ IGNORED_FOLDERS = [
 IGNORE_ROOT_FILES = True
 # ===================================================
 
+# Свойства в frontmatter, которые могут содержать ссылки в виде простого текста.
+# Скрипт будет рассматривать значение этих свойств как потенциальную ссылку на файл.
+# Пример: `banner: "attachments/image.png"`
+FRONTMATTER_LINK_PROPERTIES = [
+    "banner",
+    "image",
+]
+
 # --- Вспомогательные функции (аналогичные предыдущему скрипту) ---
 
 # Регулярные выражения для поиска ссылок
@@ -158,13 +166,17 @@ def _generate_table_for_category(files: list[Path], vault: Path) -> list[str]:
 
 def analyze_file_content(content: str, file_path: Path, vault_path: Path, file_index: dict[str, Path]) -> dict:
     """Анализирует содержимое файла, извлекая все виды ссылок за один проход."""
-    # --- Анализ обычных ссылок ---
     valid_links = set()
     broken_links = set()
     has_external_links = False
-    cleaned_body = _clean_markdown_body(content)
+    fm_wikilinks = []
+    dataview_hubs_found = []
 
-    for match in WIKI_RE.finditer(cleaned_body):
+    # --- 1. Анализ ссылок в теле и frontmatter (WIKI и INLINE) ---
+    # _clean_markdown_body удаляет код-блоки и т.д., где ссылки не должны учитываться.
+    cleaned_content = _clean_markdown_body(content)
+
+    for match in WIKI_RE.finditer(cleaned_content):
         raw_link = match.group(1).strip()
         decoded_link = unquote(raw_link)
         target_path = find_file_in_vault(file_index, decoded_link)
@@ -173,7 +185,7 @@ def analyze_file_content(content: str, file_path: Path, vault_path: Path, file_i
         else:
             broken_links.add(decoded_link)
 
-    for match in INLINE_RE.finditer(cleaned_body):
+    for match in INLINE_RE.finditer(cleaned_content):
         raw_link = match.group(1).strip()
         decoded_link = unquote(raw_link)
         if decoded_link.startswith(('http://', 'https://', 'ftp://', 'mailto:')):
@@ -191,24 +203,72 @@ def analyze_file_content(content: str, file_path: Path, vault_path: Path, file_i
         else:
             broken_links.add(decoded_link)
 
-    # --- Анализ "виртуальных" ссылок ---
-    fm_wikilinks = []
+    # --- 2. Дополнительный анализ Frontmatter ---
     fm_match = FRONTMATTER_RE.match(content)
     if fm_match:
         frontmatter_content = fm_match.group(1)
+        
+        # 2.1. Анализ "виртуальных" ссылок для dataview (`wikilinks` property)
         for section in FM_WIKILINKS_SECTION_RE.finditer(frontmatter_content):
             for link_match in FM_WIKILINK_ITEM_RE.finditer(section.group(1)):
                 hub_name = link_match.group(1).strip()
                 fm_wikilinks.append(hub_name)
+        
+        # 2.2. Анализ ссылок в специальных свойствах (e.g., `banner: [[image.png]]` или `banner: image.png`)
+        for prop in FRONTMATTER_LINK_PROPERTIES:
+            # Regex to find `prop: value` and capture the value until the end of the line.
+            prop_re = re.compile(rf'^\s*{prop}:\s*(.*)', re.MULTILINE)
+            for match in prop_re.finditer(frontmatter_content):
+                value_str = match.group(1).strip()
+                
+                # Remove potential quotes
+                if (value_str.startswith('"') and value_str.endswith('"')) or \
+                   (value_str.startswith("'") and value_str.endswith("'")):
+                    value_str = value_str[1:-1]
 
-    dataview_hubs_found = []
+                if not value_str:
+                    continue
+
+                # Now value_str is either `[[image.png]]` or `image.png`
+                link_text = ""
+                # Check if the value is a wikilink, e.g., "[[image.png]]"
+                # Using findall to be safe, and taking the first result if multiple exist.
+                wiki_links_in_value = FM_WIKILINK_ITEM_RE.findall(value_str)
+                if wiki_links_in_value:
+                    link_text = wiki_links_in_value[0].strip()
+                else:
+                    # If not a wikilink, treat the whole string as a potential path
+                    link_text = value_str.strip()
+
+                if not link_text:
+                    continue
+                
+                decoded_link = unquote(link_text)
+                
+                if decoded_link.startswith(('http://', 'https://')):
+                    has_external_links = True
+                    continue
+
+                # 1. Try as a path relative to the vault root.
+                potential_path = (vault_path / decoded_link).resolve()
+                if potential_path.exists() and potential_path.is_file():
+                    valid_links.add(potential_path)
+                    continue
+
+                # 2. If not, try to find by filename in the whole vault (fallback) and handle broken links
+                file_name_only = Path(decoded_link).name
+                target_path = find_file_in_vault(file_index, file_name_only)
+                if target_path and target_path.exists():
+                    valid_links.add(target_path)
+                else:
+                    broken_links.add(decoded_link)
+
+    # --- 3. Анализ dataview-запросов (может быть где угодно в файле) ---
     for block in QUERY_BLOCK_RE.finditer(content):
         for match in DATAVIEW_FILTER_RE.finditer(block.group(1)):
-            # match.group(1) - это имя хаба для link("...") или None для link(this.file.name)
             hub_name = match.group(1).strip() if match.group(1) else file_path.stem
             dataview_hubs_found.append(hub_name)
 
-    # Данные для кэширования (пути сохраняются как строки)
     return {
         "valid_links": sorted([p.relative_to(vault_path).as_posix() for p in valid_links]),
         "broken_links": sorted(list(broken_links)),
