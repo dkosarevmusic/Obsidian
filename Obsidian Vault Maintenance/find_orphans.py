@@ -4,8 +4,15 @@ import collections
 import json
 import time
 import hashlib
+import sys
 from pathlib import Path
 from urllib.parse import unquote
+
+# PyYAML is required for advanced frontmatter parsing (e.g., in 'banner' property).
+try:
+    import yaml
+except ImportError:
+    yaml = None # Make it optional, check for it later.
 
 # ================== CONFIGURATION ==================
 # Укажите АБСОЛЮТНЫЙ путь к вашему хранилищу Obsidian
@@ -66,44 +73,27 @@ def build_file_index(vault_path: Path, ignored_folders: list[str], cache_file_na
     Использует os.scandir для максимальной производительности.
     """
     index = {}
-    # Нормализуем пути игнорируемых папок для надежного сравнения.
-    # Приводим к нижнему регистру и используем '/' в качестве разделителя.
-    ignored_paths_normalized = {p.strip().lower().replace("\\", "/") for p in ignored_folders}
+    ignored_folders_set = {p.strip().lower().replace("\\", "/") for p in ignored_folders}
+    ignored_files_set = {cache_file_name, report_file_name}
 
-    def scan_recursively(current_path: Path):
-        """Рекурсивно сканирует директории с помощью os.scandir."""
-        # Проверяем, не находится ли текущая директория в списке игнорируемых.
-        # relative_to() для корневой папки возвращает '.', поэтому обрабатываем его отдельно.
-        relative_path = current_path.relative_to(vault_path)
-        current_relative_posix = relative_path.as_posix().lower()
-        
-        # Игнорируем папку, если она есть в списке. Пропускаем '.', чтобы случайно не проигнорировать все хранилище.
-        if current_relative_posix != '.' and current_relative_posix in ignored_paths_normalized:
-            return
+    for root, dirs, files in os.walk(vault_path, topdown=True):
+        root_path = Path(root)
 
-        is_root_folder = (current_path == vault_path)
+        # Отсекаем игнорируемые и скрытые директории из дальнейшего обхода
+        dirs[:] = [
+            d for d in dirs if not d.startswith('.') and
+            (root_path / d).relative_to(vault_path).as_posix().lower() not in ignored_folders_set
+        ]
 
-        try:
-            for entry in os.scandir(current_path):
-                # Игнорируем скрытые файлы и папки (начинающиеся с точки)
-                if entry.name.startswith('.'):
-                    continue
-                
-                if entry.is_dir():
-                    scan_recursively(Path(entry.path))
-                elif entry.is_file():
-                    # Игнорируем файлы отчета, кэша и файлы в корне (если включена опция)
-                    if entry.name in (cache_file_name, report_file_name) or \
-                       (ignore_root_files and is_root_folder):
-                        continue
+        # Пропускаем файлы в корневой папке, если включена опция
+        if ignore_root_files and root_path == vault_path:
+            continue
 
-                    # os.normcase для кросс-платформенной совместимости ключей
-                    index[os.path.normcase(entry.name)] = Path(entry.path)
-        except OSError as e:
-            # Игнорируем ошибки доступа к папкам, например, из-за прав
-            print(f"  ⚠️  Не удалось просканировать директорию: {current_path} ({e})")
+        for file_name in files:
+            if file_name.startswith('.') or file_name in ignored_files_set:
+                continue
+            index[os.path.normcase(file_name)] = root_path / file_name
 
-    scan_recursively(vault_path)
     return index
 
 def find_file_in_vault(file_index: dict[str, Path], file_name: str) -> Path | None:
@@ -164,6 +154,30 @@ def _generate_table_for_category(files: list[Path], vault: Path) -> list[str]:
         lines.append("\n")
     return lines
 
+def _format_dead_ends_with_loose_ends(items: dict, vault: Path) -> list[str]:
+    """Форматирует список для категории 'тупики с оборванными ссылками'."""
+    lines = []
+    sorted_items = sorted(items.items(), key=lambda item: str(item[0]))
+    for file_path, broken_links in sorted_items:
+        lines.append(f"- {_create_obsidian_link(file_path, vault)}\n")
+        for broken in sorted(broken_links):
+            lines.append(f"  - `(битая ссылка) → {broken}`\n")
+    lines.append("\n")
+    return lines
+
+def _extract_strings_from_yaml_value(value) -> list[str]:
+    """Recursively extracts all string values from a nested YAML structure (lists/dicts)."""
+    strings = []
+    if isinstance(value, str):
+        strings.append(value)
+    elif isinstance(value, list):
+        for item in value:
+            strings.extend(_extract_strings_from_yaml_value(item))
+    elif isinstance(value, dict):
+        for sub_value in value.values():
+            strings.extend(_extract_strings_from_yaml_value(sub_value))
+    return strings
+
 def analyze_file_content(content: str, file_path: Path, vault_path: Path, file_index: dict[str, Path]) -> dict:
     """Анализирует содержимое файла, извлекая все виды ссылок за один проход."""
     valid_links = set()
@@ -214,54 +228,52 @@ def analyze_file_content(content: str, file_path: Path, vault_path: Path, file_i
                 hub_name = link_match.group(1).strip()
                 fm_wikilinks.append(hub_name)
         
-        # 2.2. Анализ ссылок в специальных свойствах (e.g., `banner: [[image.png]]` или `banner: image.png`)
-        for prop in FRONTMATTER_LINK_PROPERTIES:
-            # Regex to find `prop: value` and capture the value until the end of the line.
-            prop_re = re.compile(rf'^\s*{prop}:\s*(.*)', re.MULTILINE)
-            for match in prop_re.finditer(frontmatter_content):
-                value_str = match.group(1).strip()
-                
-                # Remove potential quotes
-                if (value_str.startswith('"') and value_str.endswith('"')) or \
-                   (value_str.startswith("'") and value_str.endswith("'")):
-                    value_str = value_str[1:-1]
+        # 2.2. Глубокий анализ ссылок в специальных свойствах с использованием YAML-парсера
+        if yaml and FRONTMATTER_LINK_PROPERTIES:
+            try:
+                fm_data = yaml.safe_load(frontmatter_content)
+                if isinstance(fm_data, dict):
+                    for prop in FRONTMATTER_LINK_PROPERTIES:
+                        if prop in fm_data:
+                            # Рекурсивно извлекаем все строковые значения из свойства
+                            link_candidates = _extract_strings_from_yaml_value(fm_data[prop])
+                            
+                            for raw_link_text in link_candidates:
+                                link_text = ""
+                                # Сначала проверяем, не является ли строка вики-ссылкой
+                                wiki_links_in_value = FM_WIKILINK_ITEM_RE.findall(raw_link_text)
+                                if wiki_links_in_value:
+                                    link_text = wiki_links_in_value[0].strip()
+                                else:
+                                    # Если нет, используем всю строку как есть
+                                    link_text = raw_link_text.strip()
 
-                if not value_str:
-                    continue
+                                if not link_text:
+                                    continue
+                                
+                                decoded_link = unquote(link_text)
+                                
+                                if decoded_link.startswith(('http://', 'https://')):
+                                    has_external_links = True
+                                    continue
 
-                # Now value_str is either `[[image.png]]` or `image.png`
-                link_text = ""
-                # Check if the value is a wikilink, e.g., "[[image.png]]"
-                # Using findall to be safe, and taking the first result if multiple exist.
-                wiki_links_in_value = FM_WIKILINK_ITEM_RE.findall(value_str)
-                if wiki_links_in_value:
-                    link_text = wiki_links_in_value[0].strip()
-                else:
-                    # If not a wikilink, treat the whole string as a potential path
-                    link_text = value_str.strip()
+                                # Логика поиска файла (такая же, как была)
+                                # 1. Try as a path relative to the vault root.
+                                potential_path = (vault_path / decoded_link).resolve()
+                                if potential_path.exists() and potential_path.is_file():
+                                    valid_links.add(potential_path)
+                                    continue
 
-                if not link_text:
-                    continue
-                
-                decoded_link = unquote(link_text)
-                
-                if decoded_link.startswith(('http://', 'https://')):
-                    has_external_links = True
-                    continue
-
-                # 1. Try as a path relative to the vault root.
-                potential_path = (vault_path / decoded_link).resolve()
-                if potential_path.exists() and potential_path.is_file():
-                    valid_links.add(potential_path)
-                    continue
-
-                # 2. If not, try to find by filename in the whole vault (fallback) and handle broken links
-                file_name_only = Path(decoded_link).name
-                target_path = find_file_in_vault(file_index, file_name_only)
-                if target_path and target_path.exists():
-                    valid_links.add(target_path)
-                else:
-                    broken_links.add(decoded_link)
+                                # 2. If not, try to find by filename in the whole vault (fallback) and handle broken links
+                                file_name_only = Path(decoded_link).name
+                                target_path = find_file_in_vault(file_index, file_name_only)
+                                if target_path and target_path.exists():
+                                    valid_links.add(target_path)
+                                else:
+                                    broken_links.add(decoded_link)
+            except yaml.YAMLError:
+                # Игнорируем ошибки парсинга YAML, чтобы не прерывать весь анализ
+                pass
 
     # --- 3. Анализ dataview-запросов (может быть где угодно в файле) ---
     for block in QUERY_BLOCK_RE.finditer(content):
@@ -412,42 +424,53 @@ def _categorize_files(file_graph: dict, report_file_name: str) -> dict:
 def _generate_report(categories: dict, vault_path: Path, report_path: Path):
     """Генерирует и сохраняет итоговый markdown-отчет."""
     total_found = sum(len(v) for v in categories.values())
+
+    # Если проблемных файлов нет, создаем чистый отчет и выходим.
     if total_found == 0:
         print("🎉 Всё связано — проблемных файлов не найдено!")
+        report_lines = [
+            "---\ntags:\n  - optimization\n  - cleanup\n---\n\n",
+            "# Отчет о проблемных файлах\n\n",
+            f"✅ **Проблемных файлов не найдено.**\n\n_Отчет обновлен {time.strftime('%Y-%m-%d %H:%M:%S')}_"
+        ]
+        try:
+            with open(report_path, 'w', encoding='utf-8') as f:
+                f.writelines(report_lines)
+            print(f"✅ Отчет обновлен, подтверждено отсутствие проблем: {report_path}")
+        except Exception as e:
+            print(f"❌ Критическая ошибка при записи файла отчета: {e}")
         return
 
     print("🔄 Создание отчета...")
     report_lines = [
-        "---\n",
-        "tags:\n",
-        "  - optimization\n",
-        "  - cleanup\n",
-        "---\n\n",
+        "---\ntags:\n  - optimization\n  - cleanup\n---\n\n",
         f"# Отчет о проблемных файлах ({total_found} шт.)\n\n"
     ]
 
-    dead_ends_with_loose_ends = categories["dead_ends_with_loose_ends"]
-    if dead_ends_with_loose_ends:
-        report_lines.append(f"## 🕸️ Тупики с оборванными ссылками ({len(dead_ends_with_loose_ends)} шт.)\n\n")
-        report_lines.append("Файлы, на которые нет ссылок, и которые сами ссылаются на **несуществующие** файлы. **Требуют внимания в первую очередь.**\n\n")
-        sorted_items = sorted(dead_ends_with_loose_ends.items(), key=lambda item: str(item[0]))
-        for file_path, broken_links in sorted_items:
-            report_lines.append(f"- {_create_obsidian_link(file_path, vault_path)}\n")
-            for broken in sorted(broken_links):
-                report_lines.append(f"  - `(битая ссылка) → {broken}`\n")
-        report_lines.append("\n")
+    report_sections = {
+        "dead_ends_with_loose_ends": {
+            "title": "🕸️ Тупики с оборванными ссылками",
+            "description": "Файлы, на которые нет ссылок, и которые сами ссылаются на **несуществующие** файлы. **Требуют внимания в первую очередь.**",
+            "formatter": _format_dead_ends_with_loose_ends
+        },
+        "dead_ends": {
+            "title": "🛑 Тупики",
+            "description": "Файлы, на которые нет ссылок, но которые сами ссылаются на **существующие** файлы. На эти файлы невозможно попасть по ссылкам.",
+            "formatter": _generate_table_for_category
+        },
+        "absolute_orphans": {
+            "title": "🗑️ Абсолютные сироты",
+            "description": "Файлы, у которых нет ни входящих, ни исходящих ссылок.",
+            "formatter": _generate_table_for_category
+        }
+    }
 
-    dead_ends = categories["dead_ends"]
-    if dead_ends:
-        report_lines.append(f"## 🛑 Тупики ({len(dead_ends)} шт.)\n\n")
-        report_lines.append("Файлы, на которые нет ссылок, но которые сами ссылаются на **существующие** файлы. На эти файлы невозможно попасть по ссылкам.\n\n")
-        report_lines.extend(_generate_table_for_category(dead_ends, vault_path))
-
-    absolute_orphans = categories["absolute_orphans"]
-    if absolute_orphans:
-        report_lines.append(f"## 🗑️ Абсолютные сироты ({len(absolute_orphans)} шт.)\n\n")
-        report_lines.append("Файлы, у которых нет ни входящих, ни исходящих ссылок.\n\n")
-        report_lines.extend(_generate_table_for_category(absolute_orphans, vault_path))
+    for key, config in report_sections.items():
+        items = categories.get(key)
+        if items:
+            report_lines.append(f"## {config['title']} ({len(items)} шт.)\n\n")
+            report_lines.append(f"{config['description']}\n\n")
+            report_lines.extend(config['formatter'](items, vault_path))
 
     try:
         with open(report_path, 'w', encoding='utf-8') as f:
@@ -463,6 +486,10 @@ def main():
     if not vault.is_dir():
         print(f"❌ Ошибка: Указанный путь к хранилищу не существует или не является папкой: {VAULT_PATH}")
         return
+
+    if not yaml:
+        print("\n  ⚠️  Предупреждение: Библиотека PyYAML не найдена (команда для установки: pip install PyYAML).")
+        print("     Расширенный анализ ссылок в YAML-свойствах (например, 'banner') будет пропущен.\n")
 
     # Шаг 1: Индексация файлов
     print("🔄 Создание индекса файлов хранилища...")
