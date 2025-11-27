@@ -46,10 +46,10 @@ async function renderTableCompletion(dv, app) {
     // 2. ПОДСЧЕТ СТАТУСОВ (в один проход для скорости)
     const counts = Object.fromEntries(Object.values(STATUSES).map(s => [s.key, 0]));
     for (const p of pages) {
-        // Если статус отсутствует, пуст или не является массивом, по умолчанию считаем его 'not started'
-        const status = (p.status && Array.isArray(p.status) && p.status.length > 0)
-            ? p.status[0].toLowerCase()
-            : 'not started';
+        // Универсальное получение статуса: работает и со строкой 'status: in progress' и с массивом 'status: [in progress]'
+        const statusValue = Array.isArray(p.status) ? p.status[0] : p.status;
+        // Если статус не указан, пуст или имеет неизвестное значение, по умолчанию 'not started'
+        const status = (statusValue || 'not started').toLowerCase();
 
         const key = STATUS_KEY_MAP[status];
         if (key) counts[key]++;
