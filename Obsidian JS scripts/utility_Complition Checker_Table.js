@@ -108,10 +108,20 @@ async function renderTableCompletion(dv, app) {
         }
         
         // 4.4. Добавляем остальные ключи (статусы)
-        const statusValues = Object.fromEntries(Object.values(STATUSES).map(s => [s.fmKey, counts[s.key]]));
-        for (const key in statusValues) {
-            if (fm[key] !== statusValues[key]) {
-                updates[key] = statusValues[key];
+        // Теперь ключи статусов тоже зависят от isVisible
+        for (const statusInfo of Object.values(STATUSES)) {
+            const currentKey = isVisible ? statusInfo.fmKey : `${statusInfo.fmKey}x`;
+            const oldKey = isVisible ? `${statusInfo.fmKey}x` : statusInfo.fmKey;
+            const newCount = counts[statusInfo.key];
+
+            // Если существует старый ключ, добавляем его в список на удаление
+            if (fm.hasOwnProperty(oldKey)) {
+                deletions.push(oldKey);
+            }
+
+            // Обновляем текущий ключ, если значение изменилось или произошло переименование
+            if (fm[currentKey] !== newCount || deletions.includes(oldKey)) {
+                updates[currentKey] = newCount;
             }
         }
 

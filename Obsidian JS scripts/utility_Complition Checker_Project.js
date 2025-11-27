@@ -58,6 +58,10 @@ async function renderProjectCompletion(dv, app) {
         const fm = p.file.frontmatter;
         if (!fm) continue;
 
+        // ГЛАВНАЯ ПРОВЕРКА: Если для источника выключена видимость, пропускаем его.
+        // `compvis` может быть `undefined` (что равносильно true) или `true`. Проверяем только на явное `false`.
+        if (fm.compvis === false) continue;
+
         // Проверяем, является ли источник "под-проектом" (Тип А)
         // Признак: наличие хотя бы одного из специфичных ключей `tasks...`
         const isSubProject = Object.values(STATUSES).some(s => fm.hasOwnProperty(s.fmKey));
