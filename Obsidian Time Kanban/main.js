@@ -57,7 +57,11 @@ TKB.renderKanban = function(dv) {
             (TKB.toDate(a.date)?.getTime() || 0) - (TKB.toDate(b.date)?.getTime() || 0) ||
             
             // 2. По статусу "important" (важные задачи всегда выше в своей группе).
-            ((b.status?.includes('important') || false) - (a.status?.includes('important') || false)) ||
+            (() => {
+                const aStatus = Array.isArray(a.status) ? a.status : [String(a.status)];
+                const bStatus = Array.isArray(b.status) ? b.status : [String(b.status)];
+                return (bStatus.includes('important') || false) - (aStatus.includes('important') || false);
+            })() ||
 
             // 3. По времени (задачи со временем всегда выше, затем сортировка по значению).
             (!!b.time - !!a.time) ||
@@ -87,7 +91,11 @@ TKB.renderKanban = function(dv) {
 
     // 1. Получаем и ОДИН РАЗ сортируем все задачи
     const pagesArr = dv.pages(TKB.SOURCE_PATH)
-      .where(p => p.date && p.status?.some(s => TKB.ALLOWED_STATUSES.includes(s)))
+      .where(p => {
+          if (!p.date || !p.status) return false;
+          const pageStatuses = Array.isArray(p.status) ? p.status : [String(p.status)];
+          return pageStatuses.some(s => TKB.ALLOWED_STATUSES.includes(s));
+      })
       .array()
       .sort(compareTasks);
 
