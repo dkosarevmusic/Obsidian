@@ -101,6 +101,19 @@ async function renderProjectCompletion(dv, app) {
                     statusSources[statusKey].add(p.file.path);
                 }
             }
+        } else if (fm.status) {
+            // Это простая задача (Тип В), у которой есть только статус.
+            // Считаем ее как одну задачу.
+            const statusValue = (Array.isArray(fm.status) ? fm.status[0] : fm.status)?.toLowerCase();
+            const statusKey = STATUS_LOOKUP[statusValue] || 'notstarted';
+
+            // Увеличиваем счетчик для соответствующего статуса.
+            totalCounts[statusKey] += 1;
+
+            // Добавляем в список источников для выпадающего списка.
+            if (statusSources.hasOwnProperty(statusKey)) {
+                statusSources[statusKey].add(p.file.path);
+            }
         }
     }
 
