@@ -68,3 +68,39 @@ def generate_remove_report(results: List[AnalysisResult], errors: List[AnalysisR
                 f.write(f"- ❌ Ошибка в файле `{relative_path}`: {err.error}\n")
     
     print(f"✅ Отчёт сохранён в '{report_path}'")
+
+def generate_status_fix_report(
+    results: List[AnalysisResult], 
+    errors: List[AnalysisResult], 
+    report_path: str, 
+    vault_path: str,
+    total_files_scanned: int
+):
+    """
+    Генерирует отчет для операции исправления поля 'status'.
+    """
+    results.sort(key=lambda r: (r.area.lower(), r.file_path.lower()))
+
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write(f"# 🛠️ Отчёт об исправлении поля 'status' ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})\n")
+        f.write(f"🔍 Всего проанализировано: **{total_files_scanned}** файлов.\n")
+        f.write(f"✅ Найдено для исправления: **{len(results)}** файлов, где `status` был списком.\n\n")
+        
+        if results:
+            f.write("### Список измененных файлов по областям\n\n")
+            for area, group in groupby(results, key=lambda r: r.area):
+                f.write(f"#### Area: {area}\n")
+                for res in group:
+                    relative_path = os.path.relpath(res.file_path, vault_path)
+                    # Показываем, какое значение было до исправления
+                    f.write(f"- `{relative_path}` (Было: `{res.original_status_value}`)\n")
+                f.write("\n")
+        
+        if errors:
+            f.write("\n---\n\n")
+            f.write(f"### ⚠️ Обнаружены ошибки при анализе ({len(errors)}):\n")
+            for err in errors:
+                relative_path = os.path.relpath(err.file_path, vault_path)
+                f.write(f"- ❌ Ошибка в файле `{relative_path}`: {err.error}\n")
+
+    print(f"✅ Отчёт сохранён в '{report_path}'")

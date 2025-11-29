@@ -1,8 +1,5 @@
 # --- КОНФИГУРАЦИЯ СКРИПТА ---
 
-# Укажите АБСОЛЮТНЫЙ путь к вашему хранилищу Obsidian
-vault_path: "D:/Obsidian/dkosarevmusic"
-
 # Укажите путь к файлу-шаблону (может быть относительным от папки со скриптом)
 reference_file_path: "C:/Users/Dmitrij Kosarev/Documents/GitHub/Obsidian/Obsidian JS scripts/utility_Complition Checker_Project.md"
 
@@ -15,4 +12,4 @@ target_types:
   - 'project'
 
 # Имя файла для отчета
-report_file_name: "current_script_report.md"
+report_file_name: "current_sc

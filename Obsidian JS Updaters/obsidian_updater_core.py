@@ -23,6 +23,8 @@ class AnalysisResult:
     has_non_target_type: bool = False
     block_count: int = 0
     separators_found_count: int = 0
+    status_is_list: bool = False
+    original_status_value: Optional[any] = None
     error: Optional[str] = None
 
 def format_yaml_value(value: any, default: str) -> str:

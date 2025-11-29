@@ -1,29 +1,29 @@
 import os
+import re
+import yaml
 
+from typing import Tuple
 from obsidian_updater_core import (
     SEPARATOR_CONFIG_NAME,
     DATAVIEWJS_BLOCK_RE,
     SEPARATOR_REMOVAL_RE,
+    FRONTMATTER_RE,
 )
 from obsidian_updater_config import get_all_configs, select_config, load_config
 from obsidian_updater_analysis import run_analysis
 from obsidian_updater_reporting import (
     generate_replace_report,
     generate_remove_report,
+    generate_status_fix_report,
 )
 from obsidian_updater_fileops import archive_and_modify_files
 
-def handle_replace_operation(script_dir: str):
+def handle_replace_operation(script_dir: str, vault_path: str):
     """Обрабатывает операцию замены блоков `dataviewjs`."""
     config_files = get_all_configs(script_dir, exclude=SEPARATOR_CONFIG_NAME)
     if not (config_path := select_config(config_files, script_dir)):
         return
     if not (config := load_config(config_path)):
-        return
-    
-    if not (vault_path := config.get("vault_path")) or not os.path.isdir(vault_path):
-        config_name = os.path.basename(config_path)
-        print(f"❌ Ошибка: 'vault_path' не указан, не найден или не является папкой в '{config_name}'.")
         return
 
     reference_file_path = config.get("reference_file_path")
@@ -76,7 +76,7 @@ def handle_replace_operation(script_dir: str):
         archive_and_modify_files(files_with_blocks, vault_path, modification_func)
         generate_replace_report(files_with_blocks, error_files, full_report_path, vault_path)
 
-def handle_remove_operation(script_dir: str):
+def handle_remove_operation(script_dir: str, vault_path: str):
     """Обрабатывает операцию удаления разделителей '---'."""
     config_path = os.path.join(script_dir, SEPARATOR_CONFIG_NAME)
     if not os.path.exists(config_path):
@@ -86,11 +86,7 @@ def handle_remove_operation(script_dir: str):
     if not (config := load_config(config_path)):
         return
 
-    vault_path = config.get("vault_path")
     full_report_path = os.path.join(script_dir, config.get("report_file_name", "default_report.md"))
-    if not vault_path or not os.path.isdir(vault_path):
-        print(f"❌ Ошибка: 'vault_path' не указан или не является папкой в '{SEPARATOR_CONFIG_NAME}'")
-        return
 
     # Собираем все target_types из всех остальных конфигов
     other_configs = get_all_configs(script_dir, exclude=SEPARATOR_CONFIG_NAME)
@@ -143,23 +139,114 @@ def handle_remove_operation(script_dir: str):
         archive_and_modify_files(files_to_clean, vault_path, modification_func)
         generate_remove_report(files_to_clean, error_files, full_report_path, vault_path)
 
+def handle_status_fix_operation(script_dir: str, vault_path: str):
+    """Обрабатывает операцию исправления поля 'status' из списка в строку."""
+    # Используем конфиг от операции №2 для консистентности имени файла отчета
+    config_path = os.path.join(script_dir, SEPARATOR_CONFIG_NAME)
+    if not os.path.exists(config_path):
+        print(f"❌ Ошибка: Конфигурационный файл '{SEPARATOR_CONFIG_NAME}' не найден. Он нужен для определения имени файла отчета.")
+        return
+
+    if not (config := load_config(config_path)):
+        return
+
+    full_report_path = os.path.join(script_dir, config.get("report_file_name", "default_report.md"))
+
+    print("Начинаю анализ файлов на наличие поля 'status' в виде списка...")
+    # Анализируем ВСЕ файлы, используя новый флаг return_all_files=True
+    target_files, error_files = run_analysis(vault_path, special_names=[], target_types=None, return_all_files=True)
+
+    print(f"Всего проанализировано: {len(target_files)} файлов.")
+    files_to_fix = [res for res in target_files if res.status_is_list]
+    print(f"Найдено {len(files_to_fix)} файлов для исправления.")
+
+    while (mode := input("\nВыберите режим выполнения:\n1. 📝 Только сгенерировать отчёт\n2. 🚀 Выполнить исправление и сгенерировать отчёт\nВведите 1 или 2: ")) not in ['1', '2']:
+        print("Неверный ввод. Пожалуйста, введите 1 или 2.")
+
+    # Передаем общее количество проанализированных файлов в функцию генерации отчета
+    if mode == '1':
+        print("\n--- Режим: Только отчёт ---")
+        generate_status_fix_report(files_to_fix, error_files, full_report_path, vault_path, total_files_scanned=len(target_files))
+
+    elif mode == '2':
+        print("\n--- Режим: Исправление и отчёт ---")
+        if not files_to_fix:
+            print("ℹ️ Нет файлов, требующих исправления.")
+            generate_status_fix_report(files_to_fix, error_files, full_report_path, vault_path, total_files_scanned=len(target_files))
+            return
+
+        print(f"\n⚠️ ВНИМАНИЕ: Будет предпринята попытка изменить {len(files_to_fix)} файлов.")
+        confirm = input("Вы уверены, что хотите продолжить? (введите 'yes'): ").lower()
+        if confirm != 'yes':
+            print("🚫 Операция отменена пользователем.")
+            return
+
+        def fix_status_field(content: str) -> Tuple[str, int]:
+            fm_match = FRONTMATTER_RE.match(content)
+            if not fm_match:
+                return content, 0
+
+            fm_text = fm_match.group(1)
+            try:
+                frontmatter = yaml.safe_load(fm_text)
+                if isinstance(frontmatter, dict) and isinstance(frontmatter.get('status'), list):
+                    status_list = frontmatter['status']
+                    # Берем первый элемент или оставляем пустым, если список пуст
+                    frontmatter['status'] = status_list[0] if status_list else ''
+                    
+                    # Преобразуем обратно в YAML, сохраняя порядок и стиль
+                    new_fm_text = yaml.dump(frontmatter, sort_keys=False, allow_unicode=True, default_flow_style=False)
+                    new_content = content.replace(fm_text, new_fm_text, 1)
+                    return new_content, 1
+            except yaml.YAMLError:
+                return content, 0 # Не трогаем файлы с ошибками YAML
+            return content, 0
+
+        archive_and_modify_files(files_to_fix, vault_path, fix_status_field)
+        generate_status_fix_report(files_to_fix, error_files, full_report_path, vault_path, total_files_scanned=len(target_files))
+
 def main():
     """Главная функция скрипта."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    VAULT_CONFIG_NAME = "vault_config.yml"
+    vault_config_path = os.path.join(script_dir, VAULT_CONFIG_NAME)
+
+    if not os.path.exists(vault_config_path):
+        print(f"❌ КРИТИЧЕСКАЯ ОШИБКА: Глобальный конфигурационный файл '{VAULT_CONFIG_NAME}' не найден.")
+        print("Пожалуйста, создайте его и укажите 'vault_path'.")
+        return
+
+    vault_config = load_config(vault_config_path)
+    if not vault_config or not (vault_path := vault_config.get("vault_path")):
+        print(f"❌ КРИТИЧЕСКАЯ ОШИБКА: Ключ 'vault_path' не найден в '{VAULT_CONFIG_NAME}'.")
+        return
+
+    # Нормализуем слэши в пути для кросс-платформенной совместимости
+    vault_path = vault_path.replace('\\', '/')
+
+    if not os.path.isdir(vault_path):
+        print(f"❌ КРИТИЧЕСКАЯ ОШИБКА: Путь '{vault_path}', указанный в '{VAULT_CONFIG_NAME}', не существует или не является папкой.")
+        return
+    
+    print(f"✅ Работаем с хранилищем: {vault_path}\n")
     
     print("Выберите основную операцию:")
     print("1. 🔄 Заменить код-блоки dataviewjs")
     print("2. 🧹 Удалить разделители '---' после код-блоков")
+    print("3. 🛠️  Исправить поле 'status' в frontmatter (из списка в строку)")
     
-    while (choice := input("Введите 1 или 2: ")) not in ['1', '2']:
-        print("Неверный ввод. Пожалуйста, введите 1 или 2.")
+    while (choice := input("Введите 1, 2 или 3: ")) not in ['1', '2', '3']:
+        print("Неверный ввод. Пожалуйста, введите 1, 2 или 3.")
 
     if choice == '1':
         print("\n--- Операция: Замена код-блоков ---")
-        handle_replace_operation(script_dir)
+        handle_replace_operation(script_dir, vault_path)
     elif choice == '2':
         print("\n--- Операция: Удаление разделителей ---")
-        handle_remove_operation(script_dir)
+        handle_remove_operation(script_dir, vault_path)
+    elif choice == '3':
+        print("\n--- Операция: Исправление поля 'status' ---")
+        handle_status_fix_operation(script_dir, vault_path)
 
 if __name__ == "__main__":
     main()

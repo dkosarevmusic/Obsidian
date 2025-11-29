@@ -1,0 +1,4 @@
+# --- КОНФИГУРАЦИЯ СКРИПТА ИСПРАВЛЕНИЯ 'status' ---
+
+# Имя файла для отчета
+report_file_name: "status_fix_report.md"

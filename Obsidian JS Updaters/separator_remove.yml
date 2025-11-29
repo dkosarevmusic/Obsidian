@@ -1,10 +1,5 @@
 # Конфигурация для операции удаления разделителей '---'
 
-# Абсолютный путь к вашему хранилищу Obsidian.
-# Пример для Windows: "C:/Users/User/Documents/MyVault"
-# Пример для macOS/Linux: "/home/user/MyVault"
-vault_path: "C:/Obsidian/dkosarevmusic"
-
 # Имя файла, в который будет сохранен отчет.
 report_file_name: "current_script_report.md"
 
