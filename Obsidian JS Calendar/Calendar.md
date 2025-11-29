@@ -20,6 +20,7 @@
 const OJSC = {}; // Namespace для всех функций и переменных календаря
 
 try {
+    const luxon = dv.luxon; // Получаем luxon из API Dataview
     // Путь к папке со скриптами от корня хранилища.
     const SCRIPT_FOLDER = "JS Scripts/cal";
     // Порядок важен: config -> utils -> main
@@ -30,13 +31,13 @@ try {
         if (!scriptContent) {
             throw new Error(`Файл скрипта пуст или не найден: ${fileName}`);
         }
-        // Выполняем код модуля, передавая ему пространство имен OJSC и объект dv
-        new Function('OJSC', 'dv', scriptContent)(OJSC, dv);
+        // Выполняем код модуля, передавая ему пространство имен OJSC, объект dv и библиотеку luxon
+        new Function('OJSC', 'dv', 'luxon', scriptContent)(OJSC, dv, luxon);
     }
 
     // Проверяем, что основная функция была определена в main.js
     if (typeof OJSC.renderCalendar !== 'function') {
-        throw new Error("Основная функция OJSC.renderCalendar не была найдена. Проверьте файл Obsidian JS Calendar/main.js.");
+        throw new Error("Основная функция OJSC.renderCalendar не была найдена. Проверьте файл JS Scripts/cal/main.js.");
     }
 
     // Запускаем основную логику
@@ -44,7 +45,7 @@ try {
 
 } catch (e) {
     // Выводим сообщение об ошибке прямо в заметке для удобной отладки
-    dv.el("pre", `❌ **Ошибка выполнения JS Calendar.**\n\n${e.message}\n\n${e.stack}`);
+    dv.el("pre", `❌ **Ошибка выполнения JS Calendar.**\n\n**Сообщение:** ${e.message}\n\n**Стек:**\n${e.stack}`);
     console.error("JS Calendar Error:", e);
 }
 ```

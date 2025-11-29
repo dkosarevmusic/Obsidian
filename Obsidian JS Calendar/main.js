@@ -1,18 +1,127 @@
 /**
  * Основная логика для получения данных и рендеринга календаря.
  */
-const luxon = dv.luxon;
 
 /**
  * Получает задачи из хранилища на основе конфигурации.
  * @param {object} dv - Глобальный объект API Dataview.
- * @returns {Array} - Массив страниц (задач).
+ * @returns {Array<object>} - Массив страниц (задач).
  */
 function getTasks(dv) {
      const source = OJSC.config.source;
      const dateField = OJSC.config.dateField;
-     // Загружаем страницы, где есть указанное поле с датой
-     return dv.pages(source).where(p => p[dateField]);
+     const statusField = OJSC.config.statusField;
+     const allowedStatuses = OJSC.config.allowedStatuses;
+
+     // Загружаем страницы, где есть поле с датой и статус из списка разрешенных
+     return dv.pages(source).where(p =>
+         p[dateField] &&
+         p[statusField] &&
+         allowedStatuses.includes(p[statusField])
+     );
+}
+
+/**
+ * Группирует задачи по датам в формате 'yyyy-MM-dd'.
+ * @param {Array<object>} tasks - Массив задач от Dataview.
+ * @returns {object} - Объект, где ключи - это даты, а значения - массивы задач.
+ */
+function groupTasksByDate(tasks) {
+    const tasksByDate = {};
+    tasks.forEach(task => {
+        const dateField = task[OJSC.config.dateField];
+        if (dateField) {
+            const dateStr = OJSC.utils.formatDate(dateField);
+            if (!tasksByDate[dateStr]) tasksByDate[dateStr] = [];
+            tasksByDate[dateStr].push(task);
+        }
+    });
+    return tasksByDate;
+}
+
+/**
+ * Создает и возвращает HTML-элемент для одной ячейки дня.
+ * @param {luxon.DateTime} day - Текущий день для рендеринга.
+ * @param {luxon.DateTime} viewDate - Отображаемая дата (для определения текущего месяца).
+ * @param {object} tasksByDate - Сгруппированные задачи.
+ * @returns {HTMLElement} - Элемент `<td>`.
+ */
+function createDayCell(day, viewDate, tasksByDate) {
+    const cell = document.createElement('td');
+    cell.className = 'ojsc-day-cell';
+
+    // Стилизация ячейки
+    if (day.month !== viewDate.month) {
+        cell.classList.add('ojsc-other-month');
+    }
+    if (day.hasSame(luxon.DateTime.now(), 'day')) {
+        cell.classList.add('ojsc-today');
+    }
+
+    // Номер дня
+    const dayNumber = document.createElement('div');
+    dayNumber.className = 'ojsc-day-number';
+    dayNumber.textContent = day.day;
+    cell.appendChild(dayNumber);
+
+    // Список задач
+    const dateStr = day.toFormat('yyyy-MM-dd');
+    if (tasksByDate[dateStr]) {
+        const taskListEl = document.createElement('ul');
+        taskListEl.className = 'ojsc-task-list';
+        tasksByDate[dateStr].forEach(task => {
+            const taskItem = document.createElement('li');
+            taskItem.className = 'ojsc-task-item';
+
+            const link = document.createElement('a');
+            link.textContent = task[OJSC.config.summaryField] || task.file.name;
+            link.className = 'internal-link';
+            link.href = task.file.path;
+            taskItem.appendChild(link);
+
+            taskListEl.appendChild(taskItem);
+        });
+        cell.appendChild(taskListEl);
+    }
+    return cell;
+}
+
+/**
+ * Возвращает строку со всеми CSS-стилями для календаря.
+ * @returns {string}
+ */
+function getStyles() {
+    return `
+        .ojsc-wrapper {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+        }
+        .ojsc-calendar { 
+            border-collapse: collapse; 
+            width: 100%; 
+            border: 1px solid var(--background-modifier-border); 
+            table-layout: fixed; 
+        }
+        .ojsc-calendar th, .ojsc-calendar td { 
+            border: 1px solid var(--background-modifier-border); 
+            padding: 8px; 
+            vertical-align: top; 
+            width: 14.28%; 
+        }
+        .ojsc-calendar th { 
+            background-color: var(--background-secondary-alt); 
+            text-align: center; 
+        }
+        .ojsc-calendar .ojsc-day-cell { height: 120px; overflow: hidden; }
+        .ojsc-calendar .ojsc-day-number { font-size: 0.9em; font-weight: bold; }
+        .ojsc-calendar .ojsc-other-month .ojsc-day-number { color: var(--text-muted); }
+        .ojsc-calendar .ojsc-today .ojsc-day-number { color: var(--text-accent); }
+        .ojsc-calendar .ojsc-task-list { list-style: none; padding: 0; margin: 5px 0 0 0; font-size: 0.85em; }
+        .ojsc-calendar .ojsc-task-item { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ojsc-calendar .ojsc-task-item a { display: block; overflow: hidden; text-overflow: ellipsis; }
+        .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; }
+    `;
 }
 
 /**
@@ -20,113 +129,57 @@ function getTasks(dv) {
  * @param {object} dv - Глобальный объект API Dataview.
  * @param {luxon.DateTime} viewDate - Дата для отображения (по умолчанию сегодня).
  */
-OJSC.renderCalendar = (dv, viewDate = luxon.luxon.now()) => {
+OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
     const container = dv.container;
     container.innerHTML = ''; // Очищаем контейнер перед отрисовкой
 
-    // --- 1. Стили для календаря ---
-    const styles = `
-        .ojsc-calendar { border-collapse: collapse; width: 100%; border: 1px solid var(--background-modifier-border); }
-        .ojsc-calendar th, .ojsc-calendar td { border: 1px solid var(--background-modifier-border); padding: 8px; vertical-align: top; }
-        .ojsc-calendar th { background-color: var(--background-secondary-alt); text-align: center; }
-        .ojsc-calendar .ojsc-day-cell { height: 120px; }
-        .ojsc-calendar .ojsc-day-number { font-size: 0.9em; font-weight: bold; }
-        .ojsc-calendar .ojsc-other-month .ojsc-day-number { color: var(--text-muted); }
-        .ojsc-calendar .ojsc-today .ojsc-day-number { color: var(--text-accent); }
-        .ojsc-calendar .ojsc-task-list { list-style: none; padding: 0; margin: 5px 0 0 0; font-size: 0.85em; }
-        .ojsc-calendar .ojsc-task-item { margin-bottom: 4px; }
-        .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; }
-    `;
-    const styleEl = document.createElement('style');
-    styleEl.innerHTML = styles;
-    container.appendChild(styleEl);
-
-    // --- 2. Получение и группировка задач ---
+    // 1. Получаем и группируем данные
     const tasks = getTasks(dv);
-    const tasksByDate = {};
-    tasks.forEach(task => {
-        const dateField = task[OJSC.config.dateField];
-        if (dateField) {
-            const dateStr = OJSC.utils.formatDate(dateField.toJSDate());
-            if (!tasksByDate[dateStr]) {
-                tasksByDate[dateStr] = [];
-            }
-            tasksByDate[dateStr].push(task);
-        }
-    });
+    const tasksByDate = groupTasksByDate(tasks);
 
-    // --- 3. Отрисовка заголовка ---
+    // 2. Создаем основные элементы в памяти
+    const fragment = document.createDocumentFragment();
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ojsc-wrapper';
+
+    // Заголовок
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
     const monthName = viewDate.setLocale('ru').toFormat('LLLL yyyy');
     headerEl.innerHTML = `<h2>${monthName}</h2>`; // TODO: Добавить кнопки навигации
-    container.appendChild(headerEl);
+    wrapper.appendChild(headerEl);
 
-    // --- 4. Отрисовка сетки календаря ---
+    // Таблица
     const table = document.createElement('table');
     table.className = 'ojsc-calendar';
 
-    // Дни недели (Пн-Вс)
+    // Шапка таблицы (Пн-Вс)
     const thead = table.createTHead();
     const weekdaysRow = thead.insertRow();
-    const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    weekdays.forEach(day => {
+    ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
         const th = document.createElement('th');
         th.textContent = day;
         weekdaysRow.appendChild(th);
     });
 
-    // Дни месяца
+    // Тело таблицы (дни)
     const tbody = table.createTBody();
-    const startOfMonth = viewDate.startOf('month');
-    const endOfMonth = viewDate.endOf('month');
-    // Начинаем с понедельника недели, в которой находится первый день месяца
-    let currentDay = startOfMonth.startOf('week');
+    let currentDay = viewDate.startOf('month').startOf('week');
+    const endDay = viewDate.endOf('month').endOf('week');
 
-    const todayStr = luxon.luxon.now().toFormat('yyyy-MM-dd');
-
-    while (currentDay <= endOfMonth.endOf('week')) {
+    while (currentDay <= endDay) {
         const weekRow = tbody.insertRow();
         for (let i = 0; i < 7; i++) {
-            const cell = weekRow.insertCell();
-            cell.className = 'ojsc-day-cell';
-
-            // Стилизация ячейки
-            if (currentDay.month !== viewDate.month) {
-                cell.classList.add('ojsc-other-month');
-            }
-            if (currentDay.toFormat('yyyy-MM-dd') === todayStr) {
-                cell.classList.add('ojsc-today');
-            }
-
-            // Номер дня
-            const dayNumber = document.createElement('div');
-            dayNumber.className = 'ojsc-day-number';
-            dayNumber.textContent = currentDay.day;
-            cell.appendChild(dayNumber);
-
-            // Список задач
-            const dateStr = currentDay.toFormat('yyyy-MM-dd');
-            if (tasksByDate[dateStr]) {
-                const taskListEl = document.createElement('ul');
-                taskListEl.className = 'ojsc-task-list';
-                tasksByDate[dateStr].forEach(task => {
-                    const taskItem = document.createElement('li');
-                    taskItem.className = 'ojsc-task-item';
-                    // Создаем ссылку на заметку
-                    const link = dv.fileLink(task.file.path, task[OJSC.config.summaryField] || task.file.name);
-                    taskItem.appendChild(link);
-                    taskListEl.appendChild(taskItem);
-                });
-                cell.appendChild(taskListEl);
-            }
-
-            currentDay = currentDay.plus({
-                days: 1
-            });
+            const cell = createDayCell(currentDay, viewDate, tasksByDate);
+            weekRow.appendChild(cell);
+            currentDay = currentDay.plus({ days: 1 });
         }
     }
+    wrapper.appendChild(table);
 
-    container.appendChild(table);
+    // 3. Добавляем стили и собранный HTML на страницу
+    // Использование fragment минимизирует количество перерисовок DOM
+    fragment.appendChild(wrapper);
+    dv.el('style', getStyles());
+    container.appendChild(fragment);
 };

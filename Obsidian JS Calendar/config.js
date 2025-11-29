@@ -11,6 +11,12 @@ OJSC.config = {
     // Поле для отображения в качестве заголовка события
     summaryField: 'text',
 
+    // Поле, содержащее статус задачи (как в Kanban)
+    statusField: 'status',
+
+    // Статусы, которые нужно отображать в календаре. Задачи с другими статусами будут скрыты.
+    allowedStatuses: ["important", "imschedule", "imw", "in progress"],
+
     // Начальный вид календаря ('month', 'week', 'day')
     initialView: 'month'
 };
