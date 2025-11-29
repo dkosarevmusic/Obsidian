@@ -26,6 +26,7 @@ def analyze_file(file_path: str, special_names: List[str], target_types: List[st
         is_special_name = os.path.basename(file_path) in special_names
         area, file_type_str = "[No Area]", "[No Type]"
         status_is_list = False
+        status_is_not_string = False
         original_status_value = None
         has_target_type, has_non_target_type = False, False
 
@@ -36,8 +37,9 @@ def analyze_file(file_path: str, special_names: List[str], target_types: List[st
                     
                     if status_val := frontmatter.get('status'):
                         status_is_list = isinstance(status_val, list)
-                        if status_is_list:
-                            original_status_value = status_val
+                        status_is_not_string = not isinstance(status_val, str)
+                        if status_is_list or status_is_not_string:
+                             original_status_value = status_val
 
                     if file_type := frontmatter.get('type'):
                         file_type_str = format_yaml_value(file_type, '[No Type]')
@@ -65,6 +67,7 @@ def analyze_file(file_path: str, special_names: List[str], target_types: List[st
             block_count=block_count,
             separators_found_count=separators_found_count,
             status_is_list=status_is_list,
+            status_is_not_string=status_is_not_string,
             original_status_value=original_status_value
         )
 

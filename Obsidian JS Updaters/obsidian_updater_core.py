@@ -24,6 +24,7 @@ class AnalysisResult:
     block_count: int = 0
     separators_found_count: int = 0
     status_is_list: bool = False
+    status_is_not_string: bool = False
     original_status_value: Optional[any] = None
     error: Optional[str] = None
 

@@ -15,6 +15,7 @@ from obsidian_updater_reporting import (
     generate_replace_report,
     generate_remove_report,
     generate_status_fix_report,
+    generate_status_check_report,
 )
 from obsidian_updater_fileops import archive_and_modify_files
 
@@ -205,6 +206,29 @@ def handle_status_fix_operation(script_dir: str, vault_path: str):
         archive_and_modify_files(files_to_fix, vault_path, fix_status_field)
         generate_status_fix_report(files_to_fix, error_files, full_report_path, vault_path, total_files_scanned=len(target_files))
 
+def handle_status_check_operation(script_dir: str, vault_path: str):
+    """Проверяет, что поле 'status' является строкой, и генерирует отчет."""
+    # Используем конфиг от операции №2 для консистентности имени файла отчета
+    config_path = os.path.join(script_dir, SEPARATOR_CONFIG_NAME)
+    if not os.path.exists(config_path):
+        print(f"❌ Ошибка: Конфигурационный файл '{SEPARATOR_CONFIG_NAME}' не найден. Он нужен для определения имени файла отчета.")
+        return
+
+    if not (config := load_config(config_path)):
+        return
+
+    full_report_path = os.path.join(script_dir, config.get("report_file_name", "default_report.md"))
+
+    print("Начинаю анализ файлов на тип поля 'status'...")
+    # Анализируем ВСЕ файлы
+    all_files, error_files = run_analysis(vault_path, special_names=[], target_types=None, return_all_files=True)
+
+    files_with_invalid_status = [res for res in all_files if res.status_is_not_string]
+    print(f"Всего проанализировано: {len(all_files)} файлов.")
+    print(f"Найдено {len(files_with_invalid_status)} файлов, где 'status' не является строкой.")
+
+    generate_status_check_report(files_with_invalid_status, error_files, full_report_path, vault_path, total_files_scanned=len(all_files))
+
 def main():
     """Главная функция скрипта."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -233,10 +257,11 @@ def main():
     print("Выберите основную операцию:")
     print("1. 🔄 Заменить код-блоки dataviewjs")
     print("2. 🧹 Удалить разделители '---' после код-блоков")
-    print("3. 🛠️  Исправить поле 'status' в frontmatter (из списка в строку)")
+    print("3. 🛠️  Исправить поле 'status' (из списка в строку)")
+    print("4. 🔍 Проверить тип поля 'status' (должен быть строкой)")
     
-    while (choice := input("Введите 1, 2 или 3: ")) not in ['1', '2', '3']:
-        print("Неверный ввод. Пожалуйста, введите 1, 2 или 3.")
+    while (choice := input("Введите 1, 2, 3 или 4: ")) not in ['1', '2', '3', '4']:
+        print("Неверный ввод. Пожалуйста, введите 1, 2, 3 или 4.")
 
     if choice == '1':
         print("\n--- Операция: Замена код-блоков ---")
@@ -247,6 +272,9 @@ def main():
     elif choice == '3':
         print("\n--- Операция: Исправление поля 'status' ---")
         handle_status_fix_operation(script_dir, vault_path)
+    elif choice == '4':
+        print("\n--- Операция: Проверка типа поля 'status' ---")
+        handle_status_check_operation(script_dir, vault_path)
 
 if __name__ == "__main__":
     main()
