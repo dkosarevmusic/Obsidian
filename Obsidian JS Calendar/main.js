@@ -92,7 +92,7 @@ function createDayCell(day, viewDate, tasksByDate) {
  */
 function getStyles() {
     return `
-        .ojsc-wrapper {
+        .ojsc-container {
             width: 100%;
         }
         .ojsc-calendar { 
@@ -114,7 +114,17 @@ function getStyles() {
         .ojsc-day-cell { height: 120px; overflow: hidden; }
         .ojsc-day-number { font-size: 0.9em; font-weight: bold; margin-bottom: 4px; }
         .ojsc-other-month .ojsc-day-number { color: var(--text-muted); opacity: 0.7; }
-        .ojsc-today .ojsc-day-number { color: var(--text-accent); }
+        .ojsc-today .ojsc-day-number { 
+            background-color: var(--text-accent); 
+            color: var(--text-on-accent, white);
+            border-radius: 50%;
+            width: 1.8em;
+            height: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
         .ojsc-task-list { list-style: none; padding: 0; margin: 5px 0 0 0; font-size: 0.85em; }
         .ojsc-task-item { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .ojsc-task-item a { display: block; overflow: hidden; text-overflow: ellipsis; }
@@ -138,6 +148,7 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
 
     // 2. Создаем корневой элемент, который будет содержать и стили, и HTML
     const rootEl = document.createElement('div');
+    rootEl.className = 'ojsc-container';
     
     // Добавляем стили прямо в корневой элемент
     const styleEl = document.createElement('style');
@@ -180,9 +191,6 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
     }
     rootEl.appendChild(table);
 
-    // 3. Оборачиваем все в .ojsc-wrapper для растягивания на всю ширину
-    const wrapper = document.createElement('div');
-    wrapper.className = 'ojsc-wrapper';
-    wrapper.appendChild(rootEl);
-    container.appendChild(wrapper);
+    // 3. Добавляем собранный календарь на страницу
+    container.appendChild(rootEl);
 };
