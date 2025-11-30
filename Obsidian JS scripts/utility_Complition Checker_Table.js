@@ -148,42 +148,40 @@ async function renderTableCompletion(dv, app) {
         dv.paragraph('<hr />');
 
         // 5.3. Детальная статистика по статусам в виде таблицы для выравнивания
-        const tableRows = [];
-        // Добавляем стили, чтобы полностью скрыть ячейки и рамки таблицы, переопределяя стили темы
-        const cellStyle = "border: none; background: transparent;";
+        const flexRows = [];
         for (const statusName of DISPLAY_ORDER) {
             const statusInfo = STATUSES[statusName];
             const count = counts[statusInfo.key];
 
             if (count > 0) {
                 // Ячейка со статусом. Добавляем отступ справа для разделения колонок.
-                const statusCell = `<td style="${cellStyle} padding-right: 1em;">${statusInfo.emoji}&nbsp;${statusInfo.name}:</td>`;
+                const statusCell = `<div style="width: 120px; flex-shrink: 0;">${statusInfo.emoji}&nbsp;${statusInfo.name}:</div>`;
                 
                 // Ячейка с прогрессом/количеством
-                let progressCell;
+                let progressContent;
                 if (statusName === 'cancelled') {
-                    progressCell = `<td style="${cellStyle}"><b>${count}</b></td>`;
+                    progressContent = `<b>${count}</b>`;
                 } else {
                     // Для незавершенных статусов ('in progress', 'not started', 'postpone') 
                     // в качестве знаменателя используем только оставшиеся задачи (без 'done' и 'cancelled').
                     // Для статуса 'done' используем общий знаменатель (без 'cancelled').
                     const isRemainingStatus = ['in progress', 'not started', 'postpone'].includes(statusName);
                     const denominator = isRemainingStatus ? totalRemaining : totalForProgress;
-
+                    
+                    // `position: relative; top: 0.1em;` для лучшего вертикального выравнивания прогресс-бара
                     const progressTag = denominator > 0 
-                        ? `<progress value="${count}" max="${denominator}"></progress>` 
+                        ? `<progress style="position: relative; top: 0.1em;" value="${count}" max="${denominator}"></progress>` 
                         : '';
-                    // `vertical-align: middle` для выравнивания текста и прогресс-бара по центру
-                    progressCell = `<td style="${cellStyle} vertical-align: middle;">${progressTag}&nbsp;<b>${count}/${denominator || 0}</b></td>`;
+                    progressContent = `${progressTag}&nbsp;<b>${count}/${denominator || 0}</b>`;
                 }
-                tableRows.push(`<tr>${statusCell}${progressCell}</tr>`);
+                const progressCell = `<div style="display: flex; align-items: center;">${progressContent}</div>`;
+                flexRows.push(`<div style="display: flex; align-items: center;">${statusCell}${progressCell}</div>`);
             }
         }
         
-        if (tableRows.length > 0) {
-            // Убираем стандартные отступы и рамки таблицы для более чистого вида.
-            const tableHtml = `<table style="border-spacing: 0; border-collapse: collapse; border: none;"><tbody>${tableRows.join('')}</tbody></table>`;
-            dv.el('div', tableHtml);
+        if (flexRows.length > 0) {
+            const flexContainerHtml = `<div style="display: flex; flex-direction: column; gap: 4px;">${flexRows.join('')}</div>`;
+            dv.el('div', flexContainerHtml);
         } else if (totalLinks > 0) { // Если есть связанные страницы, но ни одна не попала в статистику
             dv.paragraph("Все связанные задачи имеют неизвестный статус.");
         }
