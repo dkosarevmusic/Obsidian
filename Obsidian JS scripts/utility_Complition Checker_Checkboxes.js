@@ -1,5 +1,11 @@
 async function renderCheckboxCompletion(dv, app) {
   // --- НАСТРОЙКИ ---
+  // Задержка в миллисекундах перед обновлением frontmatter. 2000 = 2 секунды.
+  const UPDATE_DELAY = 2000; 
+  // Глобальный объект для хранения таймеров, чтобы они не сбрасывались при каждом запуске скрипта.
+  if (!window.checkboxUpdaters) window.checkboxUpdaters = {};
+  const file = dv.current().file;
+
   // Ключи, когда прогресс ВИДИМ для других скриптов
   const VISIBLE_COMP_KEY = 'comp';
   const VISIBLE_TASKS_KEY = 'tasks';
@@ -10,7 +16,6 @@ async function renderCheckboxCompletion(dv, app) {
   const VISIBILITY_KEY = 'compvis';
 
   // --- 1. ПОЛУЧЕНИЕ ДАННЫХ ---
-  const file = dv.current().file;
   const fm = file.frontmatter;
   const allTasks = file.tasks || [];
   
@@ -59,21 +64,28 @@ async function renderCheckboxCompletion(dv, app) {
 
   // 4.4. Применяем все изменения одним махом, если они есть
   if (Object.keys(updates).length > 0 || deletions.length > 0) {
-    const tfile = app.vault.getAbstractFileByPath(file.path);
-    if (tfile && !tfile.children) { // Убедимся, что это файл, а не папка
-      await app.fileManager.processFrontMatter(tfile, (frontmatter) => {
-        // Применяем обновления
-        for (const key in updates) {
-          frontmatter[key] = updates[key];
-        }
-        // Удаляем старые ключи
-        for (const key of deletions) {
-          delete frontmatter[key];
-        }
-      });
+    // Отменяем предыдущий запланированный вызов, если он был
+    if (window.checkboxUpdaters[file.path]) {
+      clearTimeout(window.checkboxUpdaters[file.path]);
     }
-  }
 
+    // Планируем новый вызов функции обновления
+    window.checkboxUpdaters[file.path] = setTimeout(async () => {
+      const tfile = app.vault.getAbstractFileByPath(file.path);
+      if (tfile && !tfile.children) { // Убедимся, что это файл, а не папка
+        await app.fileManager.processFrontMatter(tfile, (frontmatter) => {
+          // Применяем обновления
+          Object.assign(frontmatter, updates);
+          // Удаляем старые ключи
+          for (const key of deletions) {
+            delete frontmatter[key];
+          }
+        });
+      }
+      delete window.checkboxUpdaters[file.path]; // Очищаем после выполнения
+    }, UPDATE_DELAY);
+  }
+  
   // --- 5. ВЫВОД В PREVIEW ---
   if (total === 0) {
     dv.paragraph("В этой заметке нет задач.");
