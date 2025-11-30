@@ -50,6 +50,10 @@ function createDayCell(day, viewDate, tasksByDate) {
     const cell = document.createElement('td');
     cell.className = 'ojsc-day-cell';
 
+    // Внутренняя обертка для flex-контейнера, чтобы не ломать разметку таблицы
+    const cellInner = document.createElement('div');
+    cellInner.className = 'ojsc-day-cell-inner';
+
     // Стилизация ячейки
     if (day.month !== viewDate.month) {
         cell.classList.add('ojsc-other-month');
@@ -62,7 +66,7 @@ function createDayCell(day, viewDate, tasksByDate) {
     const dayNumber = document.createElement('div');
     dayNumber.className = 'ojsc-day-number';
     dayNumber.textContent = day.day;
-    cell.appendChild(dayNumber);
+    cellInner.appendChild(dayNumber);
 
     // Список задач
     const dateStr = day.toFormat('yyyy-MM-dd');
@@ -81,8 +85,10 @@ function createDayCell(day, viewDate, tasksByDate) {
 
             taskListEl.appendChild(taskItem);
         });
-        cell.appendChild(taskListEl);
+        cellInner.appendChild(taskListEl);
     }
+
+    cell.appendChild(cellInner);
     return cell;
 }
 
@@ -111,7 +117,17 @@ function getStyles() {
             background-color: var(--background-secondary); 
             text-align: center; 
         }
-        .ojsc-day-cell { height: 120px; overflow: hidden; }
+        .ojsc-day-cell { 
+            height: 120px; 
+            overflow: hidden;
+        }
+        .ojsc-day-cell-inner {
+            height: 100%;
+            display: flex; 
+            flex-direction: column;
+            margin: -8px; /* Компенсируем padding родительской ячейки */
+            padding: 8px 0; /* <-- [СДВИГ 1] Внутренние отступы всей ячейки (0 по бокам для макс. ширины) */
+        }
         .ojsc-day-number { font-size: 0.9em; font-weight: bold; margin-bottom: 4px; }
         .ojsc-other-month .ojsc-day-number { color: var(--text-muted); opacity: 0.7; }
         .ojsc-today .ojsc-day-number { 
@@ -125,8 +141,16 @@ function getStyles() {
             justify-content: center;
             margin-bottom: 4px;
         }
-        .ojsc-task-list { list-style: none; padding: 0; margin: 5px -16px 0 -16px; font-size: 0.85em; }
-        .ojsc-task-item { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 2px; }
+        .ojsc-task-list { list-style: none; padding: 0 4px 0 0; margin: 5px 0 0 -18px; font-size: 0.85em; /* <-- [СДВИГ 2] Отрицательный отступ для "вытягивания" списка задач */ }
+        .ojsc-task-item { 
+            margin-bottom: 4px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            background-color: var(--background-secondary);
+            border-radius: 4px;
+            padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
+        }
         .ojsc-task-item a { display: block; overflow: hidden; text-overflow: ellipsis; }
         .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; }
