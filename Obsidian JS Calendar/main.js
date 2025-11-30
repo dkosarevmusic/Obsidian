@@ -93,8 +93,7 @@ function createDayCell(day, viewDate, tasksByDate) {
 function getStyles() {
     return `
         .ojsc-wrapper {
-            width: 100vw;
-            margin-left: calc(-50vw + 50%);
+            width: 100%;
         }
         .ojsc-calendar { 
             border-collapse: collapse; 
@@ -108,17 +107,17 @@ function getStyles() {
             vertical-align: top; 
             width: 14.28%; 
         }
-        .ojsc-calendar th { 
-            background-color: var(--background-secondary-alt); 
+        .ojsc-weekday-header { 
+            background-color: var(--background-secondary); 
             text-align: center; 
         }
-        .ojsc-calendar .ojsc-day-cell { height: 120px; overflow: hidden; }
-        .ojsc-calendar .ojsc-day-number { font-size: 0.9em; font-weight: bold; }
-        .ojsc-calendar .ojsc-other-month .ojsc-day-number { color: var(--text-muted); }
-        .ojsc-calendar .ojsc-today .ojsc-day-number { color: var(--text-accent); }
-        .ojsc-calendar .ojsc-task-list { list-style: none; padding: 0; margin: 5px 0 0 0; font-size: 0.85em; }
-        .ojsc-calendar .ojsc-task-item { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .ojsc-calendar .ojsc-task-item a { display: block; overflow: hidden; text-overflow: ellipsis; }
+        .ojsc-day-cell { height: 120px; overflow: hidden; }
+        .ojsc-day-number { font-size: 0.9em; font-weight: bold; margin-bottom: 4px; }
+        .ojsc-other-month .ojsc-day-number { color: var(--text-muted); opacity: 0.7; }
+        .ojsc-today .ojsc-day-number { color: var(--text-accent); }
+        .ojsc-task-list { list-style: none; padding: 0; margin: 5px 0 0 0; font-size: 0.85em; }
+        .ojsc-task-item { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ojsc-task-item a { display: block; overflow: hidden; text-overflow: ellipsis; }
         .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; }
     `;
@@ -137,17 +136,20 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
     const tasks = getTasks(dv);
     const tasksByDate = groupTasksByDate(tasks);
 
-    // 2. Создаем основные элементы в памяти
-    const fragment = document.createDocumentFragment();
-    const wrapper = document.createElement('div');
-    wrapper.className = 'ojsc-wrapper';
+    // 2. Создаем корневой элемент, который будет содержать и стили, и HTML
+    const rootEl = document.createElement('div');
+    
+    // Добавляем стили прямо в корневой элемент
+    const styleEl = document.createElement('style');
+    styleEl.textContent = getStyles();
+    rootEl.appendChild(styleEl);
 
     // Заголовок
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
     const monthName = viewDate.setLocale('ru').toFormat('LLLL yyyy');
     headerEl.innerHTML = `<h2>${monthName}</h2>`; // TODO: Добавить кнопки навигации
-    wrapper.appendChild(headerEl);
+    rootEl.appendChild(headerEl);
 
     // Таблица
     const table = document.createElement('table');
@@ -159,6 +161,7 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
     ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
         const th = document.createElement('th');
         th.textContent = day;
+        th.className = 'ojsc-weekday-header';
         weekdaysRow.appendChild(th);
     });
 
@@ -175,11 +178,11 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
             currentDay = currentDay.plus({ days: 1 });
         }
     }
-    wrapper.appendChild(table);
+    rootEl.appendChild(table);
 
-    // 3. Добавляем стили и собранный HTML на страницу
-    // Использование fragment минимизирует количество перерисовок DOM
-    fragment.appendChild(wrapper);
-    dv.el('style', getStyles());
-    container.appendChild(fragment);
+    // 3. Оборачиваем все в .ojsc-wrapper для растягивания на всю ширину
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ojsc-wrapper';
+    wrapper.appendChild(rootEl);
+    container.appendChild(wrapper);
 };
