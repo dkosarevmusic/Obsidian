@@ -125,8 +125,8 @@ function getStyles() {
             justify-content: center;
             margin-bottom: 4px;
         }
-        .ojsc-task-list { list-style: none; padding: 0; margin: 5px 0 0 0; font-size: 0.85em; }
-        .ojsc-task-item { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ojsc-task-list { list-style: none; padding: 0; margin: 5px -16px 0 -16px; font-size: 0.85em; }
+        .ojsc-task-item { margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 2px; }
         .ojsc-task-item a { display: block; overflow: hidden; text-overflow: ellipsis; }
         .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; }
