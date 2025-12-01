@@ -19,12 +19,32 @@ OJSC.utils = {
       */
      getTaskStyles: (area) => {
         const colorMap = OJSC.config.areaColors;
-        const hslColor = colorMap[area] || 'hsl(0,0%,80%)'; // Цвет по умолчанию
-        return {
-            backgroundColor: hslColor.replace('hsl(', 'hsla(').replace(')', ',0.2)'), // Полупрозрачный фон
-            color: hslColor,
-            borderColor: hslColor
-        };
+         let hslColor = colorMap[area] || 'hsl(0,0%,80%)'; // Цвет по умолчанию
+ 
+         // Разбираем HSL-строку на компоненты
+         const match = hslColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+         if (match) {
+             const [, h, s, l] = match.map(Number);
+             const threshold = OJSC.config.darkColorLightnessThreshold;
+ 
+             // Если цвет "тёмный" (светлота l < порога)
+             if (l < threshold) {
+                 return {
+                     // Фон делаем очень прозрачным
+                     backgroundColor: `hsla(${h},${s}%,${l}%,0.1)`,
+                     // А текст делаем светлее для контраста
+                     color: `hsl(${h},${s}%,75%)`,
+                     borderColor: `hsl(${h},${s}%,${l}%)` // Рамка остается исходного цвета
+                 };
+             }
+         }
+ 
+         // Стандартное поведение для светлых цветов
+         return {
+             backgroundColor: hslColor.replace('hsl(', 'hsla(').replace(')', ',0.2)'),
+             color: hslColor,
+             borderColor: hslColor
+         };
      },
 
      /**

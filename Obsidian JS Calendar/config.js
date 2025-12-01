@@ -20,9 +20,13 @@ OJSC.config = {
     // Начальный вид календаря ('month', 'week', 'day')
     initialView: 'month',
 
+    // Порог светлоты (в HSL) для определения "тёмных" цветов.
+    // Цвета ниже этого порога будут обработаны для лучшей контрастности.
+    darkColorLightnessThreshold: 65,
+
     // Цветовая карта для поля 'Area' (скопировано из Time KanBan)
     areaColors: {
-        Work:"hsl(30,100%,50%)", Skills:"hsl(220,100%,50%)",
+        Work:"hsl(30,100%,50%)", Skills:"hsl(220,100%,50%)", // Возвращаем оригинальный синий
         Optimization:"hsl(0,0%,100%)", Matter:"hsl(120,100%,50%)",
         Health:"hsl(150,72%,42%)", Housekeep:"hsl(75,100%,50%)",
         Art:"hsl(280,100%,50%)", Spirit:"hsl(330,100%,88%)",
