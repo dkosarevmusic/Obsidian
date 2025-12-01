@@ -73,7 +73,9 @@ function createDayCell(day, viewDate, tasksByDate) {
     if (tasksByDate[dateStr]) {
         const taskListEl = document.createElement('ul');
         taskListEl.className = 'ojsc-task-list';
-        tasksByDate[dateStr].forEach(task => {
+
+        // Сортируем задачи внутри дня по логике из KanBan
+        tasksByDate[dateStr].sort(OJSC.utils.compareTasks).forEach(task => {
             const taskItem = document.createElement('li');
             taskItem.className = 'ojsc-task-item';
 

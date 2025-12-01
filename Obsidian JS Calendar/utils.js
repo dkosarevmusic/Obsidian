@@ -25,5 +25,58 @@ OJSC.utils = {
             color: hslColor,
             borderColor: hslColor
         };
+     },
+
+     /**
+      * Сравнивает две задачи для комплексной сортировки (логика из Time KanBan).
+      * @param {object} a - Первая задача (страница)
+      * @param {object} b - Вторая задача (страница)
+      * @returns {number}
+      */
+     compareTasks: (a, b) => {
+        /**
+         * Нормализует поле (которое может быть строкой, ссылкой, массивом) в строку для сравнения.
+         * @param {*} field - Поле для нормализации.
+         * @param {boolean} isLink - Является ли поле ссылкой/массивом ссылок.
+         * @returns {string}
+         */
+        function getComparableString(field, isLink = false) {
+            if (!field) return "";
+            const arr = Array.isArray(field) ? field : [field];
+            const items = isLink 
+                ? arr.map(l => (typeof l === 'string' ? l : l.path))
+                : arr.map(String);
+            return items.sort().join('|');
+        }
+
+        // Используем "цепочку" сравнений. Если результат не 0, возвращаем его.
+        return (
+            // 1. По статусу "important" (важные задачи всегда выше).
+            (() => {
+                const aStatus = Array.isArray(a.status) ? a.status : [String(a.status)];
+                const bStatus = Array.isArray(b.status) ? b.status : [String(b.status)];
+                return (bStatus.includes('important') || false) - (aStatus.includes('important') || false);
+            })() ||
+
+            // 2. По времени (задачи со временем выше, затем сортировка по значению).
+            (!!b.time - !!a.time) ||
+            (() => {
+                let timeA = a.time === null || typeof a.time === 'undefined' ? '' : a.time;
+                let timeB = b.time === null || typeof b.time === 'undefined' ? '' : b.time;
+
+                if (typeof timeA === 'number') timeA = String(timeA).padStart(4, '0');
+                if (typeof timeB === 'number') timeB = String(timeB).padStart(4, '0');
+                
+                return String(timeA).localeCompare(String(timeB));
+            })() ||
+
+            // 3. По остальным полям для стабильной сортировки.
+            getComparableString(a.status).localeCompare(getComparableString(b.status)) ||
+            getComparableString(a.Area).localeCompare(getComparableString(b.Area)) ||
+            getComparableString(a.wikilinks, true).localeCompare(getComparableString(b.wikilinks, true)) ||
+
+            // 4. По имени файла как последний критерий.
+            a.file.name.localeCompare(b.file.name)
+        );
      }
 };
