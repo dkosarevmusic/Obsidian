@@ -78,13 +78,14 @@ function createDayCell(day, viewDate, tasksByDate) {
             taskItem.className = 'ojsc-task-item';
 
             // Применяем стили на основе поля 'Area'
+            const link = document.createElement('a');
             if (task.Area) {
                 const styles = OJSC.utils.getTaskStyles(task.Area);
                 taskItem.style.backgroundColor = styles.backgroundColor;
-                taskItem.style.color = styles.color;
+                // Устанавливаем цвет для самой ссылки, а не для всего li
+                link.style.color = styles.color;
             }
 
-            const link = document.createElement('a');
             link.textContent = task[OJSC.config.summaryField] || task.file.name;
             link.className = 'internal-link';
             link.href = task.file.path;
@@ -159,7 +160,7 @@ function getStyles() {
             padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
         }
         /* Цвет ссылки наследуется от родителя (.ojsc-task-item) */
-        .ojsc-task-item a { color: inherit; display: block; overflow: hidden; text-overflow: ellipsis; }
+        .ojsc-task-item a { display: block; overflow: hidden; text-overflow: ellipsis; }
         .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; }
     `;
