@@ -128,7 +128,7 @@ function getStyles() {
             margin: -8px; /* Компенсируем padding родительской ячейки */
             padding: 8px 0; /* <-- [СДВИГ 1] Внутренние отступы всей ячейки (0 по бокам для макс. ширины) */
         }
-        .ojsc-day-number { font-size: 0.9em; font-weight: bold; margin-bottom: 4px; }
+        .ojsc-day-number { font-size: 0.9em; font-weight: bold; margin-bottom: 4px; margin-left: 8px; }
         .ojsc-other-month .ojsc-day-number { color: var(--text-muted); opacity: 0.7; }
         .ojsc-today .ojsc-day-number { 
             background-color: var(--text-accent); 
