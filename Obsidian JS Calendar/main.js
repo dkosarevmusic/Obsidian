@@ -14,11 +14,12 @@ function getTasks(dv) {
      const allowedStatuses = OJSC.config.allowedStatuses;
 
      // Загружаем страницы, где есть поле с датой и статус из списка разрешенных
-     return dv.pages(source).where(p =>
-         p[dateField] &&
-         p[statusField] &&
-         allowedStatuses.includes(p[statusField])
-     );
+     return dv.pages(source).where(p => {
+         if (!p[dateField] || !p[statusField]) return false;
+         // Корректно обрабатываем статус, если он является массивом
+         const pageStatuses = Array.isArray(p[statusField]) ? p[statusField] : [p[statusField]];
+         return pageStatuses.some(s => allowedStatuses.includes(s));
+     });
 }
 
 /**
@@ -69,8 +70,8 @@ function createDayCell(day, viewDate, tasksByDate) {
     cellInner.appendChild(dayNumber);
 
     // Список задач
-    const dateStr = day.toFormat('yyyy-MM-dd');
-    if (tasksByDate[dateStr]) {
+    const dateStr = day.toFormat('yyyy-MM-dd'); // Перемещаем сюда, так как выше не нужно для D&D
+    if (tasksByDate[dateStr]) { 
         const taskListEl = document.createElement('ul');
         taskListEl.className = 'ojsc-task-list';
 
@@ -123,35 +124,37 @@ function getStyles() {
             vertical-align: top; 
             width: 14.28%; 
         }
-        .ojsc-weekday-header { 
-            background-color: var(--background-secondary); 
-            text-align: center; 
-        }
-        .ojsc-day-cell { 
-            height: 120px; 
-            overflow: hidden;
-        }
-        .ojsc-day-cell-inner {
-            height: 100%;
+        .ojsc-weekday-header { background-color: var(--background-secondary); text-align: center; }
+        .ojsc-day-cell { /* Высота теперь будет автоматической */ }
+        .ojsc-day-cell-inner { 
             display: flex; 
             flex-direction: column;
             margin: -8px; /* Компенсируем padding родительской ячейки */
             padding: 8px 0; /* <-- [СДВИГ 1] Внутренние отступы всей ячейки (0 по бокам для макс. ширины) */
         }
-        .ojsc-day-number { font-size: 0.9em; font-weight: bold; margin-bottom: 4px; margin-left: 8px; }
+        .ojsc-day-number { 
+            font-size: 0.9em; font-weight: bold; margin-bottom: 4px;
+            /* Резервируем одинаковое пространство для всех номеров дней */
+            width: 1.8em; height: 1.8em;
+            display: flex; align-items: center;
+            /* Сдвигаем обычные дни вправо */
+            justify-content: flex-start; padding-left: 8px;
+        }
         .ojsc-other-month .ojsc-day-number { color: var(--text-muted); opacity: 0.7; }
         .ojsc-today .ojsc-day-number { 
             background-color: var(--text-accent); 
             color: var(--text-on-accent, white);
             border-radius: 50%;
-            width: 1.8em;
-            height: 1.8em;
-            display: flex;
-            align-items: center;
+            /* Центрируем номер внутри круга, убирая отступ */
             justify-content: center;
-            margin-bottom: 4px;
+            padding-left: 0; /* Убираем внутренний отступ, так как центрируем */
+            /* Добавляем внешний отступ, чтобы отодвинуть круг от края */
+            margin-left: 8px;
         }
-        .ojsc-task-list { list-style: none; padding: 0 4px 0 0; margin: 5px 0 0 -18px; font-size: 0.85em; /* <-- [СДВИГ 2] Отрицательный отступ для "вытягивания" списка задач */ }
+        .ojsc-task-list { 
+            list-style: none; padding: 0 4px 0 0; margin: 5px 0 0 -18px; font-size: 0.85em; /* <-- [СДВИГ 2] Отрицательный отступ для "вытягивания" списка задач */
+            /* Убираем прокрутку и позволяем списку расти */
+        }
         .ojsc-task-item { 
             margin-bottom: 4px; 
             white-space: nowrap; 
@@ -161,8 +164,6 @@ function getStyles() {
             border-radius: 4px;
             padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
         }
-        /* Цвет ссылки наследуется от родителя (.ojsc-task-item) */
-        .ojsc-task-item a { display: block; overflow: hidden; text-overflow: ellipsis; }
         .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; }
     `;
