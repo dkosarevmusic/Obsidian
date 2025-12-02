@@ -3,6 +3,20 @@
  * Основная точка входа для рендеринга календаря.
  */
 
+function getViewParameters(viewDate, viewType) {
+    if (viewType === 'month') {
+        return { title: viewDate.setLocale('ru').toFormat('LLLL yyyy'), navStep: { months: 1 } };
+    }
+    if (viewType === '3months') {
+        const endPeriod = viewDate.plus({ months: 2 });
+        return { title: `${viewDate.setLocale('ru').toFormat('LLL yyyy')} - ${endPeriod.setLocale('ru').toFormat('LLL yyyy')}`, navStep: { months: 1 } };
+    }
+    if (viewType === 'year') {
+        return { title: viewDate.toFormat('yyyy'), navStep: { years: 1 } };
+    }
+    return { title: '', navStep: {} }; // Default case
+}
+
 /**
  * Основная функция для отрисовки календаря.
  * @param {object} dv - Глобальный объект API Dataview.
@@ -41,41 +55,37 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
     }
     viewSelector.onchange = (e) => OJSC.renderCalendar(dv, viewDate, e.target.value);
 
-    rootEl.appendChild(headerEl); // <-- Перемещаем добавление заголовка сюда
+    rootEl.appendChild(headerEl);
 
-    // --- Логика отрисовки в зависимости от вида ---
-    let title = '';
-    let navStep = {};
+    // --- Определение параметров и отрисовка тела календаря ---
+    const { title, navStep } = getViewParameters(viewDate, viewType);
+    const bodyFragment = document.createDocumentFragment();
 
     if (viewType === 'month') {
-        title = viewDate.setLocale('ru').toFormat('LLLL yyyy');
-        navStep = { months: 1 };
         const table = OJSC.utils.createMonthTable(viewDate, tasksByDate);
-        rootEl.appendChild(table);
+        bodyFragment.appendChild(table);
     } else if (viewType === '3months') {
-        const endPeriod = viewDate.plus({ months: 2 });
-        title = `${viewDate.setLocale('ru').toFormat('LLL yyyy')} - ${endPeriod.setLocale('ru').toFormat('LLL yyyy')}`;
-        navStep = { months: 1 };
         for (let i = 0; i < 3; i++) {
             const monthDate = viewDate.plus({ months: i });
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
-            rootEl.appendChild(monthHeader);
-            rootEl.appendChild(OJSC.utils.createMonthTable(monthDate, tasksByDate));
+            bodyFragment.appendChild(monthHeader);
+            bodyFragment.appendChild(OJSC.utils.createMonthTable(monthDate, tasksByDate));
         }
     } else if (viewType === 'year') {
-        title = viewDate.toFormat('yyyy');
-        navStep = { years: 1 };
         for (let i = 0; i < 12; i++) {
             const monthDate = viewDate.startOf('year').plus({ months: i });
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
-            rootEl.appendChild(monthHeader);
-            rootEl.appendChild(OJSC.utils.createMonthTable(monthDate, tasksByDate));
+            bodyFragment.appendChild(monthHeader);
+            bodyFragment.appendChild(OJSC.utils.createMonthTable(monthDate, tasksByDate));
         }
     }
+
+    // Добавляем собранное тело календаря в DOM одной операцией
+    rootEl.appendChild(bodyFragment);
 
     // --- Собираем заголовок с навигацией и названием ---
     const prevButton = document.createElement('button');

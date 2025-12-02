@@ -55,11 +55,11 @@ OJSC.utils = {
       * @returns {number}
       */
      compareTasks: (a, b) => {
+        const aStatus = Array.isArray(a.status) ? a.status : [String(a.status)];
+        const bStatus = Array.isArray(b.status) ? b.status : [String(b.status)];
+
         /**
          * Нормализует поле (которое может быть строкой, ссылкой, массивом) в строку для сравнения.
-         * @param {*} field - Поле для нормализации.
-         * @param {boolean} isLink - Является ли поле ссылкой/массивом ссылок.
-         * @returns {string}
          */
         function getComparableString(field, isLink = false) {
             if (!field) return "";
@@ -73,11 +73,7 @@ OJSC.utils = {
         // Используем "цепочку" сравнений. Если результат не 0, возвращаем его.
         return (
             // 1. По статусу "important" (важные задачи всегда выше).
-            (() => {
-                const aStatus = Array.isArray(a.status) ? a.status : [String(a.status)];
-                const bStatus = Array.isArray(b.status) ? b.status : [String(b.status)];
-                return (bStatus.includes('important') || false) - (aStatus.includes('important') || false);
-            })() ||
+            (bStatus.includes('important') || false) - (aStatus.includes('important') || false) ||
 
             // 2. По времени (задачи со временем выше, затем сортировка по значению).
             (!!b.time - !!a.time) ||
@@ -92,7 +88,7 @@ OJSC.utils = {
             })() ||
 
             // 3. По остальным полям для стабильной сортировки.
-            getComparableString(a.status).localeCompare(getComparableString(b.status)) ||
+            getComparableString(aStatus).localeCompare(getComparableString(bStatus)) ||
             getComparableString(a.Area).localeCompare(getComparableString(b.Area)) ||
             getComparableString(a.wikilinks, true).localeCompare(getComparableString(b.wikilinks, true)) ||
 
