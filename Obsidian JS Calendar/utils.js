@@ -149,11 +149,6 @@ OJSC.utils = {
                 li.appendChild(link);
                 taskList.appendChild(li);
             });
-        } else {
-            const li = document.createElement('li');
-            li.className = 'ojsc-no-tasks';
-            li.textContent = 'Нет задач';
-            taskList.appendChild(li);
         }
 
         card.appendChild(taskList);
@@ -216,13 +211,7 @@ OJSC.utils = {
 
                 taskList.appendChild(li);
             });
-        } else {
-            // Если задач нет, возвращаем стандартное сообщение
-            const li = document.createElement('li');
-            li.className = 'ojsc-no-tasks';
-            li.textContent = 'Нет задач';
-            taskList.appendChild(li);
-        }
+        } 
 
         // Перезаписываем заголовок для 3-дневного вида
         const header = card.querySelector('.ojsc-day-card-header');
@@ -350,11 +339,6 @@ OJSC.utils = {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-        .ojsc-day-card .ojsc-no-tasks {
-            color: var(--text-muted);
-            font-style: italic;
-            padding: 4px 0;
         }
         /* Стили для 3-дневного вида */
         .ojsc-day-list .ojsc-day-card-header {
