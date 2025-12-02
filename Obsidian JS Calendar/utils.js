@@ -289,6 +289,10 @@ OJSC.utils = {
         .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
         .ojsc-button-group { display: flex; gap: 5px; }
         .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
+        .ojsc-calendar-header select {
+            text-align: center;
+            text-align-last: center;
+        }
         .ojsc-calendar-header h2 { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; text-transform: capitalize; color: white; text-align: center; }
         .ojsc-multi-month-header { 
             text-align: center; 
@@ -420,6 +424,31 @@ OJSC.utils = {
         /* Для месячного вида, компенсируем padding: 4px у .ojsc-month-grid-card */
         .ojsc-month-grid .ojsc-task-item {
             margin-left: 2px; /* Сдвиг вправо на 1px */
+        }
+
+        /* --- Адаптивность для мобильных устройств --- */
+        @media (max-width: 650px) {
+            .ojsc-calendar-header {
+                flex-direction: column; /* Элементы в столбец */
+                align-items: center; /* Центрируем элементы по горизонтали */
+            }
+            .ojsc-calendar-header h2 {
+                position: static; /* Убираем абсолютное позиционирование */
+                transform: none; /* Сбрасываем трансформацию */
+                order: 2; /* Ставим заголовок вторым */
+                margin-bottom: 8px; /* Добавляем отступ снизу */
+            }
+            .ojsc-button-group {
+                justify-content: center; /* Центрируем кнопки */
+                order: 3; /* Ставим кнопки управления третьими */
+            }
+            .ojsc-calendar-header select {
+                order: 1; /* Ставим выбор режима первым */
+                margin-bottom: 8px; /* Добавляем отступ снизу */
+            }
+            .ojsc-day-list {
+                flex-direction: column; /* В режиме 3 дня карточки тоже будут в столбец */
+            }
         }
     `;
     }
