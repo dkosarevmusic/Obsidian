@@ -4,6 +4,9 @@
  */
 
 function getViewParameters(viewDate, viewType) {
+    if (viewType === '3days') {
+        return { title: viewDate.setLocale('ru').toFormat('dd MMMM yyyy'), navStep: { days: 1 } };
+    }
     if (viewType === 'month') {
         return { title: viewDate.setLocale('ru').toFormat('LLLL yyyy'), navStep: { months: 1 } };
     }
@@ -45,7 +48,7 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
 
     // Выпадающий список для выбора вида
     const viewSelector = document.createElement('select');
-    const views = { month: 'Месяц', '3months': '3 месяца', year: 'Год' };
+    const views = { '3days': '3 дня', month: 'Месяц', '3months': '3 месяца', year: 'Год' };
     for (const [value, text] of Object.entries(views)) {
         const option = document.createElement('option');
         option.value = value;
@@ -61,7 +64,15 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
     const { title, navStep } = getViewParameters(viewDate, viewType);
     const bodyFragment = document.createDocumentFragment();
 
-    if (viewType === 'month') {
+    if (viewType === '3days') {
+        const list = document.createElement('div');
+        list.className = 'ojsc-day-list';
+        for (let i = -1; i <= 1; i++) {
+            const dayDate = viewDate.plus({ days: i }); // Отображаем вчера, сегодня, завтра относительно viewDate
+            list.appendChild(OJSC.utils.createDayCard(dayDate, tasksByDate));
+        }
+        bodyFragment.appendChild(list);
+    } else if (viewType === 'month') {
         const table = OJSC.utils.createMonthTable(viewDate, tasksByDate);
         bodyFragment.appendChild(table);
     } else if (viewType === '3months') {
@@ -98,7 +109,7 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
 
     const todayButton = document.createElement('button');
     todayButton.textContent = 'Сегодня';
-    todayButton.onclick = () => OJSC.renderCalendar(dv); // Вызов без аргументов вернет к текущей дате
+    todayButton.onclick = () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType);
 
     const titleEl = document.createElement('h2');
     titleEl.textContent = title;

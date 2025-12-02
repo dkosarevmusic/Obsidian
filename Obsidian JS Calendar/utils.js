@@ -189,6 +189,63 @@ OJSC.utils = {
     },
 
     /**
+     * Создает карточку для одного дня с задачами.
+     * @param {luxon.DateTime} dayDate - Дата дня.
+     * @param {object} tasksByDate - Сгруппированные задачи.
+     * @returns {HTMLElement} - HTML-элемент карточки дня.
+     */
+    createDayCard: (dayDate, tasksByDate) => {
+        const dayKey = dayDate.toISODate();
+        const dayTasks = tasksByDate[dayKey] || [];
+
+        const card = document.createElement('div');
+        card.className = 'ojsc-day-card';
+        if (dayDate.toISODate() === luxon.DateTime.now().toISODate()) {
+            card.classList.add('ojsc-today');
+        }
+
+        const header = document.createElement('div');
+        header.className = 'ojsc-day-card-header';
+        header.textContent = dayDate.setLocale('ru').toFormat('cccc, dd.MM.yyyy');
+        card.appendChild(header);
+
+        const taskList = document.createElement('ul');
+        taskList.className = 'ojsc-task-list';
+
+        if (dayTasks.length > 0) {
+            dayTasks.sort(OJSC.utils.compareTasks).forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'ojsc-task-item';
+                const link = document.createElement('a');
+
+                if (task.Area) {
+                    const styles = OJSC.utils.getTaskStyles(task.Area);
+                    li.style.backgroundColor = styles.backgroundColor;
+                    link.style.color = styles.color;
+                    li.style.borderLeft = `3px solid ${styles.borderColor}`;
+                }
+
+                link.textContent = task[OJSC.config.summaryField] || task.file.name;
+                link.className = 'internal-link';
+                link.href = task.file.path;
+                li.appendChild(link);
+                taskList.appendChild(li);
+            });
+        } else {
+            const li = document.createElement('li');
+            li.className = 'ojsc-no-tasks';
+            li.textContent = 'Нет задач';
+            taskList.appendChild(li);
+        }
+
+        card.appendChild(taskList);
+        return card;
+    },
+    /**
+     * Возвращает строку со всеми CSS-стилями для календаря.
+     * @returns {string}
+     */
+    /**
      * Возвращает строку со всеми CSS-стилями для календаря.
      * @returns {string}
      */
@@ -254,6 +311,46 @@ OJSC.utils = {
         .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
         .ojsc-calendar-header h2 { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; text-transform: capitalize; color: white; text-align: center; }
         .ojsc-multi-month-header { text-align: center; text-transform: capitalize; margin-top: 20px; margin-bottom: 10px; }
+
+        /* Стили для 3-дневного вида */
+        .ojsc-day-list {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+        .ojsc-day-card {
+            border: 1px solid var(--background-modifier-border);
+            border-radius: 8px;
+            padding: 12px;
+            background-color: var(--background-secondary);
+            flex: 1;
+            min-width: 0; /* Предотвращает переполнение контентом */
+        }
+        .ojsc-day-card.ojsc-today {
+            border-color: var(--text-accent);
+        }
+        .ojsc-day-card-header {
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--background-modifier-border);
+        }
+        .ojsc-day-card .ojsc-task-list {
+            list-style: none;
+            padding: 0; /* Убираем внутренние отступы списка */
+            margin: 8px 0 0 0; /* Убираем отрицательный margin у списка */
+            font-size: 0.9em;
+        }
+        .ojsc-day-card .ojsc-task-item {
+            margin-bottom: 4px;
+            padding: 2px 8px;
+            margin-left: -2px; /* Корректируем сдвиг влево */
+        }
+        .ojsc-day-card .ojsc-no-tasks {
+            color: var(--text-muted);
+            font-style: italic;
+            padding: 4px 0;
+        }
     `;
     }
 };
