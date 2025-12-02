@@ -1,6 +1,7 @@
 /**
  * Вспомогательные функции для календаря.
  */
+if (!window.OJSC) window.OJSC = {};
 OJSC.utils = {
      /**
       * Форматирует объект даты в строку YYYY-MM-DD.
@@ -98,5 +99,165 @@ OJSC.utils = {
             // 4. По имени файла как последний критерий.
             a.file.name.localeCompare(b.file.name)
         );
-     }
+     },
+
+    /**
+     * Создает и возвращает HTML-элемент для одной ячейки дня.
+     * @param {luxon.DateTime} day - Текущий день для рендеринга.
+     * @param {luxon.DateTime} viewDate - Отображаемая дата (для определения текущего месяца).
+     * @param {object} tasksByDate - Сгруппированные задачи.
+     * @returns {HTMLElement} - Элемент `<td>`.
+     */
+    createDayCell: (day, viewDate, tasksByDate) => {
+        const cell = document.createElement('td');
+        cell.className = 'ojsc-day-cell';
+
+        const cellInner = document.createElement('div');
+        cellInner.className = 'ojsc-day-cell-inner';
+
+        if (day.month !== viewDate.month) {
+            cell.classList.add('ojsc-other-month');
+        }
+        if (day.hasSame(luxon.DateTime.now(), 'day')) {
+            cell.classList.add('ojsc-today');
+        }
+
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'ojsc-day-number';
+        dayNumber.textContent = day.day;
+        cellInner.appendChild(dayNumber);
+
+        const dateStr = day.toFormat('yyyy-MM-dd');
+        if (tasksByDate[dateStr]) {
+            const taskListEl = document.createElement('ul');
+            taskListEl.className = 'ojsc-task-list';
+
+            tasksByDate[dateStr].sort(OJSC.utils.compareTasks).forEach(task => {
+                const taskItem = document.createElement('li');
+                taskItem.className = 'ojsc-task-item';
+
+                const link = document.createElement('a');
+                if (task.Area) {
+                    const styles = OJSC.utils.getTaskStyles(task.Area);
+                    taskItem.style.backgroundColor = styles.backgroundColor;
+                    link.style.color = styles.color;
+                }
+
+                link.textContent = task[OJSC.config.summaryField] || task.file.name;
+                link.className = 'internal-link';
+                link.href = task.file.path;
+                taskItem.appendChild(link);
+
+                taskListEl.appendChild(taskItem);
+            });
+            cellInner.appendChild(taskListEl);
+        }
+
+        cell.appendChild(cellInner);
+        return cell;
+    },
+
+    /**
+     * Создает и возвращает HTML-элемент для таблицы одного месяца.
+     * @param {luxon.DateTime} monthDate - Дата, определяющая отображаемый месяц.
+     * @param {object} tasksByDate - Сгруппированные задачи.
+     * @returns {HTMLTableElement} - Элемент `<table>` для одного месяца.
+     */
+    createMonthTable: (monthDate, tasksByDate) => {
+        const table = document.createElement('table');
+        table.className = 'ojsc-calendar';
+
+        const thead = table.createTHead();
+        const weekdaysRow = thead.insertRow();
+        ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
+            const th = document.createElement('th');
+            th.textContent = day;
+            th.className = 'ojsc-weekday-header';
+            weekdaysRow.appendChild(th);
+        });
+
+        const tbody = table.createTBody();
+        let currentDay = monthDate.startOf('month').startOf('week');
+        const endDay = monthDate.endOf('month').endOf('week');
+
+        while (currentDay <= endDay) {
+            const weekRow = tbody.insertRow();
+            for (let i = 0; i < 7; i++) {
+                const cell = OJSC.utils.createDayCell(currentDay, monthDate, tasksByDate);
+                weekRow.appendChild(cell);
+                currentDay = currentDay.plus({ days: 1 });
+            }
+        }
+        return table;
+    },
+
+    /**
+     * Возвращает строку со всеми CSS-стилями для календаря.
+     * @returns {string}
+     */
+    getStyles: () => {
+        return `
+        .ojsc-container {
+            width: 100%;
+            margin-top: 20px; /* Добавляем отступ сверху, чтобы выпадающий список не обрезался */
+        }
+        .ojsc-calendar { 
+            border-collapse: collapse; 
+            width: 100%; 
+            border: 1px solid var(--background-modifier-border); 
+            table-layout: fixed; 
+        }
+        .ojsc-calendar th, .ojsc-calendar td { 
+            border: 1px solid var(--background-modifier-border); 
+            padding: 8px; 
+            vertical-align: top; 
+            width: 14.28%; 
+        }
+        .ojsc-weekday-header { background-color: var(--background-secondary); text-align: center; }
+        .ojsc-day-cell { /* Высота теперь будет автоматической */ }
+        .ojsc-day-cell-inner { 
+            display: flex; 
+            flex-direction: column;
+            margin: -8px; /* Компенсируем padding родительской ячейки */
+            padding: 8px 0; /* <-- [СДВИГ 1] Внутренние отступы всей ячейки (0 по бокам для макс. ширины) */
+        }
+        .ojsc-day-number { 
+            font-size: 0.9em; font-weight: bold; margin-bottom: 4px;
+            /* Резервируем одинаковое пространство для всех номеров дней */
+            width: 1.8em; height: 1.8em;
+            display: flex; align-items: center;
+            /* Сдвигаем обычные дни вправо */
+            justify-content: flex-start; padding-left: 8px;
+        }
+        .ojsc-other-month .ojsc-day-number { color: var(--text-muted); opacity: 0.7; }
+        .ojsc-today .ojsc-day-number { 
+            background-color: var(--text-accent); 
+            color: var(--text-on-accent, white);
+            border-radius: 50%;
+            /* Центрируем номер внутри круга, убирая отступ */
+            justify-content: center;
+            padding-left: 0; /* Убираем внутренний отступ, так как центрируем */
+            /* Добавляем внешний отступ, чтобы отодвинуть круг от края */
+            margin-left: 8px;
+        }
+        .ojsc-task-list { 
+            list-style: none; padding: 0 4px 0 0; margin: 5px 0 0 -18px; font-size: 0.85em; /* <-- [СДВИГ 2] Отрицательный отступ для "вытягивания" списка задач */
+            /* Убираем прокрутку и позволяем списку расти */
+        }
+        .ojsc-task-item { 
+            margin-bottom: 4px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            background-color: hsla(var(--mono-rgb-100), 0.07); /* var(--background-secondary) не всегда работает */
+            border-radius: 4px;
+            padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
+        }
+        .ojsc-calendar-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; gap: 10px; }
+        .ojsc-calendar-navigation { display: flex; justify-content: center; align-items: center; }
+        .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
+        .ojsc-calendar-navigation h2 { margin: 0 15px; text-transform: capitalize; color: white; text-align: center; }
+        .ojsc-multi-month-header { text-align: center; text-transform: capitalize; margin-top: 20px; margin-bottom: 10px; }
+    `;
+    }
 };

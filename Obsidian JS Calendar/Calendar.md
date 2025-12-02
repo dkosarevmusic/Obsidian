@@ -24,7 +24,7 @@ try {
     // Путь к папке со скриптами от корня хранилища.
     const SCRIPT_FOLDER = "JS Scripts/cal";
     // Порядок важен: config -> utils -> main
-    const SCRIPT_FILES = ["config.js", "utils.js", "main.js"];
+    const SCRIPT_FILES = ["config.js", "utils.js", "calendar-data.js", "main.js"];
 
     for (const fileName of SCRIPT_FILES) {
         const scriptContent = await dv.io.load(`${SCRIPT_FOLDER}/${fileName}`);
