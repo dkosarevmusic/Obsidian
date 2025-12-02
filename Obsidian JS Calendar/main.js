@@ -8,7 +8,18 @@ function getViewParameters(viewDate, viewType) {
         return { title: viewDate.setLocale('ru').toFormat('d MMMM yyyy'), navStep: { days: 1 } };
     }
     if (viewType === '3days') {
-        return { title: viewDate.setLocale('ru').toFormat('d MMMM yyyy'), navStep: { days: 1 } };
+        const startDate = viewDate.minus({ days: 1 });
+        const endDate = viewDate.plus({ days: 1 });
+        let title;
+
+        if (startDate.month === endDate.month) {
+            // Если дни в одном месяце, используем короткий формат: "2 - 4 октября 2023"
+            title = `${startDate.toFormat('d')} - ${endDate.setLocale('ru').toFormat('d MMMM yyyy')}`;
+        } else {
+            // Если дни в разных месяцах: "31 октября - 2 ноября 2023"
+            title = `${startDate.setLocale('ru').toFormat('d MMMM')} - ${endDate.setLocale('ru').toFormat('d MMMM yyyy')}`;
+        }
+        return { title: title, navStep: { days: 1 } };
     }
     if (viewType === 'month') {
         return { title: viewDate.setLocale('ru').toFormat('LLLL yyyy'), navStep: { months: 1 } };
@@ -29,7 +40,11 @@ function getViewParameters(viewDate, viewType) {
  * @param {luxon.DateTime} viewDate - Дата для отображения (по умолчанию сегодня).
  * @param {string} viewType - Тип вида ('month', '3months', 'year').
  */
-OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') => {
+OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => {
+    // Если viewType не передан, пытаемся загрузить его из localStorage. Если и там нет, ставим 'month' по умолчанию.
+    if (viewType === null) {
+        viewType = localStorage.getItem('ojsc_lastViewType') || 'month';
+    }
     const container = dv.container;
     container.innerHTML = ''; // Очищаем контейнер перед отрисовкой
 
@@ -59,7 +74,10 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
         if (value === viewType) option.selected = true;
         viewSelector.appendChild(option);
     }
-    viewSelector.onchange = (e) => OJSC.renderCalendar(dv, viewDate, e.target.value);
+    viewSelector.onchange = (e) => {
+        localStorage.setItem('ojsc_lastViewType', e.target.value); // Сохраняем выбор
+        OJSC.renderCalendar(dv, viewDate, e.target.value);
+    };
 
     rootEl.appendChild(headerEl);
 
