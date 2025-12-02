@@ -249,10 +249,10 @@ OJSC.utils = {
             border-radius: 4px;
             padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
         }
-        .ojsc-calendar-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; gap: 10px; }
-        .ojsc-calendar-navigation { display: flex; justify-content: center; align-items: center; }
+        .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
+        .ojsc-button-group { display: flex; gap: 5px; }
         .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
-        .ojsc-calendar-navigation h2 { margin: 0 15px; text-transform: capitalize; color: white; text-align: center; }
+        .ojsc-calendar-header h2 { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; text-transform: capitalize; color: white; text-align: center; }
         .ojsc-multi-month-header { text-align: center; text-transform: capitalize; margin-top: 20px; margin-bottom: 10px; }
     `;
     }

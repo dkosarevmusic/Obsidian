@@ -91,18 +91,25 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
     const prevButton = document.createElement('button');
     prevButton.textContent = '<';
     prevButton.onclick = () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType);
+
     const nextButton = document.createElement('button');
     nextButton.textContent = '>';
     nextButton.onclick = () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType);
+
+    const todayButton = document.createElement('button');
+    todayButton.textContent = 'Сегодня';
+    todayButton.onclick = () => OJSC.renderCalendar(dv); // Вызов без аргументов вернет к текущей дате
+
     const titleEl = document.createElement('h2');
     titleEl.textContent = title;
 
-    // Создаем отдельный контейнер для навигации (кнопки + заголовок)
-    const navContainer = document.createElement('div');
-    navContainer.className = 'ojsc-calendar-navigation';
-    navContainer.append(prevButton, titleEl, nextButton);
+    // Группируем кнопки навигации
+    const buttonGroup = document.createElement('div');
+    buttonGroup.className = 'ojsc-button-group';
+    buttonGroup.append(prevButton, todayButton, nextButton);
 
-    headerEl.append(viewSelector, navContainer);
+    // Собираем заголовок: группа кнопок слева, заголовок по центру, селектор справа
+    headerEl.append(buttonGroup, titleEl, viewSelector);
 
     // 3. Добавляем собранный календарь на страницу
     container.appendChild(rootEl);
