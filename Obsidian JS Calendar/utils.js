@@ -98,97 +98,6 @@ OJSC.utils = {
      },
 
     /**
-     * Создает и возвращает HTML-элемент для одной ячейки дня.
-     * @param {luxon.DateTime} day - Текущий день для рендеринга.
-     * @param {luxon.DateTime} viewDate - Отображаемая дата (для определения текущего месяца).
-     * @param {object} tasksByDate - Сгруппированные задачи.
-     * @returns {HTMLElement} - Элемент `<td>`.
-     */
-    createDayCell: (day, viewDate, tasksByDate) => {
-        const cell = document.createElement('td');
-        cell.className = 'ojsc-day-cell';
-
-        const cellInner = document.createElement('div');
-        cellInner.className = 'ojsc-day-cell-inner';
-
-        if (day.month !== viewDate.month) {
-            cell.classList.add('ojsc-other-month');
-        }
-        if (day.hasSame(luxon.DateTime.now(), 'day')) {
-            cell.classList.add('ojsc-today');
-        }
-
-        const dayNumber = document.createElement('div');
-        dayNumber.className = 'ojsc-day-number';
-        dayNumber.textContent = day.day;
-        cellInner.appendChild(dayNumber);
-
-        const dateStr = day.toFormat('yyyy-MM-dd');
-        if (tasksByDate[dateStr]) {
-            const taskListEl = document.createElement('ul');
-            taskListEl.className = 'ojsc-task-list';
-
-            tasksByDate[dateStr].sort(OJSC.utils.compareTasks).forEach(task => {
-                const taskItem = document.createElement('li');
-                taskItem.className = 'ojsc-task-item';
-
-                const link = document.createElement('a');
-                if (task.Area) {
-                    const styles = OJSC.utils.getTaskStyles(task.Area);
-                    taskItem.style.backgroundColor = styles.backgroundColor;
-                    link.style.color = styles.color;
-                taskItem.style.borderLeft = `3px solid ${styles.borderColor}`;
-                }
-
-                link.textContent = task[OJSC.config.summaryField] || task.file.name;
-                link.className = 'internal-link';
-                link.href = task.file.path;
-                taskItem.appendChild(link);
-
-                taskListEl.appendChild(taskItem);
-            });
-            cellInner.appendChild(taskListEl);
-        }
-
-        cell.appendChild(cellInner);
-        return cell;
-    },
-
-    /**
-     * Создает и возвращает HTML-элемент для таблицы одного месяца.
-     * @param {luxon.DateTime} monthDate - Дата, определяющая отображаемый месяц.
-     * @param {object} tasksByDate - Сгруппированные задачи.
-     * @returns {HTMLTableElement} - Элемент `<table>` для одного месяца.
-     */
-    createMonthTable: (monthDate, tasksByDate) => {
-        const table = document.createElement('table');
-        table.className = 'ojsc-calendar';
-
-        const thead = table.createTHead();
-        const weekdaysRow = thead.insertRow();
-        ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
-            const th = document.createElement('th');
-            th.textContent = day;
-            th.className = 'ojsc-weekday-header';
-            weekdaysRow.appendChild(th);
-        });
-
-        const tbody = table.createTBody();
-        let currentDay = monthDate.startOf('month').startOf('week');
-        const endDay = monthDate.endOf('month').endOf('week');
-
-        while (currentDay <= endDay) {
-            const weekRow = tbody.insertRow();
-            for (let i = 0; i < 7; i++) {
-                const cell = OJSC.utils.createDayCell(currentDay, monthDate, tasksByDate);
-                weekRow.appendChild(cell);
-                currentDay = currentDay.plus({ days: 1 });
-            }
-        }
-        return table;
-    },
-
-    /**
      * Создает карточку для одного дня с задачами.
      * @param {luxon.DateTime} dayDate - Дата дня.
      * @param {object} tasksByDate - Сгруппированные задачи.
@@ -206,8 +115,17 @@ OJSC.utils = {
 
         const header = document.createElement('div');
         header.className = 'ojsc-day-card-header';
-        header.textContent = dayDate.setLocale('ru').toFormat('cccc, dd.MM.yyyy');
-        card.appendChild(header);
+
+        // По умолчанию ставим только номер дня. Для 3-дневного вида будет перезаписано в main.js
+        const daySpan = document.createElement('span');
+        daySpan.textContent = dayDate.day;
+
+        if (dayDate.hasSame(luxon.DateTime.now(), 'day')) {
+            daySpan.classList.add('ojsc-today-number');
+        }
+        header.appendChild(daySpan);
+
+        card.appendChild(header); 
 
         const taskList = document.createElement('ul');
         taskList.className = 'ojsc-task-list';
@@ -241,6 +159,44 @@ OJSC.utils = {
         card.appendChild(taskList);
         return card;
     },
+
+    /**
+     * Создает и возвращает HTML-элемент для сетки одного месяца.
+     * @param {luxon.DateTime} monthDate - Дата, определяющая отображаемый месяц.
+     * @param {object} tasksByDate - Сгруппированные задачи.
+     * @returns {HTMLElement} - Элемент `<div>` для одного месяца.
+     */
+    createMonthGrid: (monthDate, tasksByDate) => {
+        const monthContainer = document.createElement('div');
+        monthContainer.className = 'ojsc-month-container';
+
+        const weekdaysHeader = document.createElement('div');
+        weekdaysHeader.className = 'ojsc-weekdays-header';
+        ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
+            const weekday = document.createElement('div');
+            weekday.textContent = day;
+            weekdaysHeader.appendChild(weekday);
+        });
+        monthContainer.appendChild(weekdaysHeader);
+
+        const grid = document.createElement('div');
+        grid.className = 'ojsc-month-grid';
+        
+        let currentDay = monthDate.startOf('month').startOf('week');
+        const endDay = monthDate.endOf('month').endOf('week');
+
+        while (currentDay <= endDay) {
+            const card = OJSC.utils.createDayCard(currentDay, tasksByDate);
+            card.classList.add('ojsc-month-grid-card'); // Добавляем класс для специфичных стилей
+            if (currentDay.month !== monthDate.month) {
+                card.classList.add('ojsc-other-month');
+            }
+            grid.appendChild(card);
+            currentDay = currentDay.plus({ days: 1 });
+        }
+        monthContainer.appendChild(grid);
+        return monthContainer;
+    },
     /**
      * Возвращает строку со всеми CSS-стилями для календаря.
      * @returns {string}
@@ -254,57 +210,6 @@ OJSC.utils = {
         .ojsc-container {
             width: 100%;
             margin-top: 20px; /* Добавляем отступ сверху, чтобы выпадающий список не обрезался */
-        }
-        .ojsc-calendar { 
-            border-collapse: collapse; 
-            width: 100%; 
-            border: 1px solid var(--background-modifier-border); 
-            table-layout: fixed; 
-        }
-        .ojsc-calendar th, .ojsc-calendar td {
-            border: 1px solid var(--background-modifier-border); 
-            padding: 8px; 
-            vertical-align: top; 
-            width: 14.28%; 
-        }
-        .ojsc-today { 
-            background-color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.1); 
-        }
-        .ojsc-weekday-header { background-color: var(--background-secondary); text-align: center; }
-        .ojsc-day-cell-inner { 
-            display: flex; 
-            flex-direction: column;
-            margin: -8px; /* Компенсируем padding родительской ячейки */
-            padding: 8px 4px; /* Увеличиваем боковые отступы для "воздуха" */
-        }
-        .ojsc-day-number { 
-            font-size: 0.9em; font-weight: bold; margin-bottom: 4px;
-            width: 1.8em; height: 1.8em;
-            display: flex; align-items: center;
-            justify-content: flex-start; padding-left: 8px;
-        }
-        .ojsc-other-month { 
-            opacity: 0.5; /* Приглушаем всю ячейку "чужого" месяца */
-        }
-        .ojsc-today .ojsc-day-number { 
-            background-color: var(--text-accent); 
-            color: var(--text-on-accent, white);
-            border-radius: 50%;
-            justify-content: center;
-            padding-left: 0; /* Убираем внутренний отступ, так как центрируем */
-            margin-left: 8px;
-        }
-        .ojsc-task-list { 
-            list-style: none; padding: 0 4px 0 0; margin: 5px 0 0 -18px; font-size: 0.85em; /* <-- [СДВИГ 2] Отрицательный отступ для "вытягивания" списка задач */
-        }
-        .ojsc-task-item { 
-            margin-bottom: 4px; 
-            white-space: nowrap; 
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-            background-color: hsla(var(--mono-rgb-100), 0.07);
-            border-radius: 4px;
-            padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
         }
         .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
         .ojsc-button-group { display: flex; gap: 5px; }
@@ -320,20 +225,20 @@ OJSC.utils = {
         }
         .ojsc-day-card {
             border: 1px solid var(--background-modifier-border);
-            border-radius: 8px;
-            padding: 12px;
+            border-radius: 6px;
+            padding: 8px;
             background-color: var(--background-secondary);
             flex: 1;
             min-width: 0; /* Предотвращает переполнение контентом */
+            display: flex;
+            flex-direction: column;
         }
         .ojsc-day-card.ojsc-today {
             border-color: var(--text-accent);
         }
         .ojsc-day-card-header {
             font-weight: bold;
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--background-modifier-border);
+            margin-bottom: 4px;
         }
         .ojsc-day-card .ojsc-task-list {
             list-style: none;
@@ -343,13 +248,66 @@ OJSC.utils = {
         }
         .ojsc-day-card .ojsc-task-item {
             margin-bottom: 4px;
-            padding: 2px 8px;
-            margin-left: -2px; /* Корректируем сдвиг влево */
+            padding: 1px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .ojsc-day-card .ojsc-no-tasks {
             color: var(--text-muted);
             font-style: italic;
             padding: 4px 0;
+        }
+        /* Стили для 3-дневного вида */
+        .ojsc-day-list .ojsc-day-card-header {
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--background-modifier-border);
+        }
+        /* Стили для сеток (месяц, год) */
+        .ojsc-month-container { margin-bottom: 20px; }
+        .ojsc-weekdays-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: bold;
+            padding: 4px 0;
+            margin-bottom: 4px;
+        }
+        .ojsc-month-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .ojsc-month-grid-card {
+            min-height: 100px;
+            padding: 4px;
+        }
+        .ojsc-month-grid-card .ojsc-day-card-header {
+            font-size: 0.9em;
+            text-align: right;
+            min-height: 1.8em; /* Задаем минимальную высоту, равную высоте кружка */
+        }
+        .ojsc-month-grid-card.ojsc-other-month {
+            opacity: 0.5;
+        }
+        .ojsc-today-number {
+            background-color: var(--text-accent);
+            color: var(--text-on-accent, white);
+            border-radius: 50%;
+            display: inline-block;
+            width: 1.8em; height: 1.8em; line-height: 1.8em;
+            text-align: center;
+        }
+
+        /* --- Кастомные сдвиги для разных режимов --- */
+        /* Для 3-дневного вида, компенсируем padding: 8px у .ojsc-day-card */
+        .ojsc-day-list .ojsc-task-item {
+            margin-left: -2px; /* Сдвиг вправо на 1px */
+        }
+        /* Для месячного вида, компенсируем padding: 4px у .ojsc-month-grid-card */
+        .ojsc-month-grid .ojsc-task-item {
+            margin-left: 2px; /* Сдвиг вправо на 1px */
         }
     `;
     }

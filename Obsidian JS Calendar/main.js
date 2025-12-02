@@ -69,20 +69,22 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
         list.className = 'ojsc-day-list';
         for (let i = -1; i <= 1; i++) {
             const dayDate = viewDate.plus({ days: i }); // Отображаем вчера, сегодня, завтра относительно viewDate
-            list.appendChild(OJSC.utils.createDayCard(dayDate, tasksByDate));
+            const card = OJSC.utils.createDayCard(dayDate, tasksByDate);
+            const header = card.querySelector('.ojsc-day-card-header');
+            header.textContent = dayDate.setLocale('ru').toFormat('cccc, dd.MM.yyyy');
+            header.style.textAlign = 'left'; // Для 3-дневного вида выравниваем заголовок влево
+            list.appendChild(card);
         }
         bodyFragment.appendChild(list);
     } else if (viewType === 'month') {
-        const table = OJSC.utils.createMonthTable(viewDate, tasksByDate);
-        bodyFragment.appendChild(table);
+        bodyFragment.appendChild(OJSC.utils.createMonthGrid(viewDate, tasksByDate));
     } else if (viewType === '3months') {
         for (let i = 0; i < 3; i++) {
             const monthDate = viewDate.plus({ months: i });
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
-            bodyFragment.appendChild(monthHeader);
-            bodyFragment.appendChild(OJSC.utils.createMonthTable(monthDate, tasksByDate));
+            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate));
         }
     } else if (viewType === 'year') {
         for (let i = 0; i < 12; i++) {
@@ -90,8 +92,7 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
-            bodyFragment.appendChild(monthHeader);
-            bodyFragment.appendChild(OJSC.utils.createMonthTable(monthDate, tasksByDate));
+            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate));
         }
     }
 
