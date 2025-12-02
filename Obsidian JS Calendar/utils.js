@@ -172,9 +172,14 @@ OJSC.utils = {
 
         const weekdaysHeader = document.createElement('div');
         weekdaysHeader.className = 'ojsc-weekdays-header';
-        ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
+        ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach((day, index) => {
             const weekday = document.createElement('div');
             weekday.textContent = day;
+            weekday.className = 'ojsc-weekday'; // Базовый класс для плашки
+            // Индексы 5 (Сб) и 6 (Вс) - это выходные
+            if (index >= 5) {
+                weekday.classList.add('ojsc-weekend');
+            }
             weekdaysHeader.appendChild(weekday);
         });
         monthContainer.appendChild(weekdaysHeader);
@@ -211,11 +216,24 @@ OJSC.utils = {
             width: 100%;
             margin-top: 20px; /* Добавляем отступ сверху, чтобы выпадающий список не обрезался */
         }
-        .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
+        .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
         .ojsc-button-group { display: flex; gap: 5px; }
         .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
         .ojsc-calendar-header h2 { position: absolute; left: 50%; transform: translateX(-50%); margin: 0; text-transform: capitalize; color: white; text-align: center; }
-        .ojsc-multi-month-header { text-align: center; text-transform: capitalize; margin-top: 20px; margin-bottom: 10px; }
+        .ojsc-multi-month-header { 
+            text-align: center; 
+            text-transform: capitalize; 
+            margin-top: 20px; 
+            margin-bottom: 5px; 
+            background-color: var(--background-secondary);
+            color: var(--text-accent) !important;
+            padding: 6px 0;
+            border-radius: 6px;
+        }
+        /* Убираем верхний отступ у самого первого заголовка месяца в многомесячных видах */
+        .ojsc-multi-month-header:first-of-type {
+            margin-top: 0;
+        }
 
         /* Стили для 3-дневного вида */
         .ojsc-day-list {
@@ -263,16 +281,27 @@ OJSC.utils = {
         .ojsc-day-list .ojsc-day-card-header {
             padding-bottom: 8px;
             border-bottom: 1px solid var(--background-modifier-border);
+            min-height: 1.8em; /* Выравниваем высоту заголовка с другими режимами */
         }
         /* Стили для сеток (месяц, год) */
         .ojsc-month-container { margin-bottom: 20px; }
         .ojsc-weekdays-header {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-weight: bold;
+            gap: 5px; /* Отступ между плашками */
+            margin-bottom: 5px;
+        }
+        .ojsc-weekday {
+            background-color: var(--background-secondary);
+            color: var(--text-muted);
             padding: 4px 0;
-            margin-bottom: 4px;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .ojsc-weekday.ojsc-weekend {
+            color: var(--text-accent);
         }
         .ojsc-month-grid {
             display: grid;
