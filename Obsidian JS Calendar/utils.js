@@ -137,6 +137,7 @@ OJSC.utils = {
                     const styles = OJSC.utils.getTaskStyles(task.Area);
                     taskItem.style.backgroundColor = styles.backgroundColor;
                     link.style.color = styles.color;
+                taskItem.style.borderLeft = `3px solid ${styles.borderColor}`;
                 }
 
                 link.textContent = task[OJSC.config.summaryField] || task.file.name;
@@ -203,49 +204,48 @@ OJSC.utils = {
             border: 1px solid var(--background-modifier-border); 
             table-layout: fixed; 
         }
-        .ojsc-calendar th, .ojsc-calendar td { 
+        .ojsc-calendar th, .ojsc-calendar td {
             border: 1px solid var(--background-modifier-border); 
             padding: 8px; 
             vertical-align: top; 
             width: 14.28%; 
         }
+        .ojsc-today { 
+            background-color: hsla(var(--accent-h), var(--accent-s), var(--accent-l), 0.1); 
+        }
         .ojsc-weekday-header { background-color: var(--background-secondary); text-align: center; }
-        .ojsc-day-cell { /* Высота теперь будет автоматической */ }
         .ojsc-day-cell-inner { 
             display: flex; 
             flex-direction: column;
             margin: -8px; /* Компенсируем padding родительской ячейки */
-            padding: 8px 0; /* <-- [СДВИГ 1] Внутренние отступы всей ячейки (0 по бокам для макс. ширины) */
+            padding: 8px 4px; /* Увеличиваем боковые отступы для "воздуха" */
         }
         .ojsc-day-number { 
             font-size: 0.9em; font-weight: bold; margin-bottom: 4px;
-            /* Резервируем одинаковое пространство для всех номеров дней */
             width: 1.8em; height: 1.8em;
             display: flex; align-items: center;
-            /* Сдвигаем обычные дни вправо */
             justify-content: flex-start; padding-left: 8px;
         }
-        .ojsc-other-month .ojsc-day-number { color: var(--text-muted); opacity: 0.7; }
+        .ojsc-other-month { 
+            opacity: 0.5; /* Приглушаем всю ячейку "чужого" месяца */
+        }
         .ojsc-today .ojsc-day-number { 
             background-color: var(--text-accent); 
             color: var(--text-on-accent, white);
             border-radius: 50%;
-            /* Центрируем номер внутри круга, убирая отступ */
             justify-content: center;
             padding-left: 0; /* Убираем внутренний отступ, так как центрируем */
-            /* Добавляем внешний отступ, чтобы отодвинуть круг от края */
             margin-left: 8px;
         }
         .ojsc-task-list { 
             list-style: none; padding: 0 4px 0 0; margin: 5px 0 0 -18px; font-size: 0.85em; /* <-- [СДВИГ 2] Отрицательный отступ для "вытягивания" списка задач */
-            /* Убираем прокрутку и позволяем списку расти */
         }
         .ojsc-task-item { 
             margin-bottom: 4px; 
             white-space: nowrap; 
             overflow: hidden; 
             text-overflow: ellipsis; 
-            background-color: hsla(var(--mono-rgb-100), 0.07); /* var(--background-secondary) не всегда работает */
+            background-color: hsla(var(--mono-rgb-100), 0.07);
             border-radius: 4px;
             padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
         }
