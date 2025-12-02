@@ -165,7 +165,7 @@ function getStyles() {
             padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
         }
         .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; }
+        .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; color: white; }
     `;
 }
 
@@ -191,13 +191,31 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
     styleEl.textContent = getStyles();
     rootEl.appendChild(styleEl);
 
-    // Заголовок
+    // --- Заголовок с навигацией ---
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
-    const monthName = viewDate.setLocale('ru').toFormat('LLLL yyyy');
-    headerEl.innerHTML = `<h2>${monthName}</h2>`; // TODO: Добавить кнопки навигации
-    rootEl.appendChild(headerEl);
 
+    // Кнопка "Предыдущий месяц"
+    const prevButton = document.createElement('button');
+    prevButton.textContent = '<';
+    prevButton.onclick = () => OJSC.renderCalendar(dv, viewDate.minus({ months: 1 }));
+
+    // Название месяца
+    const monthNameEl = document.createElement('h2');
+    const monthName = viewDate.setLocale('ru').toFormat('LLLL yyyy');
+    monthNameEl.textContent = monthName;
+
+    // Кнопка "Следующий месяц"
+    const nextButton = document.createElement('button');
+    nextButton.textContent = '>';
+    nextButton.onclick = () => OJSC.renderCalendar(dv, viewDate.plus({ months: 1 }));
+
+    headerEl.appendChild(prevButton);
+    headerEl.appendChild(monthNameEl);
+    headerEl.appendChild(nextButton);
+
+    rootEl.appendChild(headerEl);
+    
     // Таблица
     const table = document.createElement('table');
     table.className = 'ojsc-calendar';
