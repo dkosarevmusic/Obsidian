@@ -161,6 +161,77 @@ OJSC.utils = {
     },
 
     /**
+     * Создает карточку дня с двухстрочными задачами (для 3-дневного вида).
+     * @param {luxon.DateTime} dayDate - Дата дня.
+     * @param {object} tasksByDate - Сгруппированные задачи.
+     * @returns {HTMLElement} - HTML-элемент карточки дня.
+     */
+    createDayCardFor3Days: (dayDate, tasksByDate) => {
+        const card = OJSC.utils.createDayCard(dayDate, tasksByDate); // Используем базовую функцию для создания карточки
+        const taskList = card.querySelector('.ojsc-task-list');
+        taskList.innerHTML = ''; // Очищаем список задач, созданный базовой функцией
+
+        const dayKey = dayDate.toISODate();
+        const dayTasks = tasksByDate[dayKey] || [];
+
+        if (dayTasks.length > 0) {
+            dayTasks.sort(OJSC.utils.compareTasks).forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'ojsc-task-item';
+
+                // Создаем контейнер для двух строк
+                const taskContent = document.createElement('a');
+                taskContent.className = 'internal-link ojsc-task-content-3day';
+                taskContent.href = task.file.path;
+
+                // Верхняя строка: Время
+                const timeEl = document.createElement('div');
+                timeEl.className = 'ojsc-task-time';
+                if (task.time) {
+                    const timeStr = String(task.time).padStart(4, '0');
+                    timeEl.textContent = `${timeStr.slice(0, 2)}:${timeStr.slice(2, 4)}`;
+                } else {
+                    timeEl.textContent = '\u00A0'; // Неразрывный пробел, чтобы сохранить высоту
+                }
+                taskContent.appendChild(timeEl);
+
+                // Нижняя строка: Название задачи
+                const summaryEl = document.createElement('div');
+                summaryEl.className = 'ojsc-task-summary';
+                summaryEl.textContent = task[OJSC.config.summaryField] || task.file.name;
+                taskContent.appendChild(summaryEl);
+
+                li.appendChild(taskContent);
+
+                // Применяем стили области (Area)
+                if (task.Area) {
+                    const styles = OJSC.utils.getTaskStyles(task.Area);
+                    li.style.backgroundColor = styles.backgroundColor;
+                    li.style.borderLeft = `3px solid ${styles.borderColor}`;
+                    // Устанавливаем цвет для текста, который унаследует и подчеркивание
+                    // timeEl.style.color = styles.color; // Убираем цвет у времени
+                    summaryEl.style.textDecorationColor = styles.color; // Задаем цвет подчеркивания для названия
+                    summaryEl.style.color = styles.color;
+                }
+
+                taskList.appendChild(li);
+            });
+        } else {
+            // Если задач нет, возвращаем стандартное сообщение
+            const li = document.createElement('li');
+            li.className = 'ojsc-no-tasks';
+            li.textContent = 'Нет задач';
+            taskList.appendChild(li);
+        }
+
+        // Перезаписываем заголовок для 3-дневного вида
+        const header = card.querySelector('.ojsc-day-card-header');
+        header.textContent = dayDate.setLocale('ru').toFormat('cccc, dd.MM.yyyy');
+        header.style.textAlign = 'left';
+        return card;
+    },
+
+    /**
      * Создает и возвращает HTML-элемент для сетки одного месяца.
      * @param {luxon.DateTime} monthDate - Дата, определяющая отображаемый месяц.
      * @param {object} tasksByDate - Сгруппированные задачи.
@@ -216,6 +287,14 @@ OJSC.utils = {
             width: 100%;
             margin-top: 20px; /* Добавляем отступ сверху, чтобы выпадающий список не обрезался */
         }
+        .ojsc-footer {
+            text-align: right;
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 10px;
+            padding-right: 5px;
+        }
+
         .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
         .ojsc-button-group { display: flex; gap: 5px; }
         .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
@@ -282,6 +361,24 @@ OJSC.utils = {
             padding-bottom: 8px;
             border-bottom: 1px solid var(--background-modifier-border);
             min-height: 1.8em; /* Выравниваем высоту заголовка с другими режимами */
+        }
+        .ojsc-task-content-3day {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none; /* Убираем подчеркивание по умолчанию */
+        }
+        .ojsc-task-time {
+            font-size: 0.9em;
+            opacity: 1;
+            font-weight: 600; /* Оставляем время полужирным */
+        }
+        .ojsc-task-summary {
+            font-weight: 500;
+            text-decoration: underline; /* Переносим подчеркивание на название задачи */
+        }
+        .ojsc-day-list .ojsc-task-item {
+            padding-top: 4px;
+            padding-bottom: 4px;
         }
         /* Стили для сеток (месяц, год) */
         .ojsc-month-container { margin-bottom: 20px; }

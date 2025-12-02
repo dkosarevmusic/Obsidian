@@ -69,11 +69,8 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
         list.className = 'ojsc-day-list';
         for (let i = -1; i <= 1; i++) {
             const dayDate = viewDate.plus({ days: i }); // Отображаем вчера, сегодня, завтра относительно viewDate
-            const card = OJSC.utils.createDayCard(dayDate, tasksByDate);
-            const header = card.querySelector('.ojsc-day-card-header');
-            header.textContent = dayDate.setLocale('ru').toFormat('cccc, dd.MM.yyyy');
-            header.style.textAlign = 'left'; // Для 3-дневного вида выравниваем заголовок влево
-            list.appendChild(card);
+            // Используем новую специальную функцию для 3-дневного вида
+            list.appendChild(OJSC.utils.createDayCardFor3Days(dayDate, tasksByDate));
         }
         bodyFragment.appendChild(list);
     } else if (viewType === 'month') {
@@ -125,4 +122,10 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') 
 
     // 3. Добавляем собранный календарь на страницу
     container.appendChild(rootEl);
+
+    // --- Плашка с подписью ---
+    const footer = document.createElement('div');
+    footer.className = 'ojsc-footer';
+    footer.textContent = 'Calendar by D.KOSAREV';
+    container.appendChild(footer);
 };
