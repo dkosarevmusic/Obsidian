@@ -111,6 +111,7 @@ function getStyles() {
     return `
         .ojsc-container {
             width: 100%;
+            margin-top: 20px; /* Добавляем отступ сверху, чтобы выпадающий список не обрезался */
         }
         .ojsc-calendar { 
             border-collapse: collapse; 
@@ -164,8 +165,11 @@ function getStyles() {
             border-radius: 4px;
             padding: 2px 4px; /* <-- [СДВИГ 3] Внутренний отступ для текста внутри прямоугольника */
         }
-        .ojsc-calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; color: white; }
+        .ojsc-calendar-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 10px; gap: 10px; }
+        .ojsc-calendar-navigation { display: flex; justify-content: center; align-items: center; }
+        .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
+        .ojsc-calendar-navigation h2 { margin: 0 15px; text-transform: capitalize; color: white; text-align: center; }
+        .ojsc-multi-month-header { text-align: center; text-transform: capitalize; margin-top: 20px; margin-bottom: 10px; }
     `;
 }
 
@@ -173,8 +177,9 @@ function getStyles() {
  * Основная функция для отрисовки календаря.
  * @param {object} dv - Глобальный объект API Dataview.
  * @param {luxon.DateTime} viewDate - Дата для отображения (по умолчанию сегодня).
+ * @param {string} viewType - Тип вида ('month', '3months', 'year').
  */
-OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
+OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = 'month') => {
     const container = dv.container;
     container.innerHTML = ''; // Очищаем контейнер перед отрисовкой
 
@@ -195,28 +200,22 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
 
-    // Кнопка "Предыдущий месяц"
-    const prevButton = document.createElement('button');
-    prevButton.textContent = '<';
-    prevButton.onclick = () => OJSC.renderCalendar(dv, viewDate.minus({ months: 1 }));
-
-    // Название месяца
-    const monthNameEl = document.createElement('h2');
-    const monthName = viewDate.setLocale('ru').toFormat('LLLL yyyy');
-    monthNameEl.textContent = monthName;
-
-    // Кнопка "Следующий месяц"
-    const nextButton = document.createElement('button');
-    nextButton.textContent = '>';
-    nextButton.onclick = () => OJSC.renderCalendar(dv, viewDate.plus({ months: 1 }));
-
-    headerEl.appendChild(prevButton);
-    headerEl.appendChild(monthNameEl);
-    headerEl.appendChild(nextButton);
+    // Выпадающий список для выбора вида
+    const viewSelector = document.createElement('select');
+    const views = { month: 'Месяц', '3months': '3 месяца', year: 'Год' };
+    for (const [value, text] of Object.entries(views)) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = text;
+        if (value === viewType) option.selected = true;
+        viewSelector.appendChild(option);
+    }
+    viewSelector.onchange = (e) => OJSC.renderCalendar(dv, viewDate, e.target.value);
 
     rootEl.appendChild(headerEl);
     
-    // Таблица
+    // --- Вспомогательная функция для создания таблицы одного месяца ---
+    const createMonthTable = (monthDate, tasksByDate) => {
     const table = document.createElement('table');
     table.className = 'ojsc-calendar';
 
@@ -232,18 +231,70 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now()) => {
 
     // Тело таблицы (дни)
     const tbody = table.createTBody();
-    let currentDay = viewDate.startOf('month').startOf('week');
-    const endDay = viewDate.endOf('month').endOf('week');
+        let currentDay = monthDate.startOf('month').startOf('week');
+        const endDay = monthDate.endOf('month').endOf('week');
 
     while (currentDay <= endDay) {
         const weekRow = tbody.insertRow();
         for (let i = 0; i < 7; i++) {
-            const cell = createDayCell(currentDay, viewDate, tasksByDate);
+                const cell = createDayCell(currentDay, monthDate, tasksByDate);
             weekRow.appendChild(cell);
             currentDay = currentDay.plus({ days: 1 });
         }
     }
-    rootEl.appendChild(table);
+        return table;
+    };
+
+    // --- Логика отрисовки в зависимости от вида ---
+    let title = '';
+    let navStep = {};
+
+    if (viewType === 'month') {
+        title = viewDate.setLocale('ru').toFormat('LLLL yyyy');
+        navStep = { months: 1 };
+        const table = createMonthTable(viewDate, tasksByDate);
+        rootEl.appendChild(table);
+    } else if (viewType === '3months') {
+        const endPeriod = viewDate.plus({ months: 2 });
+        title = `${viewDate.setLocale('ru').toFormat('LLL yyyy')} - ${endPeriod.setLocale('ru').toFormat('LLL yyyy')}`;
+        navStep = { months: 1 };
+        for (let i = 0; i < 3; i++) {
+            const monthDate = viewDate.plus({ months: i });
+            const monthHeader = document.createElement('h3');
+            monthHeader.className = 'ojsc-multi-month-header';
+            monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
+            rootEl.appendChild(monthHeader);
+            rootEl.appendChild(createMonthTable(monthDate, tasksByDate));
+        }
+    } else if (viewType === 'year') {
+        title = viewDate.toFormat('yyyy');
+        navStep = { years: 1 };
+        for (let i = 0; i < 12; i++) {
+            const monthDate = viewDate.startOf('year').plus({ months: i });
+            const monthHeader = document.createElement('h3');
+            monthHeader.className = 'ojsc-multi-month-header';
+            monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
+            rootEl.appendChild(monthHeader);
+            rootEl.appendChild(createMonthTable(monthDate, tasksByDate));
+        }
+    }
+
+    // --- Собираем заголовок с навигацией и названием ---
+    const prevButton = document.createElement('button');
+    prevButton.textContent = '<';
+    prevButton.onclick = () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType);
+    const nextButton = document.createElement('button');
+    nextButton.textContent = '>';
+    nextButton.onclick = () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType);
+    const titleEl = document.createElement('h2');
+    titleEl.textContent = title;
+
+    // Создаем отдельный контейнер для навигации (кнопки + заголовок)
+    const navContainer = document.createElement('div');
+    navContainer.className = 'ojsc-calendar-navigation';
+    navContainer.append(prevButton, titleEl, nextButton);
+
+    headerEl.append(viewSelector, navContainer);
 
     // 3. Добавляем собранный календарь на страницу
     container.appendChild(rootEl);
