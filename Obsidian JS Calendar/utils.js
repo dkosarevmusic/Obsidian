@@ -215,7 +215,9 @@ OJSC.utils = {
 
         // Перезаписываем заголовок для 3-дневного вида
         const header = card.querySelector('.ojsc-day-card-header');
-        header.textContent = dayDate.setLocale('ru').toFormat('cccc, dd.MM.yyyy');
+        let headerText = dayDate.setLocale('ru').toFormat('cccc, d.MM.yyyy');
+        // Делаем первую букву заглавной
+        header.textContent = headerText.charAt(0).toUpperCase() + headerText.slice(1);
         header.style.textAlign = 'left';
         return card;
     },
