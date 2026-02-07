@@ -136,11 +136,25 @@ OJSC.utils = {
                 li.className = 'ojsc-task-item';
                 const link = document.createElement('a');
 
-                if (task.Area) {
+                const taskStatus = Array.isArray(task.status) ? task.status : [String(task.status)];
+                const isImportant = taskStatus.includes('important');
+                const hasArea = !!task.Area;
+
+                if (isImportant && !hasArea) {
+                    // Важная задача БЕЗ Area -> полностью красная
+                    li.style.backgroundColor = 'hsla(0, 80%, 50%, 0.2)';
+                    li.style.borderLeft = '3px solid hsl(0, 80%, 50%)';
+                    link.style.color = 'hsl(0, 80%, 75%)';
+                } else {
+                    // Применяем стили Area, если они есть
+                    if (hasArea) {
                     const styles = OJSC.utils.getTaskStyles(task.Area);
                     li.style.backgroundColor = styles.backgroundColor;
-                    link.style.color = styles.color;
                     li.style.borderLeft = `3px solid ${styles.borderColor}`;
+                    link.style.color = styles.color;
+                    }
+                    // Если задача важная (и имеет Area), добавляем класс для подсветки
+                    if (isImportant) li.classList.add('ojsc-task-item-important');
                 }
 
                 link.textContent = task[OJSC.config.summaryField] || task.file.name;
@@ -198,15 +212,27 @@ OJSC.utils = {
 
                 li.appendChild(taskContent);
 
-                // Применяем стили области (Area)
-                if (task.Area) {
+                const taskStatus = Array.isArray(task.status) ? task.status : [String(task.status)];
+                const isImportant = taskStatus.includes('important');
+                const hasArea = !!task.Area;
+
+                if (isImportant && !hasArea) {
+                    // Важная задача БЕЗ Area -> полностью красная
+                    li.style.backgroundColor = 'hsla(0, 80%, 50%, 0.2)';
+                    li.style.borderLeft = '3px solid hsl(0, 80%, 50%)';
+                    summaryEl.style.color = 'hsl(0, 80%, 75%)';
+                    summaryEl.style.textDecorationColor = 'hsl(0, 80%, 75%)';
+                } else {
+                    // Применяем стили Area, если они есть
+                    if (hasArea) {
                     const styles = OJSC.utils.getTaskStyles(task.Area);
                     li.style.backgroundColor = styles.backgroundColor;
                     li.style.borderLeft = `3px solid ${styles.borderColor}`;
-                    // Устанавливаем цвет для текста, который унаследует и подчеркивание
-                    // timeEl.style.color = styles.color; // Убираем цвет у времени
-                    summaryEl.style.textDecorationColor = styles.color; // Задаем цвет подчеркивания для названия
                     summaryEl.style.color = styles.color;
+                    summaryEl.style.textDecorationColor = styles.color;
+                    }
+                    // Если задача важная (и имеет Area), добавляем класс для подсветки
+                    if (isImportant) li.classList.add('ojsc-task-item-important');
                 }
 
                 taskList.appendChild(li);
@@ -345,6 +371,13 @@ OJSC.utils = {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+        /* Стиль для подсветки "важных" задач. Накладывается поверх цвета Area. */
+        .ojsc-task-item.ojsc-task-item-important {
+            /* Добавляем красную рамку справа, чтобы не конфликтовать с рамкой Area слева */
+            box-shadow: inset -3px 0 0 hsl(0, 80%, 50%);
+            /* Можно добавить и полупрозрачный фон, если нужно более сильное выделение */
+            /* background-image: linear-gradient(to right, hsla(0, 80%, 50%, 0.1), hsla(0, 80%, 50%, 0.1)); */
         }
         /* Стили для 3-дневного вида */
         .ojsc-day-list .ojsc-day-card-header {
