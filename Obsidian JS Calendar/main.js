@@ -28,6 +28,8 @@ function getViewParameters(viewDate, viewType) {
  */
 OJSC.renderCalendar = (dv, viewDate, viewType) => {
     // --- Восстановление состояния при перезагрузке ---
+    const previousViewTypeFromStorage = localStorage.getItem('ojsc_lastViewType');
+
     // Если аргументы не переданы (первичный запуск), загружаем их из localStorage.
     if (viewType === undefined || viewType === null) {
         viewType = localStorage.getItem('ojsc_lastViewType') || 'month';
@@ -37,10 +39,16 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
         viewDate = savedDate ? luxon.DateTime.fromISO(savedDate) : luxon.DateTime.now();
     }
 
+    // Определяем, произошла ли смена вида, для управления скроллом.
+    const didViewTypeChange = previousViewTypeFromStorage !== viewType;
+
     // --- Сохранение текущего состояния ---
     // При любой отрисовке мы должны запомнить текущий вид и дату как последние использованные.
     localStorage.setItem('ojsc_lastViewType', viewType);
     localStorage.setItem('ojsc_lastViewDate', viewDate.toISODate());
+
+    // Сохраняем текущую дату вида в глобальный объект для доступа из других функций
+    OJSC.currentViewDate = viewDate;
 
     const previousView = localStorage.getItem('ojsc_previousView');
     const container = dv.container;
@@ -183,7 +191,10 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
         backButton.className = 'ojsc-back-button'; // Добавляем класс для стилизации
         backButton.onclick = () => {
             localStorage.removeItem('ojsc_previousView'); // Очищаем память после использования
-            OJSC.renderCalendar(dv, viewDate, previousView);
+            // Восстанавливаем дату, которая была до перехода в "1 день", из хранилища
+            const originalDate = localStorage.getItem('ojsc_originalViewDate') ? luxon.DateTime.fromISO(localStorage.getItem('ojsc_originalViewDate')) : viewDate;
+            // Передаем флаг для восстановления скролла и восстанавливаем исходную дату
+            OJSC.renderCalendar(dv, originalDate, previousView);
         };
         // Добавляем основную навигацию и кнопку "Назад" в правильном порядке
         buttonGroup.append(mainNavGroup, backButton);
@@ -204,11 +215,13 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
     footer.textContent = 'Calendar by D.KOSAREV';
     container.appendChild(footer);
 
-    // При каждой перерисовке плавно прокручиваем к началу заметки,
-    // чтобы избежать "прыжков" и всегда видеть заголовок.
-    // Ищем ближайший родительский элемент, отвечающий за прокрутку.
-    const scroller = container.closest('.cm-scroller, .markdown-preview-view');
-    if (scroller) {
-        scroller.scrollTo({ top: 0, behavior: 'smooth' });
+    // Прокручиваем к началу заметки только при смене вида (например, с месяца на год),
+    // чтобы не мешать пользователю при других действиях и избежать "черного экрана".
+    if (didViewTypeChange) {
+        const scroller = container.closest('.cm-scroller, .markdown-preview-view');
+        if (scroller) {
+            scroller.scrollTo({ top: 0, behavior: 'auto' });
+        }
     }
+
 };

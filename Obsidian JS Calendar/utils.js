@@ -115,6 +115,7 @@ OJSC.utils = {
 
         const card = document.createElement('div');
         card.className = 'ojsc-day-card';
+        card.dataset.date = dayKey; // Добавляем data-атрибут с датой для мобильного drag-n-drop
         if (dayDate.toISODate() === luxon.DateTime.now().toISODate()) {
             card.classList.add('ojsc-today');
         }
@@ -183,6 +184,61 @@ OJSC.utils = {
                         oldDateKey: dayKey
                     };
                 });
+
+                // --- Полифилл для Drag-and-Drop на мобильных устройствах ---
+                let lastTouchTarget = null;
+
+                li.addEventListener('touchstart', (e) => {
+                    // Сохраняем контекст, как и в dragstart
+                    window.OJSC.dragContext = {
+                        element: li,
+                        task: task,
+                        oldDateKey: dayKey
+                    };
+                    // Добавляем класс, чтобы визуально показать, что элемент перетаскивается
+                    li.classList.add('ojsc-dragging');
+                });
+
+                const handleTouchMove = (e) => {
+                    if (!window.OJSC.dragContext.element) return;
+                    // Находим элемент под пальцем
+                    const touch = e.touches[0];
+                    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const dropZone = target ? target.closest('.ojsc-day-card') : null;
+
+                    if (lastTouchTarget && lastTouchTarget !== dropZone) {
+                        lastTouchTarget.classList.remove('ojsc-drop-target');
+                    }
+                    if (dropZone) {
+                        dropZone.classList.add('ojsc-drop-target');
+                    }
+                    lastTouchTarget = dropZone;
+                };
+
+                const handleTouchEnd = (e) => {
+                    if (!window.OJSC.dragContext.element) return;
+                    
+                    // Убираем класс перетаскивания
+                    window.OJSC.dragContext.element.classList.remove('ojsc-dragging');
+
+                    if (lastTouchTarget) {
+                        lastTouchTarget.classList.remove('ojsc-drop-target');
+                        // Логика "бросания" задачи
+                        const newDate = lastTouchTarget.dataset.date; // Получаем дату из data-атрибута
+                        const { element, task, oldDateKey } = window.OJSC.dragContext;
+                        
+                        const targetTaskList = lastTouchTarget.querySelector('.ojsc-task-list');
+                        if (targetTaskList) targetTaskList.appendChild(element);
+
+                        onTaskDrop(task.file.path, newDate, task, oldDateKey);
+                    }
+                    // Очищаем контекст
+                    window.OJSC.dragContext = {};
+                    lastTouchTarget = null;
+                };
+
+                document.addEventListener('touchmove', handleTouchMove, { passive: false });
+                document.addEventListener('touchend', handleTouchEnd);
 
                 const link = document.createElement('a');
 
@@ -367,6 +423,7 @@ OJSC.utils = {
 
         .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
         .ojsc-button-group { display: flex; gap: 5px; flex-shrink: 0; }
+        .ojsc-main-nav-group { display: flex; gap: 5px; }
         .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
         .ojsc-calendar-header select {
             text-align: center;
@@ -428,6 +485,11 @@ OJSC.utils = {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+        /* Стиль для элемента, который перетаскивается на мобильных */
+        .ojsc-task-item.ojsc-dragging {
+            opacity: 0.5;
+            border-style: dashed;
         }
         /* Стиль для подсветки "важных" задач. Накладывается поверх цвета Area. */
         .ojsc-task-item.ojsc-task-item-important {
