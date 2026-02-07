@@ -174,4 +174,7 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
     footer.className = 'ojsc-footer';
     footer.textContent = 'Calendar by D.KOSAREV';
     container.appendChild(footer);
+
+    // Сбрасываем скролл к началу календаря при каждой перерисовке
+    container.scrollIntoView(true);
 };
