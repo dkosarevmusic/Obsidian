@@ -7,20 +7,6 @@ function getViewParameters(viewDate, viewType) {
     if (viewType === '1day') {
         return { title: viewDate.setLocale('ru').toFormat('d MMMM yyyy'), navStep: { days: 1 } };
     }
-    if (viewType === '3days') {
-        const startDate = viewDate.minus({ days: 1 });
-        const endDate = viewDate.plus({ days: 1 });
-        let title;
-
-        if (startDate.month === endDate.month) {
-            // Если дни в одном месяце, используем короткий формат: "2 - 4 октября 2023"
-            title = `${startDate.toFormat('d')} - ${endDate.setLocale('ru').toFormat('d MMMM yyyy')}`;
-        } else {
-            // Если дни в разных месяцах: "31 октября - 2 ноября 2023"
-            title = `${startDate.setLocale('ru').toFormat('d MMMM')} - ${endDate.setLocale('ru').toFormat('d MMMM yyyy')}`;
-        }
-        return { title: title, navStep: { days: 1 } };
-    }
     if (viewType === 'month') {
         return { title: viewDate.setLocale('ru').toFormat('LLLL yyyy'), navStep: { months: 1 } };
     }
@@ -78,7 +64,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
 
     // Выпадающий список для выбора вида
     const viewSelector = document.createElement('select');
-    const views = { '1day': '1 день', '3days': '3 дня', month: 'Месяц', '3months': '3 месяца', year: 'Год' };
+    const views = { '1day': '1 день', month: 'Месяц', '3months': '3 месяца', year: 'Год' };
     for (const [value, text] of Object.entries(views)) {
         const option = document.createElement('option');
         option.value = value;
@@ -109,15 +95,6 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
         list.className = 'ojsc-day-list'; // Используем тот же класс, что и в 3-дневном виде
         // Используем специальную функцию для детального отображения карточки
         list.appendChild(OJSC.utils.createDayCardFor3Days(viewDate, tasksByDate));
-        bodyFragment.appendChild(list);
-    } else if (viewType === '3days') {
-        const list = document.createElement('div');
-        list.className = 'ojsc-day-list';
-        for (let i = -1; i <= 1; i++) {
-            const dayDate = viewDate.plus({ days: i }); // Отображаем вчера, сегодня, завтра относительно viewDate
-            // Используем новую специальную функцию для 3-дневного вида
-            list.appendChild(OJSC.utils.createDayCardFor3Days(dayDate, tasksByDate));
-        }
         bodyFragment.appendChild(list);
     } else if (viewType === 'month') {
         bodyFragment.appendChild(OJSC.utils.createMonthGrid(viewDate, tasksByDate, viewType, dv));

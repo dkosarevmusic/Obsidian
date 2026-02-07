@@ -393,11 +393,6 @@ OJSC.utils = {
             /* background-image: linear-gradient(to right, hsla(0, 80%, 50%, 0.1), hsla(0, 80%, 50%, 0.1)); */
         }
         /* Стили для 3-дневного вида */
-        .ojsc-day-list .ojsc-day-card-header {
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--background-modifier-border);
-            min-height: 1.8em; /* Выравниваем высоту заголовка с другими режимами */
-        }
         .ojsc-task-content-3day {
             display: flex;
             flex-direction: column;
@@ -474,10 +469,6 @@ OJSC.utils = {
         }
 
         /* --- Кастомные сдвиги для разных режимов --- */
-        /* Для 3-дневного вида, компенсируем padding: 8px у .ojsc-day-card */
-        .ojsc-day-list .ojsc-task-item {
-            margin-left: -2px; /* Сдвиг вправо на 1px */
-        }
         /* Для месячного вида, компенсируем padding: 4px у .ojsc-month-grid-card */
         .ojsc-month-grid .ojsc-task-item {
             margin-left: 2px; /* Сдвиг вправо на 1px */
