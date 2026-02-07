@@ -110,6 +110,9 @@ OJSC.utils = {
         const dayKey = dayDate.toISODate();
         const dayTasks = tasksByDate[dayKey] || [];
 
+        // Глобальная переменная для хранения перетаскиваемого элемента и его данных
+        if (!window.OJSC.dragContext) window.OJSC.dragContext = {};
+
         const card = document.createElement('div');
         card.className = 'ojsc-day-card';
         if (dayDate.toISODate() === luxon.DateTime.now().toISODate()) {
@@ -127,9 +130,16 @@ OJSC.utils = {
         card.addEventListener('drop', (e) => {
             e.preventDefault();
             card.classList.remove('ojsc-drop-target');
-            const filePath = e.dataTransfer.getData('text/plain');
+            const { element, task, oldDateKey } = window.OJSC.dragContext;
+            if (!element || !task) return;
+
+            // Оптимистичное обновление UI: перемещаем DOM-элемент
+            const targetTaskList = card.querySelector('.ojsc-task-list');
+            if (targetTaskList) targetTaskList.appendChild(element);
+
+            // Вызываем callback для обновления файла и локальных данных
             const newDate = dayDate.toISODate();
-            onTaskDrop(filePath, newDate); // Вызываем callback для обновления файла
+            onTaskDrop(task.file.path, newDate, task, oldDateKey);
         });
 
         const header = document.createElement('div');
@@ -166,7 +176,12 @@ OJSC.utils = {
 
                 // При начале перетаскивания сохраняем путь к файлу
                 li.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData('text/plain', task.file.path);
+                    // Сохраняем контекст перетаскивания
+                    window.OJSC.dragContext = {
+                        element: li,
+                        task: task,
+                        oldDateKey: dayKey
+                    };
                 });
 
                 const link = document.createElement('a');

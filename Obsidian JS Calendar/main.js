@@ -91,8 +91,8 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
     const bodyFragment = document.createDocumentFragment();
 
     // --- Логика обновления файла при Drag-and-Drop ---
-    const onTaskDrop = (filePath, newDate) => {
-        if (!filePath || !newDate) return;
+    const onTaskDrop = (filePath, newDate, taskToMove, oldDateKey) => {
+        if (!filePath || !newDate || !taskToMove) return;
 
         const tfile = dv.app.vault.getAbstractFileByPath(filePath);
         if (!tfile) {
@@ -100,12 +100,25 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
             return;
         }
 
+        // Оптимистичное обновление локальных данных
+        // 1. Удаляем задачу из старого дня
+        if (tasksByDate[oldDateKey]) {
+            tasksByDate[oldDateKey] = tasksByDate[oldDateKey].filter(t => t.file.path !== filePath);
+        }
+        // 2. Добавляем задачу в новый день
+        if (!tasksByDate[newDate]) {
+            tasksByDate[newDate] = [];
+        }
+        tasksByDate[newDate].push(taskToMove);
+
+        // Обновляем frontmatter в фоне
         dv.app.fileManager.processFrontMatter(tfile, (fm) => {
             fm[OJSC.config.dateField] = newDate;
         }).then(() => {
-            // После успешного обновления файла, перерисовываем календарь,
-            // чтобы изменения сразу отобразились.
-            OJSC.renderCalendar(dv, null, null);
+            // После того как файл сохранен, мы можем запустить полное обновление
+            // для синхронизации, если это необходимо, но UI уже обновлен.
+            // Для мгновенного отклика мы уже не вызываем полный ререндер.
+            // Если понадобится, можно раскомментировать: OJSC.renderCalendar(dv, null, null);
         });
     };
 
