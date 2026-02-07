@@ -189,6 +189,11 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
     footer.textContent = 'Calendar by D.KOSAREV';
     container.appendChild(footer);
 
-    // Сбрасываем скролл к началу календаря при каждой перерисовке
-    container.scrollIntoView(true);
+    // При каждой перерисовке плавно прокручиваем к началу заметки,
+    // чтобы избежать "прыжков" и всегда видеть заголовок.
+    // Ищем ближайший родительский элемент, отвечающий за прокрутку.
+    const scroller = container.closest('.cm-scroller, .markdown-preview-view');
+    if (scroller) {
+        scroller.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 };
