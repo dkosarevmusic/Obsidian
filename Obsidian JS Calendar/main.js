@@ -151,17 +151,26 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
     const buttonGroup = document.createElement('div');
     buttonGroup.className = 'ojsc-button-group';
 
+    // Создаем отдельную группу для основной навигации
+    const mainNavGroup = document.createElement('div');
+    mainNavGroup.className = 'ojsc-main-nav-group';
+    mainNavGroup.append(prevButton, todayButton, nextButton);
+
     // Добавляем кнопку "Назад", если мы в режиме '1day' и есть куда возвращаться
     if (viewType === '1day' && previousView) {
         const backButton = document.createElement('button');
         backButton.textContent = 'Назад';
+        backButton.className = 'ojsc-back-button'; // Добавляем класс для стилизации
         backButton.onclick = () => {
             localStorage.removeItem('ojsc_previousView'); // Очищаем память после использования
             OJSC.renderCalendar(dv, viewDate, previousView);
         };
-        buttonGroup.append(backButton);
+        // Добавляем основную навигацию и кнопку "Назад" в правильном порядке
+        buttonGroup.append(mainNavGroup, backButton);
+    } else {
+        // Если кнопки "Назад" нет, добавляем только основную навигацию
+        buttonGroup.append(mainNavGroup);
     }
-    buttonGroup.append(prevButton, todayButton, nextButton); // Основные кнопки
 
     // Собираем заголовок: группа кнопок слева, заголовок по центру, селектор справа
     headerEl.append(buttonGroup, titleEl, viewSelector);

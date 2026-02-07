@@ -463,6 +463,14 @@ OJSC.utils = {
         }
         .ojsc-clickable-day {
             cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            border-radius: 4px;
+            background-color: var(--background-modifier-form-field); /* Постоянное выделение */
+            margin: -2px; /* Компенсируем padding родителя, чтобы ховер был красивее */
+            padding: 2px; /* Возвращаем внутренний отступ */
+        }
+        .ojsc-clickable-day:hover {
+            background-color: var(--background-modifier-hover);
         }
 
         /* --- Кастомные сдвиги для разных режимов --- */
@@ -490,6 +498,16 @@ OJSC.utils = {
             .ojsc-button-group {
                 justify-content: center; /* Центрируем кнопки */
                 order: 3; /* Ставим кнопки управления третьими */
+                flex-direction: column; /* Ставим кнопки в столбец */
+                align-items: stretch; /* Растягиваем кнопки на всю ширину */
+            }
+            .ojsc-main-nav-group {
+                display: flex;
+                justify-content: space-between; /* Распределяем кнопки по ширине */
+                gap: 5px; /* Добавляем отступ между кнопками */
+            }
+            .ojsc-main-nav-group button {
+                flex-grow: 1; /* Позволяем кнопкам расти */
             }
             .ojsc-calendar-header select {
                 order: 1; /* Ставим выбор режима первым */
