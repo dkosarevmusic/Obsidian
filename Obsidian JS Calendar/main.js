@@ -44,10 +44,12 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
     // Если viewType не передан, пытаемся загрузить его из localStorage. Если и там нет, ставим 'month' по умолчанию.
     const previousView = localStorage.getItem('ojsc_previousView');
 
+    // При любой отрисовке мы должны запомнить текущий вид как последний использованный.
+    // Это гарантирует, что при перезапуске скрипт вернется в правильное состояние.
+    if (viewType) localStorage.setItem('ojsc_lastViewType', viewType);
+
     if (viewType === null) {
         viewType = localStorage.getItem('ojsc_lastViewType') || 'month';
-        // Если мы переключились на вид, который не является '1day', сбрасываем сохраненный предыдущий вид
-        if (viewType !== '1day') localStorage.removeItem('ojsc_previousView');
     }
     const container = dv.container;
     container.innerHTML = ''; // Очищаем контейнер перед отрисовкой
@@ -79,8 +81,11 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
         viewSelector.appendChild(option);
     }
     viewSelector.onchange = (e) => {
-        localStorage.setItem('ojsc_lastViewType', e.target.value); // Сохраняем выбор
-        // При ручном переключении вида сбрасываем "память" о предыдущем виде для кнопки "Назад"
+        // Если переключились на 1 день, запоминаем откуда.
+        if (e.target.value === '1day') {
+            localStorage.setItem('ojsc_previousView', viewType); // Запоминаем текущий вид как предыдущий
+        } 
+        // Если мы вручную переключились на любой вид, который не является '1day', сбрасываем память о возврате.
         if (e.target.value !== '1day') {
             localStorage.removeItem('ojsc_previousView');
         }
