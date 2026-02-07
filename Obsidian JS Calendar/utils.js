@@ -101,9 +101,11 @@ OJSC.utils = {
      * Создает карточку для одного дня с задачами.
      * @param {luxon.DateTime} dayDate - Дата дня.
      * @param {object} tasksByDate - Сгруппированные задачи.
+     * @param {string} viewType - Текущий тип вида ('month', 'year' и т.д.).
+     * @param {object} dv - Глобальный объект API Dataview для перерисовки.
      * @returns {HTMLElement} - HTML-элемент карточки дня.
      */
-    createDayCard: (dayDate, tasksByDate) => {
+    createDayCard: (dayDate, tasksByDate, viewType, dv) => {
         const dayKey = dayDate.toISODate();
         const dayTasks = tasksByDate[dayKey] || [];
 
@@ -115,6 +117,15 @@ OJSC.utils = {
 
         const header = document.createElement('div');
         header.className = 'ojsc-day-card-header';
+
+        // Добавляем обработчик для "проваливания" в день
+        if (['month', '3months', 'year'].includes(viewType)) {
+            header.classList.add('ojsc-clickable-day');
+            header.onclick = () => {
+                localStorage.setItem('ojsc_previousView', viewType);
+                OJSC.renderCalendar(dv, dayDate, '1day');
+            };
+        }
 
         // По умолчанию ставим только номер дня. Для 3-дневного вида будет перезаписано в main.js
         const daySpan = document.createElement('span');
@@ -252,9 +263,11 @@ OJSC.utils = {
      * Создает и возвращает HTML-элемент для сетки одного месяца.
      * @param {luxon.DateTime} monthDate - Дата, определяющая отображаемый месяц.
      * @param {object} tasksByDate - Сгруппированные задачи.
+     * @param {string} viewType - Текущий тип вида.
+     * @param {object} dv - Глобальный объект API Dataview.
      * @returns {HTMLElement} - Элемент `<div>` для одного месяца.
      */
-    createMonthGrid: (monthDate, tasksByDate) => {
+    createMonthGrid: (monthDate, tasksByDate, viewType, dv) => {
         const monthContainer = document.createElement('div');
         monthContainer.className = 'ojsc-month-container';
 
@@ -279,7 +292,7 @@ OJSC.utils = {
         const endDay = monthDate.endOf('month').endOf('week');
 
         while (currentDay <= endDay) {
-            const card = OJSC.utils.createDayCard(currentDay, tasksByDate);
+            const card = OJSC.utils.createDayCard(currentDay, tasksByDate, viewType, dv);
             card.classList.add('ojsc-month-grid-card'); // Добавляем класс для специфичных стилей
             if (currentDay.month !== monthDate.month) {
                 card.classList.add('ojsc-other-month');
@@ -313,7 +326,7 @@ OJSC.utils = {
         }
 
         .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
-        .ojsc-button-group { display: flex; gap: 5px; }
+        .ojsc-button-group { display: flex; gap: 5px; flex-shrink: 0; }
         .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
         .ojsc-calendar-header select {
             text-align: center;
@@ -447,6 +460,9 @@ OJSC.utils = {
             display: inline-block;
             width: 1.8em; height: 1.8em; line-height: 1.8em;
             text-align: center;
+        }
+        .ojsc-clickable-day {
+            cursor: pointer;
         }
 
         /* --- Кастомные сдвиги для разных режимов --- */

@@ -42,8 +42,12 @@ function getViewParameters(viewDate, viewType) {
  */
 OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => {
     // Если viewType не передан, пытаемся загрузить его из localStorage. Если и там нет, ставим 'month' по умолчанию.
+    const previousView = localStorage.getItem('ojsc_previousView');
+
     if (viewType === null) {
         viewType = localStorage.getItem('ojsc_lastViewType') || 'month';
+        // Если мы переключились на вид, который не является '1day', сбрасываем сохраненный предыдущий вид
+        if (viewType !== '1day') localStorage.removeItem('ojsc_previousView');
     }
     const container = dv.container;
     container.innerHTML = ''; // Очищаем контейнер перед отрисовкой
@@ -76,6 +80,10 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
     }
     viewSelector.onchange = (e) => {
         localStorage.setItem('ojsc_lastViewType', e.target.value); // Сохраняем выбор
+        // При ручном переключении вида сбрасываем "память" о предыдущем виде для кнопки "Назад"
+        if (e.target.value !== '1day') {
+            localStorage.removeItem('ojsc_previousView');
+        }
         OJSC.renderCalendar(dv, viewDate, e.target.value);
     };
 
@@ -101,14 +109,14 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
         }
         bodyFragment.appendChild(list);
     } else if (viewType === 'month') {
-        bodyFragment.appendChild(OJSC.utils.createMonthGrid(viewDate, tasksByDate));
+        bodyFragment.appendChild(OJSC.utils.createMonthGrid(viewDate, tasksByDate, viewType, dv));
     } else if (viewType === '3months') {
         for (let i = 0; i < 3; i++) {
             const monthDate = viewDate.plus({ months: i });
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
-            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate));
+            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate, viewType, dv));
         }
     } else if (viewType === 'year') {
         for (let i = 0; i < 12; i++) {
@@ -116,7 +124,7 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
-            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate));
+            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate, viewType, dv));
         }
     }
 
@@ -142,7 +150,18 @@ OJSC.renderCalendar = (dv, viewDate = luxon.DateTime.now(), viewType = null) => 
     // Группируем кнопки навигации
     const buttonGroup = document.createElement('div');
     buttonGroup.className = 'ojsc-button-group';
-    buttonGroup.append(prevButton, todayButton, nextButton);
+
+    // Добавляем кнопку "Назад", если мы в режиме '1day' и есть куда возвращаться
+    if (viewType === '1day' && previousView) {
+        const backButton = document.createElement('button');
+        backButton.textContent = 'Назад';
+        backButton.onclick = () => {
+            localStorage.removeItem('ojsc_previousView'); // Очищаем память после использования
+            OJSC.renderCalendar(dv, viewDate, previousView);
+        };
+        buttonGroup.append(backButton);
+    }
+    buttonGroup.append(prevButton, todayButton, nextButton); // Основные кнопки
 
     // Собираем заголовок: группа кнопок слева, заголовок по центру, селектор справа
     headerEl.append(buttonGroup, titleEl, viewSelector);
