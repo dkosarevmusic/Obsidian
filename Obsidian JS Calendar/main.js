@@ -90,6 +90,25 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
     const { title, navStep } = getViewParameters(viewDate, viewType);
     const bodyFragment = document.createDocumentFragment();
 
+    // --- Логика обновления файла при Drag-and-Drop ---
+    const onTaskDrop = (filePath, newDate) => {
+        if (!filePath || !newDate) return;
+
+        const tfile = dv.app.vault.getAbstractFileByPath(filePath);
+        if (!tfile) {
+            console.error(`[OJSC] Файл не найден: ${filePath}`);
+            return;
+        }
+
+        dv.app.fileManager.processFrontMatter(tfile, (fm) => {
+            fm[OJSC.config.dateField] = newDate;
+        }).then(() => {
+            // После успешного обновления файла, перерисовываем календарь,
+            // чтобы изменения сразу отобразились.
+            OJSC.renderCalendar(dv, null, null);
+        });
+    };
+
     if (viewType === '1day') {
         const list = document.createElement('div');
         list.className = 'ojsc-day-list'; // Используем тот же класс, что и в 3-дневном виде
@@ -97,14 +116,14 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
         list.appendChild(OJSC.utils.createDayCardFor3Days(viewDate, tasksByDate));
         bodyFragment.appendChild(list);
     } else if (viewType === 'month') {
-        bodyFragment.appendChild(OJSC.utils.createMonthGrid(viewDate, tasksByDate, viewType, dv));
+        bodyFragment.appendChild(OJSC.utils.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop));
     } else if (viewType === '3months') {
         for (let i = 0; i < 3; i++) {
             const monthDate = viewDate.plus({ months: i });
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
-            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate, viewType, dv));
+            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop));
         }
     } else if (viewType === 'year') {
         for (let i = 0; i < 12; i++) {
@@ -112,7 +131,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
-            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate, viewType, dv));
+            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop));
         }
     }
 

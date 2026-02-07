@@ -103,9 +103,10 @@ OJSC.utils = {
      * @param {object} tasksByDate - Сгруппированные задачи.
      * @param {string} viewType - Текущий тип вида ('month', 'year' и т.д.).
      * @param {object} dv - Глобальный объект API Dataview для перерисовки.
+     * @param {function} onTaskDrop - Callback-функция, вызываемая при переносе задачи.
      * @returns {HTMLElement} - HTML-элемент карточки дня.
      */
-    createDayCard: (dayDate, tasksByDate, viewType, dv) => {
+    createDayCard: (dayDate, tasksByDate, viewType, dv, onTaskDrop) => {
         const dayKey = dayDate.toISODate();
         const dayTasks = tasksByDate[dayKey] || [];
 
@@ -114,6 +115,22 @@ OJSC.utils = {
         if (dayDate.toISODate() === luxon.DateTime.now().toISODate()) {
             card.classList.add('ojsc-today');
         }
+
+        // --- Логика Drag-and-Drop (Drop Zone) ---
+        card.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Необходимо, чтобы разрешить drop
+            card.classList.add('ojsc-drop-target');
+        });
+        card.addEventListener('dragleave', () => {
+            card.classList.remove('ojsc-drop-target');
+        });
+        card.addEventListener('drop', (e) => {
+            e.preventDefault();
+            card.classList.remove('ojsc-drop-target');
+            const filePath = e.dataTransfer.getData('text/plain');
+            const newDate = dayDate.toISODate();
+            onTaskDrop(filePath, newDate); // Вызываем callback для обновления файла
+        });
 
         const header = document.createElement('div');
         header.className = 'ojsc-day-card-header';
@@ -145,6 +162,13 @@ OJSC.utils = {
             dayTasks.sort(OJSC.utils.compareTasks).forEach(task => {
                 const li = document.createElement('li');
                 li.className = 'ojsc-task-item';
+                li.setAttribute('draggable', 'true'); // Делаем задачу перетаскиваемой
+
+                // При начале перетаскивания сохраняем путь к файлу
+                li.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', task.file.path);
+                });
+
                 const link = document.createElement('a');
 
                 const taskStatus = Array.isArray(task.status) ? task.status : [String(task.status)];
@@ -265,9 +289,10 @@ OJSC.utils = {
      * @param {object} tasksByDate - Сгруппированные задачи.
      * @param {string} viewType - Текущий тип вида.
      * @param {object} dv - Глобальный объект API Dataview.
+     * @param {function} onTaskDrop - Callback-функция для обновления задачи.
      * @returns {HTMLElement} - Элемент `<div>` для одного месяца.
      */
-    createMonthGrid: (monthDate, tasksByDate, viewType, dv) => {
+    createMonthGrid: (monthDate, tasksByDate, viewType, dv, onTaskDrop) => {
         const monthContainer = document.createElement('div');
         monthContainer.className = 'ojsc-month-container';
 
@@ -292,7 +317,7 @@ OJSC.utils = {
         const endDay = monthDate.endOf('month').endOf('week');
 
         while (currentDay <= endDay) {
-            const card = OJSC.utils.createDayCard(currentDay, tasksByDate, viewType, dv);
+            const card = OJSC.utils.createDayCard(currentDay, tasksByDate, viewType, dv, onTaskDrop);
             card.classList.add('ojsc-month-grid-card'); // Добавляем класс для специфичных стилей
             if (currentDay.month !== monthDate.month) {
                 card.classList.add('ojsc-other-month');
@@ -366,6 +391,10 @@ OJSC.utils = {
         }
         .ojsc-day-card.ojsc-today {
             border-color: var(--text-accent);
+        }
+        .ojsc-day-card.ojsc-drop-target {
+            background-color: var(--background-modifier-hover);
+            border-style: dashed;
         }
         .ojsc-day-card-header {
             font-weight: bold;
