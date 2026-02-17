@@ -38,7 +38,8 @@
 .ojsc-day-card {
     border: 1px solid var(--background-modifier-border);
     border-radius: 6px;
-    padding: 8px;
+    /* Возвращаем небольшой боковой отступ для общего вида, но будем его компенсировать. */
+    padding: 8px 4px;
     background-color: var(--background-secondary);
     flex: 1;
     min-width: 0; /* Предотвращает переполнение контентом */
@@ -56,16 +57,25 @@
 .ojsc-day-card-header {
     font-weight: bold;
     margin-bottom: 4px;
+    /* Заголовку теперь нужен меньший отступ, так как у родителя есть свой. */
+    padding: 0 4px;
 }
 .ojsc-day-card .ojsc-task-list {
     list-style: none;
-    padding: 0; /* Убираем внутренние отступы списка */
-    margin: 8px 0 0 0; /* Убираем отрицательный margin у списка */
+    padding: 0;
+    /* Используем отрицательный margin, чтобы "выйти" за пределы padding родителя.
+       Это позволяет списку задач занимать всю ширину, убирая лишний отступ слева. */
+    margin: 4px -4px 0 -4px;
     font-size: 0.9em;
 }
 .ojsc-day-card .ojsc-task-item {
     margin-bottom: 4px;
-    padding: 1px 6px;
+    /* Устанавливаем симметричные отступы для текста внутри задачи. */
+    /* Уменьшаем отрицательный отступ, чтобы сдвинуть элемент немного правее. */
+    margin-left: 4px;
+    /* Добавляем внешний отступ справа, чтобы сдвинуть правый край плашки левее. */
+    margin-right: 4px;
+    padding: 1px 3px;
     border-radius: 4px;
     white-space: nowrap;
     overflow: hidden;
