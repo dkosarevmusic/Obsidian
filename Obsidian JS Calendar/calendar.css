@@ -49,7 +49,8 @@
 }
 .ojsc-day-card.ojsc-drop-target {
     background-color: var(--background-modifier-hover);
-    border-style: dashed;
+    border-style: solid;
+    border-color: var(--text-accent);
 }
 .ojsc-day-card-header {
     font-weight: bold;
@@ -71,8 +72,8 @@
 }
 /* Стиль для элемента, который перетаскивается на мобильных */
 .ojsc-task-item.ojsc-dragging {
-    opacity: 0.5;
-    border-style: dashed;
+    opacity: 0.5; /* Оставляем только полупрозрачность для консистентности */
+    /* border-style: dashed; - Убираем пунктирную рамку */
 }
 /* Стиль для подсветки "важных" задач. Накладывается поверх цвета Area. */
 .ojsc-task-item.ojsc-task-item-important {
@@ -81,6 +82,30 @@
     /* Можно добавить и полупрозрачный фон, если нужно более сильное выделение */
     /* background-image: linear-gradient(to right, hsla(0, 80%, 50%, 0.1), hsla(0, 80%, 50%, 0.1)); */
 }
+/* Стиль для задачи в процессе сохранения после переноса */
+.ojsc-task-item-saving {
+    position: relative; /* Необходимо для позиционирования псевдо-элемента */
+    z-index: 1; /* Убедимся, что элемент находится над другими */
+}
+
+.ojsc-task-item-saving::before {
+    content: '';
+    position: absolute;
+    /* Сдвигаем вспышку на 3px влево, чтобы не перекрывать цветную границу задачи */
+    top: 0; left: 3px; right: 0; bottom: 0;
+    background-color: white;
+    border-radius: 4px; /* Такой же, как у самой задачи */
+    opacity: 0;
+    animation: ojsc-flash 1.2s infinite ease-out;
+    z-index: 2; /* Псевдо-элемент должен быть над текстом задачи */
+}
+
+@keyframes ojsc-flash {
+    0% { opacity: 0; }
+    20% { opacity: 0.7; } /* Пик вспышки */
+    100% { opacity: 0; }
+}
+
 /* Стили для сеток (месяц, год) */
 .ojsc-month-container { margin-bottom: 20px; }
 .ojsc-weekdays-header {

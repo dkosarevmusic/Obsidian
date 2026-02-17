@@ -32,6 +32,14 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop) => {
         const { element, task, oldDateKey } = window.OJSC.dragContext;
         if (!element || !task) return;
 
+        // Принудительно убираем класс 'ojsc-dragging' и его opacity,
+        // чтобы анимация вспышки была яркой и консистентной на всех устройствах.
+        element.classList.remove('ojsc-dragging');
+
+        // Добавляем класс для визуальной индикации процесса сохранения.
+        // Класс будет активен до полной перерисовки календаря.
+        element.classList.add('ojsc-task-item-saving');
+
         const targetTaskList = card.querySelector('.ojsc-task-list');
         if (targetTaskList) targetTaskList.appendChild(element);
 
