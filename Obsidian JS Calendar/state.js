@@ -54,5 +54,18 @@ OJSC.state = {
     setPreviousView(viewType) {
         if (viewType) localStorage.setItem('ojsc_previousView', viewType);
         else localStorage.removeItem('ojsc_previousView');
+    },
+
+    getScrollPosition() {
+        const pos = sessionStorage.getItem('ojsc_scrollPosition');
+        return pos ? parseInt(pos, 10) : null;
+    },
+
+    setScrollPosition(position) {
+        if (position !== null) {
+            sessionStorage.setItem('ojsc_scrollPosition', String(position));
+        } else {
+            sessionStorage.removeItem('ojsc_scrollPosition');
+        }
     }
 };

@@ -48,8 +48,14 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
 
     const bodyFragment = document.createDocumentFragment();
 
+    const scroller = container.closest('.cm-scroller, .markdown-preview-view');
+
     const onTaskDrop = (filePath, newDate, taskToMove, oldDateKey) => {
         if (!filePath || !newDate || !taskToMove) return;
+
+        if (scroller) {
+            OJSC.state.setScrollPosition(scroller.scrollTop);
+        }
 
         if (tasksByDate[oldDateKey]) {
             tasksByDate[oldDateKey] = tasksByDate[oldDateKey].filter(t => t.file.path !== filePath);
@@ -107,8 +113,6 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     scrollToTopBtn.innerHTML = '&#8679;'; // Upwards arrow
     container.appendChild(scrollToTopBtn);
 
-    const scroller = container.closest('.cm-scroller, .markdown-preview-view');
-
     if (scroller) {
         scroller.addEventListener('scroll', () => {
             if (scroller.scrollTop > 300) {
@@ -124,8 +128,18 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     }
 
     // --- Smart Scrolling Logic ---
+    const savedScroll = OJSC.state.getScrollPosition();
     let scrolled = false;
-    if (['month', '3months', 'year'].includes(viewType)) {
+
+    if (savedScroll !== null) {
+        // Priority 0: A scroll position was saved from a previous action (like DnD)
+        if (scroller) {
+            scroller.scrollTo({ top: savedScroll, behavior: 'auto' });
+        }
+        OJSC.state.setScrollPosition(null); // Clear the saved position
+        scrolled = true;
+    }
+    else if (['month', '3months', 'year'].includes(viewType)) {
         let cardToScrollTo = null;
 
         if (didViewTypeChange && previousViewTypeFromStorage === '1day') {
@@ -148,7 +162,6 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     // Default scroll to top if no other scroll was performed.
     // This handles initial load and view type changes (e.g., month to year).
     if (!scrolled) {
-        const scroller = container.closest('.cm-scroller, .markdown-preview-view');
         if (scroller) {
             scroller.scrollTo({ top: 0, behavior: 'auto' });
         }
