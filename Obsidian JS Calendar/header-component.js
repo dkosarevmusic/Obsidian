@@ -5,7 +5,7 @@
 if (!window.OJSC) window.OJSC = {};
 if (!OJSC.ui) OJSC.ui = {};
 
-OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime) => {
+OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showParticipants) => {
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
 
@@ -61,6 +61,18 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime) => {
         OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
     };
 
+    // --- Participants Toggle Button ---
+    const participantsToggleButton = document.createElement('button');
+    participantsToggleButton.textContent = 'Участники';
+    if (showParticipants) {
+        participantsToggleButton.classList.add('ojsc-button-active');
+    }
+    participantsToggleButton.onclick = () => {
+        const newShowParticipants = !showParticipants;
+        OJSC.state.setShowParticipants(newShowParticipants);
+        OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
+    };
+
 
     // --- Navigation Buttons ---
     const createNavButton = (text, onClick) => {
@@ -102,6 +114,7 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime) => {
     controlsWrapper.appendChild(mainNavGroup);
     viewControlsGroup.appendChild(statusModeSelector);
     viewControlsGroup.appendChild(timeToggleButton);
+    viewControlsGroup.appendChild(participantsToggleButton);
     controlsWrapper.appendChild(viewControlsGroup);
     headerEl.appendChild(controlsWrapper);
     return headerEl;

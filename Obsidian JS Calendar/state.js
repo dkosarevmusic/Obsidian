@@ -7,7 +7,7 @@ if (!window.OJSC) window.OJSC = {};
 OJSC.state = {
     /**
      * Загружает последнее сохраненное состояние (вид и дата).
-     * @returns {{viewType: string, viewDate: luxon.DateTime, statusMode: string, showTime: boolean}}
+     * @returns {{viewType: string, viewDate: luxon.DateTime, statusMode: string, showTime: boolean, showParticipants: boolean}}
      */
     load() {
         const viewType = localStorage.getItem('ojsc_lastViewType') || 'month';
@@ -15,7 +15,8 @@ OJSC.state = {
         const viewDate = savedDate ? luxon.DateTime.fromISO(savedDate) : luxon.DateTime.now();
         const statusMode = localStorage.getItem('ojsc_lastStatusMode') || 'work';
         const showTime = this.getShowTime();
-        return { viewType, viewDate, statusMode, showTime };
+        const showParticipants = this.getShowParticipants();
+        return { viewType, viewDate, statusMode, showTime, showParticipants };
     },
 
     /**
@@ -36,6 +37,14 @@ OJSC.state = {
 
     setShowTime(showTime) {
         localStorage.setItem('ojsc_showTime', String(showTime));
+    },
+
+    getShowParticipants() {
+        return localStorage.getItem('ojsc_showParticipants') === 'true';
+    },
+
+    setShowParticipants(showParticipants) {
+        localStorage.setItem('ojsc_showParticipants', String(showParticipants));
     },
 
     getPreviousView() {

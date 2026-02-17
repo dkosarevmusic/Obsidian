@@ -264,3 +264,26 @@
     color: var(--text-accent);
     font-weight: 500;
 }
+
+/* --- Participants Toggle Feature Styles --- */
+.ojsc-task-item .internal-link {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.ojsc-task-participants {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.ojsc-task-participants .internal-link {
+    font-size: 0.9em;
+    color: var(--text-accent);
+    background-color: hsla(270, 60%, 70%, 0.2);
+    padding: 1px 4px;
+    border-radius: 3px;
+}

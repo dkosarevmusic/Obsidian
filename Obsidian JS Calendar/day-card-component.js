@@ -23,7 +23,7 @@ const getDayTaskClass = (tasks) => {
     return '';
 };
 
-OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusMode, showTime) => {
+OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusMode, showTime, showParticipants) => {
     const dayKey = dayDate.toISODate();
     const dayTasks = tasksByDate[dayKey] || [];
 
@@ -212,6 +212,24 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusM
             }
 
             li.appendChild(link);
+
+            if (task.participants && (viewType === '1day' || showParticipants)) {
+                const participantsDiv = document.createElement('div');
+                participantsDiv.className = 'ojsc-task-participants';
+                
+                const participants = Array.isArray(task.participants) ? task.participants : [task.participants];
+                participants.forEach(p => {
+                    if (!p || !p.path) return; // Add guard clause for invalid participant data
+                    const participantLink = document.createElement('a');
+                    participantLink.className = 'internal-link';
+                    participantLink.href = p.path;
+                    // Use display name if available, otherwise fallback to path
+                    participantLink.textContent = p.display || p.path.split('/').pop().replace('.md', '');
+                    participantsDiv.appendChild(participantLink);
+                });
+                li.appendChild(participantsDiv);
+            }
+			
             taskList.appendChild(li);
         });
     }
