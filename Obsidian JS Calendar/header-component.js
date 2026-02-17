@@ -9,6 +9,9 @@ OJSC.ui.createHeader = (dv, viewDate, viewType) => {
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
 
+    const viewControlsGroup = document.createElement('div');
+    viewControlsGroup.className = 'ojsc-view-controls-group';
+
     // --- View Selector ---
     const viewSelector = document.createElement('select');
     const views = { '1day': '1 день', month: 'Месяц', '3months': '3 месяца', year: 'Год' };
@@ -53,6 +56,8 @@ OJSC.ui.createHeader = (dv, viewDate, viewType) => {
         createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType))
     );
 
+    buttonGroup.append(mainNavGroup);
+
     const previousView = OJSC.state.getPreviousView();
     if (viewType === '1day' && previousView) {
         const backButton = document.createElement('button');
@@ -63,12 +68,10 @@ OJSC.ui.createHeader = (dv, viewDate, viewType) => {
             const lastState = OJSC.state.load(); // Загружаем последнюю дату для того вида
             OJSC.renderCalendar(dv, lastState.viewDate, previousView);
         };
-        buttonGroup.append(mainNavGroup, backButton);
-    } else {
-        buttonGroup.append(mainNavGroup);
+        viewControlsGroup.appendChild(backButton);
     }
-
-    headerEl.append(buttonGroup, titleEl, viewSelector);
+    viewControlsGroup.appendChild(viewSelector);
+    headerEl.append(buttonGroup, titleEl, viewControlsGroup);
     return headerEl;
 };
 

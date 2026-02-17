@@ -13,6 +13,7 @@
 .ojsc-calendar-header { position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; gap: 10px; padding: 8px 12px; background-color: var(--background-secondary); border-radius: 6px; }
 .ojsc-button-group { display: flex; gap: 5px; flex-shrink: 0; }
 .ojsc-main-nav-group { display: flex; gap: 5px; }
+.ojsc-view-controls-group { display: flex; gap: 5px; flex-shrink: 0; }
 .ojsc-calendar-header select, .ojsc-calendar-header button { background-color: var(--background-modifier-form-field); color: var(--text-normal); border: 1px solid var(--background-modifier-border); border-radius: 4px; padding: 4px 8px; }
 .ojsc-calendar-header select {
     text-align: center;
