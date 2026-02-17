@@ -95,7 +95,7 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showPartic
     const mainNavGroup = document.createElement('div');
     mainNavGroup.className = 'ojsc-main-nav-group';
 
-    mainNavGroup.append(createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType, statusMode)), createNavButton('Сегодня', () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType, statusMode)), createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType, statusMode)));
+    mainNavGroup.append(createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType, statusMode)), createNavButton('Сегодня', () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType, statusMode, { scrollToToday: true })), createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType, statusMode)));
 
     mainNavGroup.appendChild(viewSelector);
 

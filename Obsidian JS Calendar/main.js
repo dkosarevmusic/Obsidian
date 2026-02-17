@@ -10,7 +10,7 @@
  * @param {string} viewType - Тип вида ('1day', 'month', '3months', 'year').
  * @param {string} statusMode - Режим отображения статусов ('work', 'done').
  */
-OJSC.renderCalendar = (dv, viewDate, viewType, statusMode) => {
+OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     const lastState = OJSC.state.load();
     const { showTime, showParticipants } = lastState;
     const previousViewTypeFromStorage = lastState.viewType;
@@ -101,11 +101,34 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode) => {
     footer.textContent = 'Calendar by D.KOSAREV';
     container.appendChild(footer);
 
-    if (didViewTypeChange) {
+    // --- Smart Scrolling Logic ---
+    let scrolled = false;
+    if (['month', '3months', 'year'].includes(viewType)) {
+        let cardToScrollTo = null;
+
+        if (didViewTypeChange && previousViewTypeFromStorage === '1day') {
+            // Priority 1: Returning from 1-day view, scroll to the day we came from.
+            const dateToScrollTo = viewDate.toISODate();
+            cardToScrollTo = rootEl.querySelector(`[data-date="${dateToScrollTo}"]`);
+        } else if (options.scrollToToday) {
+            // Priority 2: "Today" button was clicked.
+            cardToScrollTo = rootEl.querySelector('.ojsc-today');
+        }
+        
+        if (cardToScrollTo) {
+            setTimeout(() => {
+                cardToScrollTo.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' });
+            }, 150); // Delay for rendering.
+            scrolled = true;
+        }
+    }
+
+    // Default scroll to top if no other scroll was performed.
+    // This handles initial load and view type changes (e.g., month to year).
+    if (!scrolled) {
         const scroller = container.closest('.cm-scroller, .markdown-preview-view');
         if (scroller) {
             scroller.scrollTo({ top: 0, behavior: 'auto' });
         }
     }
-
 };
