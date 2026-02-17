@@ -123,7 +123,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
         });
 
         scrollToTopBtn.addEventListener('click', () => {
-            scroller.scrollTo({ top: 0, behavior: 'smooth' });
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     }
 
