@@ -12,6 +12,7 @@
  */
 OJSC.renderCalendar = (dv, viewDate, viewType, statusMode) => {
     const lastState = OJSC.state.load();
+    const { showTime } = lastState;
     const previousViewTypeFromStorage = lastState.viewType;
 
     if (viewType === undefined || viewType === null || statusMode === undefined || statusMode === null) {
@@ -42,7 +43,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode) => {
         } catch (e) { console.error("OJSC: Не удалось загрузить calendar.css", e); }
     })();
 
-    const headerEl = OJSC.ui.createHeader(dv, viewDate, viewType, statusMode);
+    const headerEl = OJSC.ui.createHeader(dv, viewDate, viewType, statusMode, showTime);
     rootEl.appendChild(headerEl);
 
     const bodyFragment = document.createDocumentFragment();
@@ -65,15 +66,15 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode) => {
     };
 
     if (viewType === '1day') {
-        bodyFragment.appendChild(OJSC.ui.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop, statusMode));
+        bodyFragment.appendChild(OJSC.ui.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop, statusMode, showTime));
     } else if (viewType === 'month') {
-        bodyFragment.appendChild(OJSC.ui.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop, statusMode));
+        bodyFragment.appendChild(OJSC.ui.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop, statusMode, showTime));
     } else if (viewType === '3months') {
         const createMonthView = (monthDate) => {
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
-            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop, statusMode);
+            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop, statusMode, showTime);
             return [monthHeader, monthGrid];
         };
         for (let i = 0; i < 3; i++) {
@@ -84,7 +85,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode) => {
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
-            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop, statusMode);
+            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop, statusMode, showTime);
             return [monthHeader, monthGrid];
         };
         for (let i = 0; i < 12; i++) {

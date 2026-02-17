@@ -23,7 +23,7 @@ const getDayTaskClass = (tasks) => {
     return '';
 };
 
-OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusMode) => {
+OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusMode, showTime) => {
     const dayKey = dayDate.toISODate();
     const dayTasks = tasksByDate[dayKey] || [];
 
@@ -177,6 +177,21 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusM
             li.addEventListener('touchend', cancelTimer);
 
             const link = document.createElement('a');
+            link.className = 'internal-link';
+            link.href = task.file.path;
+
+            if (task.time && (viewType === '1day' || showTime)) {
+                li.classList.add('ojsc-task-with-time');
+                const timeSpan = document.createElement('span');
+                timeSpan.className = 'ojsc-task-time';
+                timeSpan.textContent = OJSC.utils.task.formatTime(task.time);
+                link.appendChild(timeSpan);
+            }
+
+            const textSpan = document.createElement('span');
+            textSpan.className = 'ojsc-task-text';
+            textSpan.textContent = task[OJSC.config.summaryField] || task.file.name;
+            link.appendChild(textSpan);
 
             const taskStatus = Array.isArray(task.status) ? task.status : [String(task.status)];
             const isImportant = taskStatus.includes('important');
@@ -196,9 +211,6 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusM
                 if (isImportant) li.classList.add('ojsc-task-item-important');
             }
 
-            link.textContent = task[OJSC.config.summaryField] || task.file.name;
-            link.className = 'internal-link';
-            link.href = task.file.path;
             li.appendChild(link);
             taskList.appendChild(li);
         });

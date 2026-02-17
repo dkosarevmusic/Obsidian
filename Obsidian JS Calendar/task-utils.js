@@ -7,6 +7,17 @@ if (!OJSC.utils) OJSC.utils = {};
 
 OJSC.utils.task = {
     /**
+     * Форматирует числовое время (например, 1430) в строку "ЧЧ:ММ".
+     * @param {number|string} time - Время для форматирования.
+     * @returns {string} - Отформатированное время.
+     */
+    formatTime: (time) => {
+        if (time === null || typeof time === 'undefined') return '';
+        const timeString = String(time).padStart(4, '0');
+        return `${timeString.slice(0, 2)}:${timeString.slice(2, 4)}`;
+    },
+
+    /**
      * Генерирует стили для элемента задачи на основе цвета области (Area).
      * @param {string} area - Название области задачи.
      * @returns {{backgroundColor: string, color: string, borderColor: string}}

@@ -5,7 +5,7 @@
 if (!window.OJSC) window.OJSC = {};
 if (!OJSC.ui) OJSC.ui = {};
 
-OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode) => {
+OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime) => {
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
 
@@ -49,6 +49,17 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode) => {
         OJSC.renderCalendar(dv, viewDate, viewType, newStatusMode);
     };
 
+    // --- Time Toggle Button ---
+    const timeToggleButton = document.createElement('button');
+    timeToggleButton.textContent = 'Время';
+    if (showTime) {
+        timeToggleButton.classList.add('ojsc-button-active');
+    }
+    timeToggleButton.onclick = () => {
+        const newShowTime = !showTime;
+        OJSC.state.setShowTime(newShowTime);
+        OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
+    };
 
 
     // --- Navigation Buttons ---
@@ -90,6 +101,7 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode) => {
 
     controlsWrapper.appendChild(mainNavGroup);
     viewControlsGroup.appendChild(statusModeSelector);
+    viewControlsGroup.appendChild(timeToggleButton);
     controlsWrapper.appendChild(viewControlsGroup);
     headerEl.appendChild(controlsWrapper);
     return headerEl;

@@ -242,3 +242,25 @@
     border-top: 3px solid hsl(280, 100%, 50%);
     padding-top: 3px;
 }
+
+/* --- Time Toggle Feature Styles --- */
+
+/* Active state for the 'Time' button */
+.ojsc-calendar-header button.ojsc-button-active {
+    background-color: var(--text-accent);
+    color: var(--text-on-accent);
+    border-color: var(--text-accent);
+}
+
+/* Layout for tasks with time to stack time and text */
+.ojsc-task-with-time .internal-link {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+/* Style for the task time text */
+.ojsc-task-time {
+    color: var(--text-accent);
+    font-weight: 500;
+}
