@@ -46,6 +46,16 @@ OJSC.utils.task = {
         const aStatus = Array.isArray(a.status) ? a.status : [String(a.status)];
         const bStatus = Array.isArray(b.status) ? b.status : [String(b.status)];
 
+        function compareTime(timeA, timeB) {
+            let tA = timeA === null || typeof timeA === 'undefined' ? '' : timeA;
+            let tB = timeB === null || typeof timeB === 'undefined' ? '' : timeB;
+
+            if (typeof tA === 'number') tA = String(tA).padStart(4, '0');
+            if (typeof tB === 'number') tB = String(tB).padStart(4, '0');
+
+            return String(tA).localeCompare(String(tB));
+        }
+
         function getComparableString(field, isLink = false) {
             if (!field) return "";
             const arr = Array.isArray(field) ? field : [field];
@@ -61,15 +71,7 @@ OJSC.utils.task = {
 
             // 2. По времени
             (!!b.time - !!a.time) ||
-            (() => {
-                let timeA = a.time === null || typeof a.time === 'undefined' ? '' : a.time;
-                let timeB = b.time === null || typeof b.time === 'undefined' ? '' : b.time;
-
-                if (typeof timeA === 'number') timeA = String(timeA).padStart(4, '0');
-                if (typeof timeB === 'number') timeB = String(timeB).padStart(4, '0');
-
-                return String(timeA).localeCompare(String(timeB));
-            })() ||
+            compareTime(a.time, b.time) ||
 
             // 3. По остальным полям
             getComparableString(aStatus).localeCompare(getComparableString(bStatus)) ||

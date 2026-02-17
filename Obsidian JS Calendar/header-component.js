@@ -35,24 +35,23 @@ OJSC.ui.createHeader = (dv, viewDate, viewType) => {
     titleEl.textContent = title;
 
     // --- Navigation Buttons ---
-    const prevButton = document.createElement('button');
-    prevButton.textContent = '<';
-    prevButton.onclick = () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType);
-
-    const nextButton = document.createElement('button');
-    nextButton.textContent = '>';
-    nextButton.onclick = () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType);
-
-    const todayButton = document.createElement('button');
-    todayButton.textContent = 'Сегодня';
-    todayButton.onclick = () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType);
+    const createNavButton = (text, onClick) => {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.onclick = onClick;
+        return button;
+    };
 
     const buttonGroup = document.createElement('div');
     buttonGroup.className = 'ojsc-button-group';
 
     const mainNavGroup = document.createElement('div');
     mainNavGroup.className = 'ojsc-main-nav-group';
-    mainNavGroup.append(prevButton, todayButton, nextButton);
+    mainNavGroup.append(
+        createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType)),
+        createNavButton('Сегодня', () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType)),
+        createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType))
+    );
 
     const previousView = OJSC.state.getPreviousView();
     if (viewType === '1day' && previousView) {
@@ -74,18 +73,26 @@ OJSC.ui.createHeader = (dv, viewDate, viewType) => {
 };
 
 OJSC.ui.getViewParameters = (viewDate, viewType) => {
-    if (viewType === '1day') {
-        return { title: viewDate.setLocale('ru').toFormat('d MMMM yyyy'), navStep: { days: 1 } };
-    }
-    if (viewType === 'month') {
-        return { title: viewDate.setLocale('ru').toFormat('LLLL yyyy'), navStep: { months: 1 } };
-    }
-    if (viewType === '3months') {
-        const endPeriod = viewDate.plus({ months: 2 });
-        return { title: `${viewDate.setLocale('ru').toFormat('LLL yyyy')} - ${endPeriod.setLocale('ru').toFormat('LLL yyyy')}`, navStep: { months: 1 } };
-    }
-    if (viewType === 'year') {
-        return { title: viewDate.toFormat('yyyy'), navStep: { years: 1 } };
-    }
-    return { title: '', navStep: {} };
+    const ruDate = viewDate.setLocale('ru');
+
+    const viewConfigs = {
+        '1day': {
+            title: ruDate.toFormat('d MMMM yyyy'),
+            navStep: { days: 1 }
+        },
+        'month': {
+            title: ruDate.toFormat('LLLL yyyy'),
+            navStep: { months: 1 }
+        },
+        '3months': {
+            title: `${ruDate.toFormat('LLL yyyy')} - ${ruDate.plus({ months: 2 }).toFormat('LLL yyyy')}`,
+            navStep: { months: 1 }
+        },
+        'year': {
+            title: ruDate.toFormat('yyyy'),
+            navStep: { years: 1 }
+        }
+    };
+
+    return viewConfigs[viewType] || { title: '', navStep: {} };
 };

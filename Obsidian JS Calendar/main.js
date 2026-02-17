@@ -64,20 +64,26 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
     } else if (viewType === 'month') {
         bodyFragment.appendChild(OJSC.ui.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop));
     } else if (viewType === '3months') {
-        for (let i = 0; i < 3; i++) {
-            const monthDate = viewDate.plus({ months: i });
+        const createMonthView = (monthDate) => {
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
-            bodyFragment.append(monthHeader, OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop));
+            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop);
+            return [monthHeader, monthGrid];
+        };
+        for (let i = 0; i < 3; i++) {
+            bodyFragment.append(...createMonthView(viewDate.plus({ months: i })));
         }
     } else if (viewType === 'year') {
-        for (let i = 0; i < 12; i++) {
-            const monthDate = viewDate.startOf('year').plus({ months: i });
+        const createMonthView = (monthDate) => {
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
-            bodyFragment.append(monthHeader, OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop));
+            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop);
+            return [monthHeader, monthGrid];
+        };
+        for (let i = 0; i < 12; i++) {
+            bodyFragment.append(...createMonthView(viewDate.startOf('year').plus({ months: i })));
         }
     }
 
