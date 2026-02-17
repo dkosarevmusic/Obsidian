@@ -10,13 +10,15 @@ OJSC.services.data = {
     /**
      * Получает задачи из хранилища на основе конфигурации.
      * @param {object} dv - Глобальный объект API Dataview.
+     * @param {string} statusMode - Ключ режима статусов (например, 'work' или 'done').
      * @returns {Array<object>} - Массив страниц (задач).
      */
-    getTasks: (dv) => {
+    getTasks: (dv, statusMode) => {
         const source = OJSC.config.source;
         const dateField = OJSC.config.dateField;
         const statusField = OJSC.config.statusField;
-        const allowedStatuses = OJSC.config.allowedStatuses;
+        // Получаем список разрешенных статусов для текущего режима
+        const allowedStatuses = OJSC.config.statusModes[statusMode]?.statuses || [];
 
         return dv.pages(source).where(p => {
             if (!p[dateField] || !p[statusField]) return false;

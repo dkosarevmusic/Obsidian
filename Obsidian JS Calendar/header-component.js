@@ -5,7 +5,7 @@
 if (!window.OJSC) window.OJSC = {};
 if (!OJSC.ui) OJSC.ui = {};
 
-OJSC.ui.createHeader = (dv, viewDate, viewType) => {
+OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode) => {
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
 
@@ -29,13 +29,27 @@ OJSC.ui.createHeader = (dv, viewDate, viewType) => {
         } else {
             OJSC.state.setPreviousView(null);
         }
-        OJSC.renderCalendar(dv, viewDate, newViewType);
+        OJSC.renderCalendar(dv, viewDate, newViewType, statusMode);
     };
 
-    // --- Title ---
-    const { title, navStep } = OJSC.ui.getViewParameters(viewDate, viewType);
-    const titleEl = document.createElement('h2');
-    titleEl.textContent = title;
+    // --- Status Mode Selector ---
+    const statusModeSelector = document.createElement('select');
+    const modes = OJSC.config.statusModes;
+    for (const [value, config] of Object.entries(modes)) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = config.name;
+        if (value === statusMode) option.selected = true;
+        statusModeSelector.appendChild(option);
+    }
+    statusModeSelector.onchange = (e) => {
+        const newStatusMode = e.target.value;
+        // Перерисовываем календарь с новым режимом статусов,
+        // сохраняя текущую дату и вид.
+        OJSC.renderCalendar(dv, viewDate, viewType, newStatusMode);
+    };
+
+
 
     // --- Navigation Buttons ---
     const createNavButton = (text, onClick) => {
@@ -45,33 +59,39 @@ OJSC.ui.createHeader = (dv, viewDate, viewType) => {
         return button;
     };
 
-    const buttonGroup = document.createElement('div');
-    buttonGroup.className = 'ojsc-button-group';
+    // --- Title ---
+    const { title, navStep } = OJSC.ui.getViewParameters(viewDate, viewType);
+    const titleEl = document.createElement('h2');
+    titleEl.textContent = title;
+    headerEl.appendChild(titleEl);
+
+    // --- Controls Wrapper ---
+    const controlsWrapper = document.createElement('div');
+    controlsWrapper.className = 'ojsc-controls-wrapper';
 
     const mainNavGroup = document.createElement('div');
     mainNavGroup.className = 'ojsc-main-nav-group';
-    mainNavGroup.append(
-        createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType)),
-        createNavButton('Сегодня', () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType)),
-        createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType))
-    );
 
-    buttonGroup.append(mainNavGroup);
+    mainNavGroup.append(createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType, statusMode)), createNavButton('Сегодня', () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType, statusMode)), createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType, statusMode)));
+
+    mainNavGroup.appendChild(viewSelector);
 
     const previousView = OJSC.state.getPreviousView();
     if (viewType === '1day' && previousView) {
         const backButton = document.createElement('button');
         backButton.textContent = 'Назад';
-        backButton.className = 'ojsc-back-button';
         backButton.onclick = () => {
             OJSC.state.setPreviousView(null);
             const lastState = OJSC.state.load(); // Загружаем последнюю дату для того вида
-            OJSC.renderCalendar(dv, lastState.viewDate, previousView);
+            OJSC.renderCalendar(dv, lastState.viewDate, previousView, statusMode);
         };
-        viewControlsGroup.appendChild(backButton);
+        mainNavGroup.appendChild(backButton);
     }
-    viewControlsGroup.appendChild(viewSelector);
-    headerEl.append(buttonGroup, titleEl, viewControlsGroup);
+
+    controlsWrapper.appendChild(mainNavGroup);
+    viewControlsGroup.appendChild(statusModeSelector);
+    controlsWrapper.appendChild(viewControlsGroup);
+    headerEl.appendChild(controlsWrapper);
     return headerEl;
 };
 

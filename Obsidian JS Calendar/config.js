@@ -14,8 +14,17 @@ OJSC.config = {
     // Поле, содержащее статус задачи (как в Kanban)
     statusField: 'status',
 
-    // Статусы, которые нужно отображать в календаре. Задачи с другими статусами будут скрыты.
-    allowedStatuses: ["important", "imschedule", "imw", "in progress"],
+    // Режимы отображения задач и соответствующие им статусы.
+    statusModes: {
+        "work": {
+            name: "В работе",
+            statuses: ["important", "imschedule", "imw", "in progress"]
+        },
+        "done": {
+            name: "Готовые",
+            statuses: ["done"]
+        }
+    },
 
     // Порог светлоты (в HSL) для определения "тёмных" цветов.
     // Цвета ниже этого порога будут обработаны для лучшей контрастности.

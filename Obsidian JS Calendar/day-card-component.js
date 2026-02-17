@@ -5,7 +5,7 @@
 if (!window.OJSC) window.OJSC = {};
 if (!OJSC.ui) OJSC.ui = {};
 
-OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop) => {
+OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusMode) => {
     const dayKey = dayDate.toISODate();
     const dayTasks = tasksByDate[dayKey] || [];
 
@@ -54,7 +54,7 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop) => {
         header.classList.add('ojsc-clickable-day');
         header.onclick = () => {
             OJSC.state.setPreviousView(viewType);
-            OJSC.renderCalendar(dv, dayDate, '1day');
+            OJSC.renderCalendar(dv, dayDate, '1day', statusMode);
         };
 
         // Всегда отображаем номер дня для сеточных видов
