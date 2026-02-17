@@ -101,6 +101,28 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     footer.textContent = 'Calendar by D.KOSAREV';
     container.appendChild(footer);
 
+    // --- Scroll to Top Button ---
+    const scrollToTopBtn = document.createElement('button');
+    scrollToTopBtn.className = 'ojsc-scroll-to-top';
+    scrollToTopBtn.innerHTML = '&#8679;'; // Upwards arrow
+    container.appendChild(scrollToTopBtn);
+
+    const scroller = container.closest('.cm-scroller, .markdown-preview-view');
+
+    if (scroller) {
+        scroller.addEventListener('scroll', () => {
+            if (scroller.scrollTop > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            scroller.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
     // --- Smart Scrolling Logic ---
     let scrolled = false;
     if (['month', '3months', 'year'].includes(viewType)) {
