@@ -170,93 +170,88 @@ OJSC.utils = {
         taskList.className = 'ojsc-task-list';
 
         if (dayTasks.length > 0) {
-            dayTasks.sort(OJSC.utils.compareTasks).forEach(task => {
-                const li = document.createElement('li');
-                li.className = 'ojsc-task-item';
-                li.setAttribute('draggable', 'true'); // Делаем задачу перетаскиваемой
+            // --- НАЧАЛО: НОВАЯ, ИСПРАВЛЕННАЯ ЛОГИКА ДЛЯ МОБИЛЬНОГО DRAG-AND-DROP ---
 
-                // При начале перетаскивания сохраняем путь к файлу
-                li.addEventListener('dragstart', (e) => {
-                    // Сохраняем контекст перетаскивания
-                    window.OJSC.dragContext = {
-                        element: li,
-                        task: task,
-                        oldDateKey: dayKey
-                    };
-                });
+            let touchTimer = null;
+            let lastTouchTarget = null;
 
-                // --- Полифилл для Drag-and-Drop на мобильных устройствах ---
-                let touchTimer = null;
-                let lastTouchTarget = null;
+            // Обработчик движения пальца (только во время активного переноса)
+            const handleTouchMove = (e) => {
+                e.preventDefault();
+                if (!window.OJSC.dragContext.element) return;
 
-                li.addEventListener('touchstart', (e) => {
-                    // Запускаем таймер для определения долгого нажатия
-                    touchTimer = setTimeout(() => {
-                        // Долгое нажатие подтверждено, инициируем перетаскивание
-                        window.OJSC.dragContext = {
-                            element: li,
-                            task: task,
-                            oldDateKey: dayKey
-                        };
-                        // Добавляем класс, чтобы визуально показать, что элемент перетаскивается
-                        li.classList.add('ojsc-dragging');
-                        touchTimer = null; // Сбрасываем таймер
-                    }, 500); // 500 мс - стандартное время для долгого нажатия
-                });
+                const touch = e.touches[0];
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                const dropZone = target ? target.closest('.ojsc-day-card') : null;
 
-                const handleTouchMove = (e) => {
-                    // Если пользователь начал скроллить до срабатывания таймера, отменяем его
-                    if (touchTimer) {
-                        clearTimeout(touchTimer);
-                        touchTimer = null;
-                    }
+                if (lastTouchTarget && lastTouchTarget !== dropZone) {
+                    lastTouchTarget.classList.remove('ojsc-drop-target');
+                }
+                if (dropZone) dropZone.classList.add('ojsc-drop-target');
+                lastTouchTarget = dropZone;
+            };
 
-                    if (!window.OJSC.dragContext.element) return;
-                    // Находим элемент под пальцем
-                    const touch = e.touches[0];
-                    const target = document.elementFromPoint(touch.clientX, touch.clientY);
-                    const dropZone = target ? target.closest('.ojsc-day-card') : null;
- 
-                    if (lastTouchTarget && lastTouchTarget !== dropZone) {
-                        lastTouchTarget.classList.remove('ojsc-drop-target');
-                    }
-                    if (dropZone) {
-                        dropZone.classList.add('ojsc-drop-target');
-                    }
-                    lastTouchTarget = dropZone;
-                };
+            // Обработчик отпускания пальца (завершение переноса)
+            const handleTouchEnd = (e) => {
+                document.removeEventListener('touchmove', handleTouchMove);
+                document.removeEventListener('touchend', handleTouchEnd);
 
-                const handleTouchEnd = (e) => {
-                    // Если палец отпустили до срабатывания таймера, отменяем его
-                    if (touchTimer) {
-                        clearTimeout(touchTimer);
-                        touchTimer = null;
-                        return; // Выходим, так как это был тап, а не начало перетаскивания
-                    }
-
-                    if (!window.OJSC.dragContext.element) return;
-                    
-                    // Убираем класс перетаскивания
-                    window.OJSC.dragContext.element.classList.remove('ojsc-dragging');
+                if (window.OJSC.dragContext.element) {
+                    const { element, task, oldDateKey } = window.OJSC.dragContext;
+                    element.classList.remove('ojsc-dragging');
 
                     if (lastTouchTarget) {
                         lastTouchTarget.classList.remove('ojsc-drop-target');
-                        // Логика "бросания" задачи
-                        const newDate = lastTouchTarget.dataset.date; // Получаем дату из data-атрибута
-                        const { element, task, oldDateKey } = window.OJSC.dragContext;
-                        
+                        const newDate = lastTouchTarget.dataset.date;
                         const targetTaskList = lastTouchTarget.querySelector('.ojsc-task-list');
-                        if (targetTaskList) targetTaskList.appendChild(element);
-
-                        onTaskDrop(task.file.path, newDate, task, oldDateKey);
+                        if (targetTaskList) {
+                            targetTaskList.appendChild(element);
+                            onTaskDrop(task.file.path, newDate, task, oldDateKey);
+                        }
                     }
-                    // Очищаем контекст
-                    window.OJSC.dragContext = {};
-                    lastTouchTarget = null;
-                };
+                }
 
-                document.addEventListener('touchmove', handleTouchMove, { passive: false });
-                document.addEventListener('touchend', handleTouchEnd);
+                window.OJSC.dragContext = {};
+                lastTouchTarget = null;
+            };
+
+            // Функция для отмены таймера. Используется, если пользователь начал скролл.
+            const cancelTimer = () => {
+                if (touchTimer) {
+                    clearTimeout(touchTimer);
+                    touchTimer = null;
+                }
+            };
+
+            // Привязываем отмену таймера к событиям движения и отпускания пальца НА ВСЕЙ КАРТОЧКЕ ДНЯ.
+            // Это ключевое исправление: теперь скролл в любом месте карточки отменит перенос.
+            card.addEventListener('touchmove', cancelTimer);
+            card.addEventListener('touchend', cancelTimer);
+
+            // --- КОНЕЦ: НОВАЯ ЛОГИКА ---
+
+            dayTasks.sort(OJSC.utils.compareTasks).forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'ojsc-task-item';
+                li.setAttribute('draggable', 'true');
+
+                // Desktop Drag-and-Drop
+                li.addEventListener('dragstart', (e) => {
+                    window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
+                });
+
+                // Mobile Drag-and-Drop (только начало)
+                li.addEventListener('touchstart', (e) => {
+                    // Предотвращаем "всплытие" события, чтобы не сработал cancelTimer на карточке.
+                    e.stopPropagation();
+
+                    touchTimer = setTimeout(() => {
+                        window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
+                        li.classList.add('ojsc-dragging');
+                        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+                        document.addEventListener('touchend', handleTouchEnd);
+                    }, 500);
+                });
 
                 const link = document.createElement('a');
 
