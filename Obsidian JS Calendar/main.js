@@ -1,24 +1,7 @@
 /**
  * @file main.js
  * Основная точка входа для рендеринга календаря.
- */
-
-function getViewParameters(viewDate, viewType) {
-    if (viewType === '1day') {
-        return { title: viewDate.setLocale('ru').toFormat('d MMMM yyyy'), navStep: { days: 1 } };
-    }
-    if (viewType === 'month') {
-        return { title: viewDate.setLocale('ru').toFormat('LLLL yyyy'), navStep: { months: 1 } };
-    }
-    if (viewType === '3months') {
-        const endPeriod = viewDate.plus({ months: 2 });
-        return { title: `${viewDate.setLocale('ru').toFormat('LLL yyyy')} - ${endPeriod.setLocale('ru').toFormat('LLL yyyy')}`, navStep: { months: 1 } };
-    }
-    if (viewType === 'year') {
-        return { title: viewDate.toFormat('yyyy'), navStep: { years: 1 } };
-    }
-    return { title: '', navStep: {} }; // Default case
-}
+*/
 
 /**
  * Основная функция для отрисовки календаря.
@@ -27,122 +10,66 @@ function getViewParameters(viewDate, viewType) {
  * @param {string} viewType - Тип вида ('month', '3months', 'year').
  */
 OJSC.renderCalendar = (dv, viewDate, viewType) => {
-    // --- Восстановление состояния при перезагрузке ---
-    const previousViewTypeFromStorage = localStorage.getItem('ojsc_lastViewType');
+    const previousViewTypeFromStorage = OJSC.state.load().viewType;
 
-    // Если аргументы не переданы (первичный запуск), загружаем их из localStorage.
     if (viewType === undefined || viewType === null) {
-        viewType = localStorage.getItem('ojsc_lastViewType') || 'month';
-    }
-    if (viewDate === undefined || viewDate === null) {
-        const savedDate = localStorage.getItem('ojsc_lastViewDate');
-        viewDate = savedDate ? luxon.DateTime.fromISO(savedDate) : luxon.DateTime.now();
+        ({ viewType, viewDate } = OJSC.state.load());
     }
 
-    // Определяем, произошла ли смена вида, для управления скроллом.
     const didViewTypeChange = previousViewTypeFromStorage !== viewType;
-
-    // --- Сохранение текущего состояния ---
-    // При любой отрисовке мы должны запомнить текущий вид и дату как последние использованные.
-    localStorage.setItem('ojsc_lastViewType', viewType);
-    localStorage.setItem('ojsc_lastViewDate', viewDate.toISODate());
-
-    // Сохраняем текущую дату вида в глобальный объект для доступа из других функций
-    OJSC.currentViewDate = viewDate;
+    OJSC.state.save(viewType, viewDate);
 
     const container = dv.container;
-    container.innerHTML = ''; // Очищаем контейнер перед отрисовкой
+    container.innerHTML = '';
 
-    // 1. Получаем и группируем данные
-    const tasks = OJSC.data.getTasks(dv);
-    const tasksByDate = OJSC.data.groupTasksByDate(tasks);
+    const tasks = OJSC.services.data.getTasks(dv);
+    const tasksByDate = OJSC.services.data.groupTasksByDate(tasks);
 
-    // 2. Создаем корневой элемент, который будет содержать и стили, и HTML
     const rootEl = document.createElement('div');
     rootEl.className = 'ojsc-container';
-    
+
     const styleEl = document.createElement('style');
-    styleEl.textContent = OJSC.utils.getStyles();
     rootEl.appendChild(styleEl);
 
-    // --- Заголовок с навигацией ---
-    const headerEl = document.createElement('div');
-    headerEl.className = 'ojsc-calendar-header';
+    // Асинхронно загружаем и применяем стили.
+    // Это правильный способ работы с асинхронной функцией dv.io.load().
+    (async () => {
+        try {
+            const cssContent = await dv.io.load('JS Scripts/cal/calendar.css');
+            styleEl.textContent = cssContent;
+        } catch (e) { console.error("OJSC: Не удалось загрузить calendar.css", e); }
+    })();
 
-    // Выпадающий список для выбора вида
-    const viewSelector = document.createElement('select');
-    const views = { '1day': '1 день', month: 'Месяц', '3months': '3 месяца', year: 'Год' };
-    for (const [value, text] of Object.entries(views)) {
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = text;
-        if (value === viewType) option.selected = true;
-        viewSelector.appendChild(option);
-    }
-    viewSelector.onchange = (e) => {
-        // Если переключились на 1 день, запоминаем откуда.
-        if (e.target.value === '1day') {
-            // Запоминаем текущий вид и дату, чтобы можно было вернуться
-            localStorage.setItem('ojsc_previousView', viewType); 
-        } 
-        // Если мы вручную переключились на любой вид, который не является '1day', сбрасываем память о возврате.
-        if (e.target.value !== '1day') {
-            localStorage.removeItem('ojsc_previousView');
-        }
-        // Перерисовываем календарь с новым видом
-        OJSC.renderCalendar(dv, viewDate, e.target.value);
-    };
-
+    const headerEl = OJSC.ui.createHeader(dv, viewDate, viewType);
     rootEl.appendChild(headerEl);
 
-    // --- Определение параметров и отрисовка тела календаря ---
-    const { title, navStep } = getViewParameters(viewDate, viewType);
     const bodyFragment = document.createDocumentFragment();
 
-    // --- Логика обновления файла при Drag-and-Drop ---
     const onTaskDrop = (filePath, newDate, taskToMove, oldDateKey) => {
         if (!filePath || !newDate || !taskToMove) return;
 
-        const tfile = dv.app.vault.getAbstractFileByPath(filePath);
-        if (!tfile) {
-            console.error(`[OJSC] Файл не найден: ${filePath}`);
-            return;
-        }
-
-        // Оптимистичное обновление локальных данных
-        // 1. Удаляем задачу из старого дня
         if (tasksByDate[oldDateKey]) {
             tasksByDate[oldDateKey] = tasksByDate[oldDateKey].filter(t => t.file.path !== filePath);
         }
-        // 2. Добавляем задачу в новый день
         if (!tasksByDate[newDate]) {
             tasksByDate[newDate] = [];
         }
         tasksByDate[newDate].push(taskToMove);
 
-        // Обновляем frontmatter в фоне
-        dv.app.fileManager.processFrontMatter(tfile, (fm) => {
-            fm[OJSC.config.dateField] = newDate;
-        }).then(() => {
-            // После того как файл сохранен, мы можем запустить полное обновление
-            // для синхронизации, если это необходимо, но UI уже обновлен.
-            // Для мгновенного отклика мы уже не вызываем полный ререндер.
-            // Если понадобится, можно раскомментировать: OJSC.renderCalendar(dv, null, null);
-        });
+        OJSC.services.file.updateTaskDate(dv, filePath, newDate);
     };
 
     if (viewType === '1day') {
-        // Для вида "1 день" просто создаем одну карточку дня
-        bodyFragment.appendChild(OJSC.utils.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop));
+        bodyFragment.appendChild(OJSC.ui.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop));
     } else if (viewType === 'month') {
-        bodyFragment.appendChild(OJSC.utils.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop));
+        bodyFragment.appendChild(OJSC.ui.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop));
     } else if (viewType === '3months') {
         for (let i = 0; i < 3; i++) {
             const monthDate = viewDate.plus({ months: i });
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
-            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop));
+            bodyFragment.append(monthHeader, OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop));
         }
     } else if (viewType === 'year') {
         for (let i = 0; i < 12; i++) {
@@ -150,70 +77,18 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
-            bodyFragment.append(monthHeader, OJSC.utils.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop));
+            bodyFragment.append(monthHeader, OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop));
         }
     }
 
-    // Добавляем собранное тело календаря в DOM одной операцией
     rootEl.appendChild(bodyFragment);
-
-    // --- Собираем заголовок с навигацией и названием ---
-    const prevButton = document.createElement('button');
-    prevButton.textContent = '<';
-    prevButton.onclick = () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType);
-
-    const nextButton = document.createElement('button');
-    nextButton.textContent = '>';
-    nextButton.onclick = () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType);
-
-    const todayButton = document.createElement('button');
-    todayButton.textContent = 'Сегодня';
-    todayButton.onclick = () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType);
-
-    const titleEl = document.createElement('h2');
-    titleEl.textContent = title;
-
-    // Группируем кнопки навигации
-    const buttonGroup = document.createElement('div');
-    buttonGroup.className = 'ojsc-button-group';
-
-    // Создаем отдельную группу для основной навигации
-    const mainNavGroup = document.createElement('div');
-    mainNavGroup.className = 'ojsc-main-nav-group';
-    mainNavGroup.append(prevButton, todayButton, nextButton);
-
-    // Добавляем кнопку "Назад", если мы в режиме '1day' и есть куда возвращаться
-    if (viewType === '1day' && localStorage.getItem('ojsc_previousView')) {
-        const backButton = document.createElement('button');
-        backButton.textContent = 'Назад';
-        backButton.className = 'ojsc-back-button'; // Добавляем класс для стилизации
-        backButton.onclick = () => {
-            const originalView = localStorage.getItem('ojsc_previousView');
-            localStorage.removeItem('ojsc_previousView'); // Очищаем память после использования
-            // Передаем флаг для восстановления скролла и восстанавливаем исходную дату
-            OJSC.renderCalendar(dv, null, originalView); // null для даты заставит загрузить ее из localStorage
-        };
-        // Добавляем основную навигацию и кнопку "Назад" в правильном порядке
-        buttonGroup.append(mainNavGroup, backButton);
-    } else {
-        // Если кнопки "Назад" нет, добавляем только основную навигацию
-        buttonGroup.append(mainNavGroup);
-    }
-
-    // Собираем заголовок: группа кнопок слева, заголовок по центру, селектор справа
-    headerEl.append(buttonGroup, titleEl, viewSelector);
-
-    // 3. Добавляем собранный календарь на страницу
     container.appendChild(rootEl);
 
-    // --- Плашка с подписью ---
     const footer = document.createElement('div');
     footer.className = 'ojsc-footer';
     footer.textContent = 'Calendar by D.KOSAREV';
     container.appendChild(footer);
 
-    // Прокручиваем к началу заметки только при смене вида (например, с месяца на год),
-    // чтобы не мешать пользователю при других действиях и избежать "черного экрана".
     if (didViewTypeChange) {
         const scroller = container.closest('.cm-scroller, .markdown-preview-view');
         if (scroller) {

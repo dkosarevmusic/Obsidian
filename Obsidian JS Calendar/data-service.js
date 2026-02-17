@@ -1,11 +1,12 @@
 /**
- * @file calendar-data.js
+ * @file data-service.js
  * Функции для получения и обработки данных для календаря.
  */
 
 if (!window.OJSC) window.OJSC = {};
+if (!OJSC.services) OJSC.services = {};
 
-OJSC.data = {
+OJSC.services.data = {
     /**
      * Получает задачи из хранилища на основе конфигурации.
      * @param {object} dv - Глобальный объект API Dataview.
@@ -30,12 +31,11 @@ OJSC.data = {
      * @returns {object} - Объект, где ключи - это даты, а значения - массивы задач.
      */
     groupTasksByDate: (tasks) => {
-        // Добавляем проверку: если tasks не является массивом, возвращаем пустой объект.
         if (!Array.isArray(tasks)) return {};
         return tasks.reduce((acc, task) => {
             const dateField = task[OJSC.config.dateField];
             if (dateField) {
-                const dateStr = OJSC.utils.formatDate(dateField);
+                const dateStr = OJSC.utils.date.format(dateField);
                 if (!acc[dateStr]) acc[dateStr] = [];
                 acc[dateStr].push(task);
             }

@@ -1,51 +1,47 @@
 ```dataviewjs
 /**
  * --------------------------------------------------------------------------
- * Obsidian JS Calendar - Loader
+ * Obsidian JS Calendar - Загрузчик
  * --------------------------------------------------------------------------
  * Этот скрипт отображает задачи из вашего хранилища в виде календаря.
  *
- * Для удобства поддержки код разбит на модули:
- *  - config.js: Настройки и константы.
- *  - utils.js:  Вспомогательные функции (работа с датами, рендеринг).
- *  - main.js:   Основная логика скрипта (получение данных, отображение).
- *
- * Все файлы должны находиться в папке "Obsidian JS Calendar" в корне хранилища.
+ * После рефакторинга код разбит на логические модули для удобства поддержки.
+ * Все файлы находятся в папке "Obsidian JS Calendar".
  */
 
-/**
- * ─── SCRIPT LOADER ──────────────────────────────────────────────────────────
- * Загружает и выполняет внешние JS-файлы.
- */
-const OJSC = {}; // Namespace для всех функций и переменных календаря
+// Создаем глобальный объект, если его нет
+if (!window.OJSC) window.OJSC = {};
 
 try {
-    const luxon = dv.luxon; // Получаем luxon из API Dataview
-    // Путь к папке со скриптами от корня хранилища.
     const SCRIPT_FOLDER = "JS Scripts/cal";
-    // Порядок важен: config -> utils -> main
-    const SCRIPT_FILES = ["config.js", "utils.js", "calendar-data.js", "main.js"];
+    // Порядок важен: сначала утилиты и конфиг, потом сервисы и UI, в конце - главный файл.
+    const SCRIPT_FILES = [
+        "config.js",
+        "date-utils.js", "task-utils.js",
+        "data-service.js", "file-service.js",
+        "state.js",
+        "day-card-component.js", "month-grid-component.js", "header-component.js",
+        "main.js"
+    ];
 
     for (const fileName of SCRIPT_FILES) {
         const scriptContent = await dv.io.load(`${SCRIPT_FOLDER}/${fileName}`);
         if (!scriptContent) {
             throw new Error(`Файл скрипта пуст или не найден: ${fileName}`);
         }
-        // Выполняем код модуля, передавая ему пространство имен OJSC, объект dv и библиотеку luxon
-        new Function('OJSC', 'dv', 'luxon', scriptContent)(OJSC, dv, luxon);
+        // Выполняем загруженный код
+        new Function('OJSC', 'dv', 'luxon', scriptContent)(OJSC, dv, dv.luxon);
     }
 
-    // Проверяем, что основная функция была определена в main.js
-    if (typeof OJSC.renderCalendar !== 'function') {
-        throw new Error("Основная функция OJSC.renderCalendar не была найдена. Проверьте файл JS Scripts/cal/main.js.");
-    }
-
-    // Запускаем основную логику
+    // --- ЗАПУСК КАЛЕНДАРЯ ---
     OJSC.renderCalendar(dv);
 
 } catch (e) {
-    // Выводим сообщение об ошибке прямо в заметке для удобной отладки
-    dv.el("pre", `❌ **Ошибка выполнения JS Calendar.**\n\n**Сообщение:** ${e.message}\n\n**Стек:**\n${e.stack}`);
-    console.error("JS Calendar Error:", e);
+    // Если какой-то из файлов не найден, выводим понятную ошибку
+    dv.el('div', `**Ошибка загрузки скриптов календаря.**
+- Убедитесь, что все файлы находятся в правильных папках.
+- Проверьте консоль разработчика (Ctrl+Shift+I) для получения подробной информации.
+- Текст ошибки: \`${e.message}\``, {attr: {style: "color: red; font-family: monospace;"}});
+    console.error("OJSC Calendar Load Error:", e);
 }
 ```
