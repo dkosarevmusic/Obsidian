@@ -186,26 +186,37 @@ OJSC.utils = {
                 });
 
                 // --- Полифилл для Drag-and-Drop на мобильных устройствах ---
+                let touchTimer = null;
                 let lastTouchTarget = null;
 
                 li.addEventListener('touchstart', (e) => {
-                    // Сохраняем контекст, как и в dragstart
-                    window.OJSC.dragContext = {
-                        element: li,
-                        task: task,
-                        oldDateKey: dayKey
-                    };
-                    // Добавляем класс, чтобы визуально показать, что элемент перетаскивается
-                    li.classList.add('ojsc-dragging');
+                    // Запускаем таймер для определения долгого нажатия
+                    touchTimer = setTimeout(() => {
+                        // Долгое нажатие подтверждено, инициируем перетаскивание
+                        window.OJSC.dragContext = {
+                            element: li,
+                            task: task,
+                            oldDateKey: dayKey
+                        };
+                        // Добавляем класс, чтобы визуально показать, что элемент перетаскивается
+                        li.classList.add('ojsc-dragging');
+                        touchTimer = null; // Сбрасываем таймер
+                    }, 500); // 500 мс - стандартное время для долгого нажатия
                 });
 
                 const handleTouchMove = (e) => {
+                    // Если пользователь начал скроллить до срабатывания таймера, отменяем его
+                    if (touchTimer) {
+                        clearTimeout(touchTimer);
+                        touchTimer = null;
+                    }
+
                     if (!window.OJSC.dragContext.element) return;
                     // Находим элемент под пальцем
                     const touch = e.touches[0];
                     const target = document.elementFromPoint(touch.clientX, touch.clientY);
                     const dropZone = target ? target.closest('.ojsc-day-card') : null;
-
+ 
                     if (lastTouchTarget && lastTouchTarget !== dropZone) {
                         lastTouchTarget.classList.remove('ojsc-drop-target');
                     }
@@ -216,6 +227,13 @@ OJSC.utils = {
                 };
 
                 const handleTouchEnd = (e) => {
+                    // Если палец отпустили до срабатывания таймера, отменяем его
+                    if (touchTimer) {
+                        clearTimeout(touchTimer);
+                        touchTimer = null;
+                        return; // Выходим, так как это был тап, а не начало перетаскивания
+                    }
+
                     if (!window.OJSC.dragContext.element) return;
                     
                     // Убираем класс перетаскивания
