@@ -31,7 +31,7 @@
     color: var(--text-normal); 
     border: 1px solid var(--background-modifier-border); 
     border-radius: 4px; 
-    padding: 4px 8px; 
+    padding: 4px; 
     height: 32px;
     box-sizing: border-box;
 }
@@ -108,10 +108,18 @@
 }
 /* Стиль для подсветки "важных" задач. Накладывается поверх цвета Area. */
 .ojsc-task-item.ojsc-task-item-important {
-    /* Добавляем красную рамку справа, чтобы не конфликтовать с рамкой Area слева */
-    box-shadow: inset -3px 0 0 hsl(0, 80%, 50%);
-    /* Можно добавить и полупрозрачный фон, если нужно более сильное выделение */
-    /* background-image: linear-gradient(to right, hsla(0, 80%, 50%, 0.1), hsla(0, 80%, 50%, 0.1)); */
+    position: relative;
+}
+.ojsc-task-item.ojsc-task-item-important::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3px;
+    bottom: 0;
+    background-color: hsl(0, 80%, 50%);
+    z-index: 1; /* Places it above the text content */
+    pointer-events: none; /* Allows clicks to pass through */
 }
 /* Стиль для задачи в процессе сохранения после переноса */
 .ojsc-task-item-saving {
