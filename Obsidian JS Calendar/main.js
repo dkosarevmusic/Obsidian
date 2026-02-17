@@ -54,7 +54,10 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
         if (!tasksByDate[newDate]) {
             tasksByDate[newDate] = [];
         }
+        // Добавляем задачу и сразу сортируем список задач в новом дне.
+        // Это гарантирует правильный порядок отображения после переноса.
         tasksByDate[newDate].push(taskToMove);
+        tasksByDate[newDate].sort(OJSC.utils.task.compare);
 
         OJSC.services.file.updateTaskDate(dv, filePath, newDate);
     };

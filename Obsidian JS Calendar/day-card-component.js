@@ -126,6 +126,12 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop) => {
                 window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
             });
 
+            // Очищаем контекст после завершения перетаскивания мышью.
+            // Это решает проблему "залипания" элемента.
+            li.addEventListener('dragend', () => {
+                window.OJSC.dragContext = {};
+            });
+
             li.addEventListener('touchstart', (e) => {
                 e.stopPropagation();
                 touchTimer = setTimeout(() => {

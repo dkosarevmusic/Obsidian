@@ -29,7 +29,7 @@ OJSC.ui.createMonthGrid = (monthDate, tasksByDate, viewType, dv, onTaskDrop) => 
     const endDay = monthDate.endOf('month').endOf('week');
 
     while (currentDay <= endDay) {
-        const card = OJSC.ui.createDayCard(currentDay, tasksByDate, viewType, dv, onTaskDrop);
+        const card = OJSC.ui.createDayCard(currentDay, tasksByDate, viewType, dv, onTaskDrop, null);
         card.classList.add('ojsc-month-grid-card');
         if (currentDay.month !== monthDate.month) {
             card.classList.add('ojsc-other-month');
