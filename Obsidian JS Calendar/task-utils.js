@@ -66,12 +66,12 @@ OJSC.utils.task = {
         }
 
         return (
-            // 1. По статусу "important"
-            (bStatus.includes('important') || false) - (aStatus.includes('important') || false) ||
-
-            // 2. По времени
+            // 1. По времени
             (!!b.time - !!a.time) ||
             compareTime(a.time, b.time) ||
+
+            // 2. По статусу "important"
+            (bStatus.includes('important') || false) - (aStatus.includes('important') || false) ||
 
             // 3. По остальным полям
             getComparableString(aStatus).localeCompare(getComparableString(bStatus)) ||
