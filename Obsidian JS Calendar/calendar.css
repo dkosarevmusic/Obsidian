@@ -139,18 +139,16 @@
 .ojsc-month-grid-card .ojsc-day-card-header {
     font-size: 0.9em;
     text-align: right;
-    min-height: 1.8em; /* Задаем минимальную высоту, равную высоте кружка */
 }
 .ojsc-month-grid-card.ojsc-other-month {
     opacity: 0.5;
 }
+/* Индикация текущего дня в сеточных видах (месяц, год).
+   Вместо круга, который влияет на размер ячейки, просто выделяем цифру цветом и жирностью. */
 .ojsc-today-number {
-    background-color: var(--text-accent);
-    color: var(--text-on-accent, white);
-    border-radius: 50%;
-    display: inline-block;
-    width: 1.8em; height: 1.8em; line-height: 1.8em;
-    text-align: center;
+    color: var(--text-accent);
+    font-weight: 700; /* Делаем цифру жирнее для акцента */
+    padding: 0 2px; /* Небольшой отступ, чтобы не прилипало к краю */
 }
 .ojsc-clickable-day {
     cursor: pointer;
