@@ -5,6 +5,24 @@
 if (!window.OJSC) window.OJSC = {};
 if (!OJSC.ui) OJSC.ui = {};
 
+/**
+ * Определяет класс CSS для карточки дня на основе приоритета задач.
+ * Приоритет: Work > Skills > Art.
+ * @param {Array} tasks - Массив задач для данного дня.
+ * @returns {string} - Имя класса CSS или пустая строка.
+ */
+const getDayTaskClass = (tasks) => {
+    if (!tasks || tasks.length === 0) return '';
+
+    const areas = new Set(tasks.map(t => t.Area).flat().filter(Boolean));
+
+    if (areas.has('Work')) return 'ojsc-day-work';
+    if (areas.has('Skills')) return 'ojsc-day-skills';
+    if (areas.has('Art')) return 'ojsc-day-art';
+
+    return '';
+};
+
 OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusMode) => {
     const dayKey = dayDate.toISODate();
     const dayTasks = tasksByDate[dayKey] || [];
@@ -16,6 +34,11 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusM
     card.dataset.date = dayKey;
     if (dayDate.toISODate() === luxon.DateTime.now().toISODate()) {
         card.classList.add('ojsc-today');
+    }
+
+    const dayTaskClass = getDayTaskClass(dayTasks);
+    if (dayTaskClass) {
+        card.classList.add(dayTaskClass);
     }
 
     // --- Логика Drag-and-Drop (Drop Zone) ---

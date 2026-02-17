@@ -213,3 +213,32 @@
         justify-content: space-between; /* Распределяем кнопки по ширине */
     }
 }
+
+/* Day card header color coding for task areas */
+
+/* For grid views (month, year) - "clickable plates" */
+.ojsc-day-work .ojsc-clickable-day {
+    box-shadow: inset 0 3px 0 0 hsl(30, 100%, 50%);
+}
+
+.ojsc-day-skills .ojsc-clickable-day {
+    box-shadow: inset 0 3px 0 0 hsl(220, 100%, 50%);
+}
+
+.ojsc-day-art .ojsc-clickable-day {
+    box-shadow: inset 0 3px 0 0 hsl(280, 100%, 50%);
+}
+
+/* For 1-day view header */
+.ojsc-day-work .ojsc-day-card-header:not(.ojsc-clickable-day) {
+    border-top: 3px solid hsl(30, 100%, 50%);
+    padding-top: 3px; /* Add padding to prevent text from touching the line */
+}
+.ojsc-day-skills .ojsc-day-card-header:not(.ojsc-clickable-day) {
+    border-top: 3px solid hsl(220, 100%, 50%);
+    padding-top: 3px;
+}
+.ojsc-day-art .ojsc-day-card-header:not(.ojsc-clickable-day) {
+    border-top: 3px solid hsl(280, 100%, 50%);
+    padding-top: 3px;
+}
