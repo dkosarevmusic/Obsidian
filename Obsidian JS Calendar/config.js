@@ -17,9 +17,6 @@ OJSC.config = {
     // Статусы, которые нужно отображать в календаре. Задачи с другими статусами будут скрыты.
     allowedStatuses: ["important", "imschedule", "imw", "in progress"],
 
-    // Начальный вид календаря ('month', 'week', 'day')
-    initialView: 'month',
-
     // Порог светлоты (в HSL) для определения "тёмных" цветов.
     // Цвета ниже этого порога будут обработаны для лучшей контрастности.
     darkColorLightnessThreshold: 65,

@@ -50,7 +50,6 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
     // Сохраняем текущую дату вида в глобальный объект для доступа из других функций
     OJSC.currentViewDate = viewDate;
 
-    const previousView = localStorage.getItem('ojsc_previousView');
     const container = dv.container;
     container.innerHTML = ''; // Очищаем контейнер перед отрисовкой
 
@@ -83,12 +82,14 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
     viewSelector.onchange = (e) => {
         // Если переключились на 1 день, запоминаем откуда.
         if (e.target.value === '1day') {
-            localStorage.setItem('ojsc_previousView', viewType); // Запоминаем текущий вид как предыдущий
+            // Запоминаем текущий вид и дату, чтобы можно было вернуться
+            localStorage.setItem('ojsc_previousView', viewType); 
         } 
         // Если мы вручную переключились на любой вид, который не является '1day', сбрасываем память о возврате.
         if (e.target.value !== '1day') {
             localStorage.removeItem('ojsc_previousView');
         }
+        // Перерисовываем календарь с новым видом
         OJSC.renderCalendar(dv, viewDate, e.target.value);
     };
 
@@ -131,11 +132,8 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
     };
 
     if (viewType === '1day') {
-        const list = document.createElement('div');
-        list.className = 'ojsc-day-list'; // Используем тот же класс, что и в 3-дневном виде
-        // Используем специальную функцию для детального отображения карточки
-        list.appendChild(OJSC.utils.createDayCardFor3Days(viewDate, tasksByDate));
-        bodyFragment.appendChild(list);
+        // Для вида "1 день" просто создаем одну карточку дня
+        bodyFragment.appendChild(OJSC.utils.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop));
     } else if (viewType === 'month') {
         bodyFragment.appendChild(OJSC.utils.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop));
     } else if (viewType === '3months') {
@@ -185,16 +183,15 @@ OJSC.renderCalendar = (dv, viewDate, viewType) => {
     mainNavGroup.append(prevButton, todayButton, nextButton);
 
     // Добавляем кнопку "Назад", если мы в режиме '1day' и есть куда возвращаться
-    if (viewType === '1day' && previousView) {
+    if (viewType === '1day' && localStorage.getItem('ojsc_previousView')) {
         const backButton = document.createElement('button');
         backButton.textContent = 'Назад';
         backButton.className = 'ojsc-back-button'; // Добавляем класс для стилизации
         backButton.onclick = () => {
+            const originalView = localStorage.getItem('ojsc_previousView');
             localStorage.removeItem('ojsc_previousView'); // Очищаем память после использования
-            // Восстанавливаем дату, которая была до перехода в "1 день", из хранилища
-            const originalDate = localStorage.getItem('ojsc_originalViewDate') ? luxon.DateTime.fromISO(localStorage.getItem('ojsc_originalViewDate')) : viewDate;
             // Передаем флаг для восстановления скролла и восстанавливаем исходную дату
-            OJSC.renderCalendar(dv, originalDate, previousView);
+            OJSC.renderCalendar(dv, null, originalView); // null для даты заставит загрузить ее из localStorage
         };
         // Добавляем основную навигацию и кнопку "Назад" в правильном порядке
         buttonGroup.append(mainNavGroup, backButton);
