@@ -142,6 +142,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     const bulkModeBtn = document.createElement('button');
     bulkModeBtn.className = 'ojsc-bulk-mode-btn';
     bulkModeBtn.innerHTML = '&#9745;'; // Softer ballot box icon
+    bulkModeBtn.title = 'Режим массовых операций';
     container.appendChild(bulkModeBtn);
 
     // Create a container for the status buttons to manage layout
@@ -248,6 +249,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     const scrollToTopBtn = document.createElement('button');
     scrollToTopBtn.className = 'ojsc-scroll-to-top';
     scrollToTopBtn.innerHTML = '&#9650;'; // Softer upwards arrow
+    scrollToTopBtn.title = 'Наверх';
     container.appendChild(scrollToTopBtn);
 
     if (scroller) {
