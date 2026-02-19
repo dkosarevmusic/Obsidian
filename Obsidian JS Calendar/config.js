@@ -27,6 +27,10 @@ OJSC.config = {
         "cancelled": {
             name: "Отмененные",
             statuses: ["cancelled"]
+        },
+        "postpone": {
+            name: "Отложенные",
+            statuses: ["postpone"]
         }
     },
 

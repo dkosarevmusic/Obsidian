@@ -1,7 +1,20 @@
 .ojsc-container {
     width: 100%;
-    margin-top: 20px; /* Добавляем отступ сверху, чтобы выпадающий список не обрезался */
+    margin-top: 20px;
+    /* Стили для цветной обводки */
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 5px;
+    transition: border-color 0.3s ease;
 }
+
+/* Цвета обводки в зависимости от режима */
+.ojsc-status-mode-work { border-color: gold; }
+.ojsc-status-mode-done { border-color: limegreen; }
+.ojsc-status-mode-cancelled { border-color: tomato; }
+.ojsc-status-mode-postpone { border-color: dodgerblue; }
+
+
 .ojsc-footer {
     text-align: right;
     font-size: 0.8em;
@@ -412,7 +425,6 @@
     border: none;
     outline: none;
     background-color: #555;
-    color: #4CAF50; /* Green color for the checkmark icon */
     cursor: pointer;
     border-radius: 50%;
     font-size: 24px; /* Slightly larger for better visibility */
@@ -445,7 +457,6 @@
     border: none;
     outline: none;
     background-color: #555;
-    color: #f44336; /* Red color for the cancel icon */
     cursor: pointer;
     border-radius: 50%;
     font-size: 20px;
@@ -464,5 +475,38 @@
 }
 
 .ojsc-bulk-toggle-cancel-btn:hover {
+    background-color: #777;
+}
+
+/* Bulk Operations Toggle Postpone Button */
+.ojsc-bulk-toggle-postpone-btn {
+    position: fixed;
+    bottom: 60px;
+    left: 204px; /* Positioned to the right of the cancel button */
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    border: none;
+    outline: none;
+    background-color: #555;
+    color: #2196F3 !important; /* Blue color for the postpone icon */
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
+}
+
+.ojsc-bulk-toggle-postpone-btn.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ojsc-bulk-toggle-postpone-btn:hover {
     background-color: #777;
 }

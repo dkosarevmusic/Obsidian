@@ -30,6 +30,8 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
 
     const rootEl = document.createElement('div');
     rootEl.className = 'ojsc-container';
+    // Добавляем класс для цветовой обводки в зависимости от режима статуса
+    rootEl.classList.add(`ojsc-status-mode-${statusMode}`);
 
     const styleEl = document.createElement('style');
     rootEl.appendChild(styleEl);
@@ -144,15 +146,21 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
 
     const bulkToggleStatusBtn = document.createElement('button');
     bulkToggleStatusBtn.className = 'ojsc-bulk-toggle-status-btn';
-    bulkToggleStatusBtn.innerHTML = '&#10004;'; // Heavy Check mark
+    bulkToggleStatusBtn.innerHTML = '✅'; // Green checkmark emoji
     bulkToggleStatusBtn.title = 'Переключить статус (in progress/done)';
     container.appendChild(bulkToggleStatusBtn);
 
     const bulkToggleCancelBtn = document.createElement('button');
     bulkToggleCancelBtn.className = 'ojsc-bulk-toggle-cancel-btn';
-    bulkToggleCancelBtn.innerHTML = '&#10060;'; // Cross mark emoji
+    bulkToggleCancelBtn.innerHTML = '❌'; // Red Cross Mark emoji
     bulkToggleCancelBtn.title = 'Переключить статус (in progress/cancelled)';
     container.appendChild(bulkToggleCancelBtn);
+
+    const bulkTogglePostponeBtn = document.createElement('button');
+    bulkTogglePostponeBtn.className = 'ojsc-bulk-toggle-postpone-btn';
+    bulkTogglePostponeBtn.innerHTML = '&#9208;'; // Pause icon
+    bulkTogglePostponeBtn.title = 'Переключить статус (in progress/postpone)';
+    container.appendChild(bulkTogglePostponeBtn);
 
 
     // Function to toggle bulk mode UI and state
@@ -171,8 +179,9 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
 
         rootEl.classList.toggle('ojsc-bulk-mode', isBulkMode);
         bulkModeBtn.classList.toggle('active', isBulkMode);
-        bulkToggleStatusBtn.classList.toggle('visible', isBulkMode); // Toggle visibility
-        bulkToggleCancelBtn.classList.toggle('visible', isBulkMode); // Toggle visibility
+        bulkToggleStatusBtn.classList.toggle('visible', isBulkMode);
+        bulkToggleCancelBtn.classList.toggle('visible', isBulkMode);
+        bulkTogglePostponeBtn.classList.toggle('visible', isBulkMode);
 
         // If turning off, re-render to clear selections and restore scroll
         if (!isBulkMode) {
@@ -236,6 +245,34 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
         }
     });
 
+    // Event listener for the new postpone toggle button
+    bulkTogglePostponeBtn.addEventListener('click', async () => {
+        const selectedTasks = OJSC.state.selectedTasks;
+        if (selectedTasks.length === 0) {
+            new Notice('Нет выбранных задач для откладывания.', 2000);
+            return;
+        }
+
+        const scroller = container.closest('.cm-scroller, .markdown-preview-view');
+        if (scroller) {
+            OJSC.state.setScrollPosition(scroller.scrollTop);
+        }
+
+        const updatePromises = selectedTasks.map(task => {
+            return OJSC.services.file.updateTaskStatusInProgressPostpone(dv, task.file.path);
+        });
+
+        try {
+            await Promise.all(updatePromises);
+            new Notice(`Статус ${selectedTasks.length} задач изменен на/с postpone.`);
+            // Re-render to reflect changes
+            OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
+        } catch (error) {
+            console.error("OJSC: Ошибка при обновлении статусов задач на postpone.", error);
+            new Notice('Произошла ошибка при обновлении статусов.');
+        }
+    });
+
 
     // Set initial state from memory
     if (OJSC.state.bulkMode) {
@@ -243,6 +280,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
         bulkModeBtn.classList.add('active');
         bulkToggleStatusBtn.classList.add('visible');
         bulkToggleCancelBtn.classList.add('visible');
+        bulkTogglePostponeBtn.classList.add('visible');
     }
 
     bulkModeBtn.addEventListener('click', toggleBulkMode);
