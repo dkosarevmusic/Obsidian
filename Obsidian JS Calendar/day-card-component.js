@@ -13,13 +13,10 @@ if (!OJSC.ui) OJSC.ui = {};
  */
 const getDayTaskClass = (tasks) => {
     if (!tasks || tasks.length === 0) return '';
-
     const areas = new Set(tasks.map(t => t.Area).flat().filter(Boolean));
-
     if (areas.has('Work')) return 'ojsc-day-work';
     if (areas.has('Skills')) return 'ojsc-day-skills';
     if (areas.has('Art')) return 'ojsc-day-art';
-
     return '';
 };
 
@@ -46,17 +43,12 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
         if (OJSC.state.bulkMode && OJSC.state.selectedTasks.length > 0) {
             e.preventDefault();
             e.stopPropagation();
-
             const newDate = card.dataset.date;
             if (!newDate) return;
-
-            // 1. Сохраняем позицию скролла в момент клика
             const scroller = card.closest('.cm-scroller, .markdown-preview-view');
             if (scroller) {
                 OJSC.state.setScrollPosition(scroller.scrollTop);
             }
-
-            // 2. Оптимистичное обновление UI
             const targetTaskList = card.querySelector('.ojsc-task-list');
             if (targetTaskList) {
                 OJSC.state.selectedTasks.forEach(task => {
@@ -68,13 +60,7 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
                     }
                 });
             }
-
-            // 3. Вызываем новый обработчик, который повторяет логику onTaskDrop
             onBulkTaskDrop(OJSC.state.selectedTasks, newDate);
-
-            // 4. Немедленно выключаем режим массовых операций и убираем классы
-            // Это ключевой момент. Первая же перерисовка от Dataview "увидит", что
-            // режим выключен, и использует сохраненную позицию скролла, а затем очистит ее.
             OJSC.state.setBulkMode(false);
             document.querySelector('.ojsc-container')?.classList.remove('ojsc-bulk-mode');
             document.querySelector('.ojsc-bulk-mode-btn')?.classList.remove('active');
@@ -94,18 +80,10 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
         card.classList.remove('ojsc-drop-target');
         const { element, task, oldDateKey } = window.OJSC.dragContext;
         if (!element || !task) return;
-
-        // Принудительно убираем класс 'ojsc-dragging' и его opacity,
-        // чтобы анимация вспышки была яркой и консистентной на всех устройствах.
         element.classList.remove('ojsc-dragging');
-
-        // Добавляем класс для визуальной индикации процесса сохранения.
-        // Класс будет активен до полной перерисовки календаря.
         element.classList.add('ojsc-task-item-saving');
-
         const targetTaskList = card.querySelector('.ojsc-task-list');
         if (targetTaskList) targetTaskList.appendChild(element);
-
         const newDate = dayDate.toISODate();
         onTaskDrop(task.file.path, newDate, task, oldDateKey);
     });
@@ -116,17 +94,10 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
     if (['month', '3months', 'year'].includes(viewType)) {
         header.classList.add('ojsc-clickable-day');
         header.onclick = (e) => {
-            // В режиме массовых операций клик по заголовку должен "проваливаться"
-            // до слушателя на самой карточке `.ojsc-day-card`, который и выполнит перенос.
-            // В обычном режиме - переход на день.
-            if (OJSC.state.bulkMode) {
-                return;
-            }
+            if (OJSC.state.bulkMode) return;
             OJSC.state.setPreviousView(viewType);
             OJSC.renderCalendar(dv, dayDate, '1day', statusMode);
         };
-
-        // Всегда отображаем номер дня для сеточных видов
         const daySpan = document.createElement('span');
         daySpan.textContent = dayDate.day;
         if (dayDate.hasSame(luxon.DateTime.now(), 'day')) daySpan.classList.add('ojsc-today-number');
@@ -144,117 +115,18 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
     const taskList = document.createElement('ul');
     taskList.className = 'ojsc-task-list';
 
+    // --- Рендеринг списка задач ---
     if (dayTasks.length > 0) {
-        let lastTouchTarget = null;
-
-        // Эти функции не зависят от конкретной задачи, их можно определить один раз.
-        const handleGlobalTouchMove = (e) => {
-            e.preventDefault();
-            if (!window.OJSC.dragContext.element) return;
-    
-            const touch = e.touches[0];
-            const target = document.elementFromPoint(touch.clientX, touch.clientY);
-            const dropZone = target ? target.closest('.ojsc-day-card') : null;
-    
-            if (lastTouchTarget && lastTouchTarget !== dropZone) {
-                lastTouchTarget.classList.remove('ojsc-drop-target');
-            }
-            if (dropZone) dropZone.classList.add('ojsc-drop-target');
-            lastTouchTarget = dropZone;
-        };
-    
-        const handleGlobalTouchEnd = (e) => {
-            document.removeEventListener('touchmove', handleGlobalTouchMove);
-            document.removeEventListener('touchend', handleGlobalTouchEnd);
-    
-            if (window.OJSC.dragContext.element) {
-                const { element, task, oldDateKey } = window.OJSC.dragContext;
-                element.classList.remove('ojsc-dragging');
-    
-                if (lastTouchTarget) {
-                    lastTouchTarget.classList.remove('ojsc-drop-target');
-                    const newDate = lastTouchTarget.dataset.date;
-                    const targetTaskList = lastTouchTarget.querySelector('.ojsc-task-list');
-                    if (targetTaskList) {
-                        targetTaskList.appendChild(element);
-                        onTaskDrop(task.file.path, newDate, task, oldDateKey);
-                    }
-                }
-            }
-    
-            window.OJSC.dragContext = {};
-            lastTouchTarget = null;
-        };
-
         dayTasks.sort(OJSC.utils.task.compare).forEach(task => {
-            let touchTimer = null;
-            const cancelTimer = () => {
-                if (touchTimer) {
-                    clearTimeout(touchTimer);
-                    touchTimer = null;
-                }
-            };
-
             const li = document.createElement('li');
             li.className = 'ojsc-task-item';
-            li.dataset.filePath = task.file.path; // <-- Add data-attribute
+            li.dataset.filePath = task.file.path;
             li.setAttribute('draggable', 'true');
-
-            // --- Логика массовых операций (выделение) ---
-            li.addEventListener('click', (e) => {
-                if (OJSC.state.bulkMode) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const filePath = task.file.path;
-                    let currentSelectedTasks = OJSC.state.selectedTasks;
-                    const isSelected = currentSelectedTasks.some(t => t.file.path === filePath);
-
-                    if (isSelected) {
-                        // Снять выделение
-                        currentSelectedTasks = currentSelectedTasks.filter(t => t.file.path !== filePath);
-                        li.classList.remove('ojsc-task-item-selected');
-                    } else {
-                        // Выделить
-                        currentSelectedTasks.push(task); // Store the whole task object
-                        li.classList.add('ojsc-task-item-selected');
-                    }
-                    OJSC.state.setSelectedTasks(currentSelectedTasks);
-                }
-            });
 
             // Восстанавливаем состояние выделения при перерисовке
             if (OJSC.state.bulkMode && OJSC.state.selectedTasks.some(t => t.file.path === task.file.path)) {
                 li.classList.add('ojsc-task-item-selected');
             }
-
-            li.addEventListener('dragstart', (e) => {
-                // Отключаем нативный d-n-d в режиме массовых операций
-                if (OJSC.state.bulkMode) {
-                    e.preventDefault();
-                    return;
-                }
-                window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
-            });
-
-            // Очищаем контекст после завершения перетаскивания мышью.
-            // Это решает проблему "залипания" элемента.
-            li.addEventListener('dragend', () => {
-                window.OJSC.dragContext = {};
-            });
-
-            li.addEventListener('touchstart', (e) => {
-                e.stopPropagation();
-                touchTimer = setTimeout(() => {
-                    window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
-                    li.classList.add('ojsc-dragging');
-                    document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
-                    document.addEventListener('touchend', handleGlobalTouchEnd);
-                }, 500);
-            });
-
-            li.addEventListener('touchmove', cancelTimer);
-            li.addEventListener('touchend', cancelTimer);
 
             const link = document.createElement('a');
             link.className = 'internal-link';
@@ -275,20 +147,18 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
 
             const taskStatus = Array.isArray(task.status) ? task.status : [String(task.status)];
             const isImportant = taskStatus.includes('important');
-            const hasArea = !!task.Area;
+            const area = Array.isArray(task.Area) ? task.Area[0] : task.Area;
 
-            if (isImportant && !hasArea) {
-                li.style.backgroundColor = 'hsla(0, 80%, 50%, 0.2)';
-                li.style.borderLeft = '3px solid hsl(0, 80%, 50%)';
-                link.style.color = 'hsl(0, 80%, 75%)';
+            if (isImportant && !area) {
+                li.classList.add('ojsc-task-important-no-area');
             } else {
-                if (hasArea) {
-                    const styles = OJSC.utils.task.getStyles(task.Area || '');
-                    li.style.backgroundColor = styles.backgroundColor;
-                    li.style.borderLeft = `3px solid ${styles.borderColor}`;
-                    link.style.color = styles.color;
+                if (area) {
+                    // Добавляем класс для каждой Area, чтобы можно было стилизовать в CSS
+                    li.classList.add(`ojsc-area-${area.replace(/\s+/g, '-')}`);
                 }
-                if (isImportant) li.classList.add('ojsc-task-item-important');
+                if (isImportant) {
+                    li.classList.add('ojsc-task-item-important');
+                }
             }
 
             li.appendChild(link);
@@ -309,10 +179,113 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
                 });
                 li.appendChild(participantsDiv);
             }
-			
             taskList.appendChild(li);
         });
     }
+
+    // --- Делегирование событий ---
+    // Клик для массового выделения
+    taskList.addEventListener('click', (e) => {
+        if (!OJSC.state.bulkMode) return;
+        const li = e.target.closest('.ojsc-task-item');
+        if (!li) return;
+        e.preventDefault();
+        e.stopPropagation();
+
+        const filePath = li.dataset.filePath;
+        const task = dayTasks.find(t => t.file.path === filePath);
+        if (!task) return;
+
+        let currentSelectedTasks = OJSC.state.selectedTasks;
+        const isSelected = currentSelectedTasks.some(t => t.file.path === filePath);
+
+        if (isSelected) {
+            currentSelectedTasks = currentSelectedTasks.filter(t => t.file.path !== filePath);
+            li.classList.remove('ojsc-task-item-selected');
+        } else {
+            currentSelectedTasks.push(task);
+            li.classList.add('ojsc-task-item-selected');
+        }
+        OJSC.state.setSelectedTasks(currentSelectedTasks);
+    });
+
+    // Drag and Drop для мыши
+    taskList.addEventListener('dragstart', (e) => {
+        if (OJSC.state.bulkMode) {
+            e.preventDefault();
+            return;
+        }
+        const li = e.target.closest('.ojsc-task-item');
+        if (!li) return;
+        const task = dayTasks.find(t => t.file.path === li.dataset.filePath);
+        if (!task) return;
+        window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
+    });
+
+    taskList.addEventListener('dragend', () => {
+        window.OJSC.dragContext = {};
+    });
+
+    // Drag and Drop для тач-устройств
+    let touchTimer = null;
+    let lastTouchTarget = null;
+
+    const handleGlobalTouchMove = (e) => {
+        e.preventDefault();
+        if (!window.OJSC.dragContext.element) return;
+        const touch = e.touches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const dropZone = target ? target.closest('.ojsc-day-card') : null;
+        if (lastTouchTarget && lastTouchTarget !== dropZone) {
+            lastTouchTarget.classList.remove('ojsc-drop-target');
+        }
+        if (dropZone) dropZone.classList.add('ojsc-drop-target');
+        lastTouchTarget = dropZone;
+    };
+
+    const handleGlobalTouchEnd = (e) => {
+        document.removeEventListener('touchmove', handleGlobalTouchMove);
+        document.removeEventListener('touchend', handleGlobalTouchEnd);
+        if (window.OJSC.dragContext.element) {
+            const { element, task, oldDateKey } = window.OJSC.dragContext;
+            element.classList.remove('ojsc-dragging');
+            if (lastTouchTarget) {
+                lastTouchTarget.classList.remove('ojsc-drop-target');
+                const newDate = lastTouchTarget.dataset.date;
+                const targetTaskList = lastTouchTarget.querySelector('.ojsc-task-list');
+                if (targetTaskList) {
+                    targetTaskList.appendChild(element);
+                    onTaskDrop(task.file.path, newDate, task, oldDateKey);
+                }
+            }
+        }
+        window.OJSC.dragContext = {};
+        lastTouchTarget = null;
+    };
+    
+    const cancelTouchTimer = () => {
+        if (touchTimer) {
+            clearTimeout(touchTimer);
+            touchTimer = null;
+        }
+    };
+
+    taskList.addEventListener('touchstart', (e) => {
+        const li = e.target.closest('.ojsc-task-item');
+        if (!li) return;
+        e.stopPropagation();
+        touchTimer = setTimeout(() => {
+            const task = dayTasks.find(t => t.file.path === li.dataset.filePath);
+            if (!task) return;
+            window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
+            li.classList.add('ojsc-dragging');
+            document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
+            document.addEventListener('touchend', handleGlobalTouchEnd);
+        }, 500);
+    });
+    
+    taskList.addEventListener('touchmove', cancelTouchTimer);
+    taskList.addEventListener('touchend', cancelTouchTimer);
 
     card.appendChild(taskList);
     return card;

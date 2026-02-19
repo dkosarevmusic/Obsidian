@@ -77,13 +77,13 @@
     text-align-last: center;
 }
 .ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; color: white; text-align: center; }
-.ojsc-multi-month-header { 
+.ojsc-container .ojsc-multi-month-header { 
     text-align: center; 
     text-transform: capitalize; 
     margin-top: 20px; 
     margin-bottom: 5px; 
     background-color: var(--background-secondary);
-    color: var(--text-accent) !important;
+    color: var(--text-accent);
     padding: 6px 0;
     border-radius: 6px;
 }
@@ -408,7 +408,7 @@
 
 /* Individual button colors and font sizes */
 .ojsc-bulk-set-in-progress-btn {
-    color: gold !important;
+    color: gold;
 }
 
 .ojsc-bulk-set-done-btn,
@@ -417,7 +417,7 @@
 }
 
 .ojsc-bulk-set-postpone-btn {
-    color: #2196F3 !important;
+    color: #2196F3;
 }
 
 
@@ -430,13 +430,50 @@
 .ojsc-bulk-mode .ojsc-calendar-header,
 .ojsc-bulk-mode .ojsc-weekday,
 .ojsc-bulk-mode .ojsc-day-card {
-    border: 1px dashed var(--text-accent) !important;
+    border: 1px dashed var(--text-accent);
     transition: border 0.3s ease;
 }
 
 .ojsc-bulk-mode .ojsc-month-grid-card.ojsc-other-month {
     opacity: 0.6;
 }
+
+/* --- Task Item Area Colors --- */
+/* Generated based on OJSC.config.areaColors and threshold logic */
+.ojsc-task-item.ojsc-area-Work { background-color: hsla(30,100%,50%,0.1); border-left: 3px solid hsl(30,100%,50%); }
+.ojsc-task-item.ojsc-area-Work .internal-link { color: hsl(30,100%,75%); }
+
+.ojsc-task-item.ojsc-area-Skills { background-color: hsla(220,100%,50%,0.1); border-left: 3px solid hsl(220,100%,50%); }
+.ojsc-task-item.ojsc-area-Skills .internal-link { color: hsl(220,100%,75%); }
+
+.ojsc-task-item.ojsc-area-Optimization { background-color: hsla(0,0%,100%,0.2); border-left: 3px solid hsl(0,0%,100%); }
+.ojsc-task-item.ojsc-area-Optimization .internal-link { color: hsl(0,0%,100%); }
+
+.ojsc-task-item.ojsc-area-Matter { background-color: hsla(120,100%,50%,0.1); border-left: 3px solid hsl(120,100%,50%); }
+.ojsc-task-item.ojsc-area-Matter .internal-link { color: hsl(120,100%,75%); }
+
+.ojsc-task-item.ojsc-area-Health { background-color: hsla(150,72%,42%,0.1); border-left: 3px solid hsl(150,72%,42%); }
+.ojsc-task-item.ojsc-area-Health .internal-link { color: hsl(150,72%,75%); }
+
+.ojsc-task-item.ojsc-area-Housekeep { background-color: hsla(75,100%,50%,0.1); border-left: 3px solid hsl(75,100%,50%); }
+.ojsc-task-item.ojsc-area-Housekeep .internal-link { color: hsl(75,100%,75%); }
+
+.ojsc-task-item.ojsc-area-Art { background-color: hsla(280,100%,50%,0.1); border-left: 3px solid hsl(280,100%,50%); }
+.ojsc-task-item.ojsc-area-Art .internal-link { color: hsl(280,100%,75%); }
+
+.ojsc-task-item.ojsc-area-Spirit { background-color: hsla(330,100%,88%,0.2); border-left: 3px solid hsl(330,100%,88%); }
+.ojsc-task-item.ojsc-area-Spirit .internal-link { color: hsl(330,100%,88%); }
+
+.ojsc-task-item.ojsc-area-Social { background-color: hsla(200,100%,70%,0.2); border-left: 3px solid hsl(200,100%,70%); }
+.ojsc-task-item.ojsc-area-Social .internal-link { color: hsl(200,100%,70%); }
+
+.ojsc-task-item.ojsc-area-Fun { background-color: hsla(60,100%,50%,0.1); border-left: 3px solid hsl(60,100%,50%); }
+.ojsc-task-item.ojsc-area-Fun .internal-link { color: hsl(60,100%,75%); }
+
+/* Style for important tasks without an area */
+.ojsc-task-item.ojsc-task-important-no-area { background-color: hsla(0, 80%, 50%, 0.2); border-left: 3px solid hsl(0, 80%, 50%); }
+.ojsc-task-item.ojsc-task-important-no-area .internal-link { color: hsl(0, 80%, 75%); }
+
 
 /* Style for selected task items in bulk mode */
 .ojsc-task-item.ojsc-task-item-selected {

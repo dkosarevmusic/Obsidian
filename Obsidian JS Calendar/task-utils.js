@@ -18,36 +18,6 @@ OJSC.utils.task = {
     },
 
     /**
-     * Генерирует стили для элемента задачи на основе цвета области (Area).
-     * @param {string} area - Название области задачи.
-     * @returns {{backgroundColor: string, color: string, borderColor: string}}
-     */
-    getStyles: (area) => {
-        const colorMap = OJSC.config.areaColors;
-        let hslColor = colorMap[area] || 'hsl(0,0%,80%)'; // Цвет по умолчанию
-
-        const match = hslColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-        if (match) {
-            const [, h, s, l] = match.map(Number);
-            const threshold = OJSC.config.darkColorLightnessThreshold;
-
-            if (l < threshold) {
-                return {
-                    backgroundColor: `hsla(${h},${s}%,${l}%,0.1)`,
-                    color: `hsl(${h},${s}%,75%)`,
-                    borderColor: `hsl(${h},${s}%,${l}%)`
-                };
-            }
-        }
-
-        return {
-            backgroundColor: hslColor.replace('hsl(', 'hsla(').replace(')', ',0.2)'),
-            color: hslColor,
-            borderColor: hslColor
-        };
-    },
-
-    /**
      * Сравнивает две задачи для комплексной сортировки.
      * @param {object} a - Первая задача.
      * @param {object} b - Вторая задача.

@@ -11,6 +11,12 @@
  * @param {string} statusMode - Режим отображения статусов ('work', 'done').
  */
 OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
+    // --- One-time setup for cache invalidation ---
+    if (!window.OJSC._cacheInvalidatorRegistered) {
+        dv.app.vault.on('modify', () => OJSC.services.data.clearCache());
+        window.OJSC._cacheInvalidatorRegistered = true;
+    }
+    
     const lastState = OJSC.state.load();
     const { showTime, showParticipants } = lastState;
     const previousViewTypeFromStorage = lastState.viewType;
@@ -30,20 +36,25 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
 
     const rootEl = document.createElement('div');
     rootEl.className = 'ojsc-container';
-    // Добавляем класс для цветовой обводки в зависимости от режима статуса
     rootEl.classList.add(`ojsc-status-mode-${statusMode}`);
 
-    const styleEl = document.createElement('style');
-    rootEl.appendChild(styleEl);
+    // --- CSS Loading (Optimized & Safe) ---
+    // Load CSS content once and cache it. On every render, re-create the style tag 
+    // inside the component from cached content, because the container is wiped.
+    const applyCss = (css) => {
+        const styleEl = document.createElement('style');
+        styleEl.textContent = css;
+        rootEl.prepend(styleEl);
+    };
 
-    // Асинхронно загружаем и применяем стили.
-    // Это правильный способ работы с асинхронной функцией dv.io.load().
-    (async () => {
-        try {
-            const cssContent = await dv.io.load('JS Scripts/cal/calendar.css');
-            styleEl.textContent = cssContent;
-        } catch (e) { console.error("OJSC: Не удалось загрузить calendar.css", e); }
-    })();
+    if (window.OJSC_CSS_CONTENT) {
+        applyCss(window.OJSC_CSS_CONTENT);
+    } else {
+        dv.io.load('JS Scripts/cal/calendar.css').then(css => {
+            window.OJSC_CSS_CONTENT = css;
+            applyCss(css);
+        }).catch(e => console.error("OJSC: Failed to load calendar.css. Ensure it is at 'JS Scripts/cal/calendar.css'", e));
+    }
 
     const headerEl = OJSC.ui.createHeader(dv, viewDate, viewType, statusMode, showTime, showParticipants);
     rootEl.appendChild(headerEl);
@@ -153,7 +164,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     // --- Status Setting Buttons ---
     const bulkSetInProgressBtn = document.createElement('button');
     bulkSetInProgressBtn.className = 'ojsc-bulk-set-in-progress-btn';
-    bulkSetInProgressBtn.innerHTML = '▶️';
+    bulkSetInProgressBtn.innerHTML = "<svg viewBox='0 0 10 10' width='36' height='36'><path d='M 2 2 L 8 5 L 2 8 Z' fill='currentColor'/></svg>";
     bulkSetInProgressBtn.title = 'Установить статус "in progress"';
     bulkActionsContainer.appendChild(bulkSetInProgressBtn);
 
