@@ -141,7 +141,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     // --- Bulk Operations UI Elements ---
     const bulkModeBtn = document.createElement('button');
     bulkModeBtn.className = 'ojsc-bulk-mode-btn';
-    bulkModeBtn.innerHTML = '&#9745;'; // Softer ballot box icon
+    bulkModeBtn.innerHTML = '📋'; // Clipboard icon
     bulkModeBtn.title = 'Режим массовых операций';
     container.appendChild(bulkModeBtn);
 
