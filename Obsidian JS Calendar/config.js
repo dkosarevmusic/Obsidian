@@ -23,6 +23,10 @@ OJSC.config = {
         "done": {
             name: "Готовые",
             statuses: ["done"]
+        },
+        "cancelled": {
+            name: "Отмененные",
+            statuses: ["cancelled"]
         }
     },
 

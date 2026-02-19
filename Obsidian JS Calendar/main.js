@@ -136,11 +136,24 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     footer.textContent = 'Calendar by D.KOSAREV';
     container.appendChild(footer);
 
-    // --- Bulk Operations Mode Button ---
+    // --- Bulk Operations UI Elements ---
     const bulkModeBtn = document.createElement('button');
     bulkModeBtn.className = 'ojsc-bulk-mode-btn';
     bulkModeBtn.innerHTML = '&#10063;'; // Ballot box with script X
     container.appendChild(bulkModeBtn);
+
+    const bulkToggleStatusBtn = document.createElement('button');
+    bulkToggleStatusBtn.className = 'ojsc-bulk-toggle-status-btn';
+    bulkToggleStatusBtn.innerHTML = '&#10004;'; // Heavy Check mark
+    bulkToggleStatusBtn.title = 'Переключить статус (in progress/done)';
+    container.appendChild(bulkToggleStatusBtn);
+
+    const bulkToggleCancelBtn = document.createElement('button');
+    bulkToggleCancelBtn.className = 'ojsc-bulk-toggle-cancel-btn';
+    bulkToggleCancelBtn.innerHTML = '&#10060;'; // Cross mark emoji
+    bulkToggleCancelBtn.title = 'Переключить статус (in progress/cancelled)';
+    container.appendChild(bulkToggleCancelBtn);
+
 
     // Function to toggle bulk mode UI and state
     const toggleBulkMode = () => {
@@ -158,6 +171,8 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
 
         rootEl.classList.toggle('ojsc-bulk-mode', isBulkMode);
         bulkModeBtn.classList.toggle('active', isBulkMode);
+        bulkToggleStatusBtn.classList.toggle('visible', isBulkMode); // Toggle visibility
+        bulkToggleCancelBtn.classList.toggle('visible', isBulkMode); // Toggle visibility
 
         // If turning off, re-render to clear selections and restore scroll
         if (!isBulkMode) {
@@ -165,10 +180,69 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
         }
     };
 
+    // Event listener for the new status toggle button
+    bulkToggleStatusBtn.addEventListener('click', async () => {
+        const selectedTasks = OJSC.state.selectedTasks;
+        if (selectedTasks.length === 0) {
+            new Notice('Нет выбранных задач для изменения статуса.', 2000);
+            return;
+        }
+
+        const scroller = container.closest('.cm-scroller, .markdown-preview-view');
+        if (scroller) {
+            OJSC.state.setScrollPosition(scroller.scrollTop);
+        }
+
+        const updatePromises = selectedTasks.map(task => {
+            return OJSC.services.file.updateTaskStatus(dv, task.file.path);
+        });
+
+        try {
+            await Promise.all(updatePromises);
+            new Notice(`Статус ${selectedTasks.length} задач успешно обновлен.`);
+            // Re-render to reflect changes
+            OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
+        } catch (error) {
+            console.error("OJSC: Ошибка при обновлении статусов задач.", error);
+            new Notice('Произошла ошибка при обновлении статусов.');
+        }
+    });
+
+    // Event listener for the new cancel toggle button
+    bulkToggleCancelBtn.addEventListener('click', async () => {
+        const selectedTasks = OJSC.state.selectedTasks;
+        if (selectedTasks.length === 0) {
+            new Notice('Нет выбранных задач для отмены.', 2000);
+            return;
+        }
+
+        const scroller = container.closest('.cm-scroller, .markdown-preview-view');
+        if (scroller) {
+            OJSC.state.setScrollPosition(scroller.scrollTop);
+        }
+
+        const updatePromises = selectedTasks.map(task => {
+            return OJSC.services.file.updateTaskStatusInProgressCancel(dv, task.file.path);
+        });
+
+        try {
+            await Promise.all(updatePromises);
+            new Notice(`Статус ${selectedTasks.length} задач изменен на/с cancelled.`);
+            // Re-render to reflect changes
+            OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
+        } catch (error) {
+            console.error("OJSC: Ошибка при обновлении статусов задач на cancelled.", error);
+            new Notice('Произошла ошибка при обновлении статусов.');
+        }
+    });
+
+
     // Set initial state from memory
     if (OJSC.state.bulkMode) {
         rootEl.classList.add('ojsc-bulk-mode');
         bulkModeBtn.classList.add('active');
+        bulkToggleStatusBtn.classList.add('visible');
+        bulkToggleCancelBtn.classList.add('visible');
     }
 
     bulkModeBtn.addEventListener('click', toggleBulkMode);

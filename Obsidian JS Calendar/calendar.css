@@ -400,3 +400,69 @@
 .ojsc-bulk-mode .ojsc-day-card {
     cursor: crosshair; /* Indicate it's a drop target */
 }
+
+/* Bulk Operations Toggle Status Button */
+.ojsc-bulk-toggle-status-btn {
+    position: fixed;
+    bottom: 60px;
+    left: 88px; /* Positioned to the right of the bulk mode button */
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    border: none;
+    outline: none;
+    background-color: #555;
+    color: #4CAF50; /* Green color for the checkmark icon */
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 24px; /* Slightly larger for better visibility */
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
+}
+
+.ojsc-bulk-toggle-status-btn.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ojsc-bulk-toggle-status-btn:hover {
+    background-color: #777;
+}
+
+/* Bulk Operations Toggle Cancel Button */
+.ojsc-bulk-toggle-cancel-btn {
+    position: fixed;
+    bottom: 60px;
+    left: 146px; /* Positioned to the right of the status toggle button */
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    border: none;
+    outline: none;
+    background-color: #555;
+    color: #f44336; /* Red color for the cancel icon */
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
+}
+
+.ojsc-bulk-toggle-cancel-btn.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ojsc-bulk-toggle-cancel-btn:hover {
+    background-color: #777;
+}
