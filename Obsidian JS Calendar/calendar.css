@@ -1,3 +1,27 @@
+@keyframes ojsc-flash {
+    0% { opacity: 0; }
+    20% { opacity: 0.7; } /* Пик вспышки */
+    100% { opacity: 0; }
+}
+
+/* Flash animation for items being saved or updated */
+.ojsc-task-item-saving,
+.ojsc-task-item-updating {
+    position: relative;
+    z-index: 1;
+}
+.ojsc-task-item-saving::before,
+.ojsc-task-item-updating::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: white;
+    border-radius: 4px;
+    opacity: 0;
+    animation: ojsc-flash 1.2s infinite ease-out;
+    z-index: 2;
+}
+
 .ojsc-container {
     width: 100%;
     margin-top: 20px;
@@ -133,29 +157,6 @@
     background-color: hsl(0, 80%, 50%);
     z-index: 1; /* Places it above the text content */
     pointer-events: none; /* Allows clicks to pass through */
-}
-/* Стиль для задачи в процессе сохранения после переноса */
-.ojsc-task-item-saving {
-    position: relative; /* Необходимо для позиционирования псевдо-элемента */
-    z-index: 1; /* Убедимся, что элемент находится над другими */
-}
-
-.ojsc-task-item-saving::before {
-    content: '';
-    position: absolute;
-    /* Сдвигаем вспышку на 3px влево, чтобы не перекрывать цветную границу задачи */
-    top: 0; left: 3px; right: 0; bottom: 0;
-    background-color: white;
-    border-radius: 4px; /* Такой же, как у самой задачи */
-    opacity: 0;
-    animation: ojsc-flash 1.2s infinite ease-out;
-    z-index: 2; /* Псевдо-элемент должен быть над текстом задачи */
-}
-
-@keyframes ojsc-flash {
-    0% { opacity: 0; }
-    20% { opacity: 0.7; } /* Пик вспышки */
-    100% { opacity: 0; }
 }
 
 /* Стили для сеток (месяц, год) */
@@ -309,28 +310,36 @@
     border-radius: 3px;
 }
 
-/* Scroll to Top Button */
-.ojsc-scroll-to-top {
+/* --- Main Action Buttons (Scroll, Bulk Mode) --- */
+.ojsc-scroll-to-top,
+.ojsc-bulk-mode-btn {
     position: fixed;
-    bottom: 60px;
-    right: 30px;
     z-index: 1000;
     width: 48px;
     height: 48px;
-    border: none;
-    outline: none;
     background-color: #555;
     color: white;
     cursor: pointer;
-    border-radius: 50%;
-    font-size: 24px;
+    border-radius: 50%; /* Reverted to circle */
+    border: none;
+    font-size: 20px;
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.ojsc-scroll-to-top {
+    bottom: 60px;
+    right: 30px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.ojsc-bulk-mode-btn {
+    bottom: 60px;
+    left: 30px;
 }
 
 .ojsc-scroll-to-top.visible {
@@ -338,42 +347,79 @@
     visibility: visible;
 }
 
-.ojsc-scroll-to-top:hover {
-    background-color: #777;
-}
-
-/* --- Bulk Operations Mode --- */
-.ojsc-bulk-mode-btn {
-    position: fixed;
-    bottom: 60px;
-    left: 30px; /* Position on the left */
-    z-index: 1000;
-    width: 48px;
-    height: 48px;
-    border: none;
-    outline: none;
-    background-color: #555;
-    color: white;
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 20px; /* Adjusted for the icon */
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Always visible */
-    opacity: 1;
-    visibility: visible;
-    transition: background-color 0.3s ease;
-}
-
+.ojsc-scroll-to-top:hover,
 .ojsc-bulk-mode-btn:hover {
-    background-color: #777;
+    background-color: #777; /* Subtle hover effect */
 }
 
 .ojsc-bulk-mode-btn.active {
     background-color: var(--text-accent);
 }
+
+
+/* --- Bulk Operations Status Buttons --- */
+/* Container for bulk action buttons */
+.ojsc-bulk-actions-container {
+    position: fixed;
+    bottom: 60px;
+    left: 88px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+}
+
+/* Base style for all bulk action buttons */
+.ojsc-bulk-set-in-progress-btn,
+.ojsc-bulk-set-done-btn,
+.ojsc-bulk-set-cancel-btn,
+.ojsc-bulk-set-postpone-btn {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--background-modifier-border);
+    outline: none;
+    background-color: var(--background-secondary);
+    color: var(--text-normal);
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, border-color 0.3s ease;
+}
+
+.ojsc-bulk-set-in-progress-btn.visible,
+.ojsc-bulk-set-done-btn.visible,
+.ojsc-bulk-set-cancel-btn.visible,
+.ojsc-bulk-set-postpone-btn.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.ojsc-bulk-set-in-progress-btn:hover,
+.ojsc-bulk-set-done-btn:hover,
+.ojsc-bulk-set-cancel-btn:hover,
+.ojsc-bulk-set-postpone-btn:hover {
+    border-color: var(--text-accent); /* Subtle border highlight on hover */
+}
+
+/* Individual button colors and font sizes */
+.ojsc-bulk-set-in-progress-btn {
+    color: gold !important;
+}
+
+.ojsc-bulk-set-done-btn,
+.ojsc-bulk-set-cancel-btn {
+    font-size: 22px;
+}
+
+.ojsc-bulk-set-postpone-btn {
+    color: #2196F3 !important;
+}
+
 
 /* Visual indicator for the entire calendar when in bulk mode */
 .ojsc-container.ojsc-bulk-mode {
@@ -412,101 +458,4 @@
 /* Change cursor for day cards in bulk mode */
 .ojsc-bulk-mode .ojsc-day-card {
     cursor: crosshair; /* Indicate it's a drop target */
-}
-
-/* Bulk Operations Toggle Status Button */
-.ojsc-bulk-toggle-status-btn {
-    position: fixed;
-    bottom: 60px;
-    left: 88px; /* Positioned to the right of the bulk mode button */
-    z-index: 1000;
-    width: 48px;
-    height: 48px;
-    border: none;
-    outline: none;
-    background-color: #555;
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 24px; /* Slightly larger for better visibility */
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
-}
-
-.ojsc-bulk-toggle-status-btn.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.ojsc-bulk-toggle-status-btn:hover {
-    background-color: #777;
-}
-
-/* Bulk Operations Toggle Cancel Button */
-.ojsc-bulk-toggle-cancel-btn {
-    position: fixed;
-    bottom: 60px;
-    left: 146px; /* Positioned to the right of the status toggle button */
-    z-index: 1000;
-    width: 48px;
-    height: 48px;
-    border: none;
-    outline: none;
-    background-color: #555;
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 20px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
-}
-
-.ojsc-bulk-toggle-cancel-btn.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.ojsc-bulk-toggle-cancel-btn:hover {
-    background-color: #777;
-}
-
-/* Bulk Operations Toggle Postpone Button */
-.ojsc-bulk-toggle-postpone-btn {
-    position: fixed;
-    bottom: 60px;
-    left: 204px; /* Positioned to the right of the cancel button */
-    z-index: 1000;
-    width: 48px;
-    height: 48px;
-    border: none;
-    outline: none;
-    background-color: #555;
-    color: #2196F3 !important; /* Blue color for the postpone icon */
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 20px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
-}
-
-.ojsc-bulk-toggle-postpone-btn.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.ojsc-bulk-toggle-postpone-btn:hover {
-    background-color: #777;
 }
