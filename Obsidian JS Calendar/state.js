@@ -4,7 +4,15 @@
  */
 if (!window.OJSC) window.OJSC = {};
 
+// Инициализация состояния массовых операций в sessionStorage
+// для гарантии сброса при закрытии вкладки/Obsidian.
+const initialBulkMode = sessionStorage.getItem('ojsc_bulkMode') === 'true';
+const initialSelectedTasks = JSON.parse(sessionStorage.getItem('ojsc_selectedTasks')) || [];
+
 OJSC.state = {
+    bulkMode: initialBulkMode,
+    selectedTasks: initialSelectedTasks,
+
     /**
      * Загружает последнее сохраненное состояние (вид и дата).
      * @returns {{viewType: string, viewDate: luxon.DateTime, statusMode: string, showTime: boolean, showParticipants: boolean}}
@@ -67,5 +75,19 @@ OJSC.state = {
         } else {
             sessionStorage.removeItem('ojsc_scrollPosition');
         }
+    },
+
+    setBulkMode(isBulkMode) {
+        this.bulkMode = isBulkMode;
+        sessionStorage.setItem('ojsc_bulkMode', String(isBulkMode));
+        // При выходе из режима массовых операций очищаем список выделенных файлов.
+        if (!isBulkMode) {
+            this.setSelectedTasks([]);
+        }
+    },
+
+    setSelectedTasks(tasks) {
+        this.selectedTasks = tasks;
+        sessionStorage.setItem('ojsc_selectedTasks', JSON.stringify(tasks));
     }
 };

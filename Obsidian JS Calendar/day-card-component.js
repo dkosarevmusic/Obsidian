@@ -23,7 +23,7 @@ const getDayTaskClass = (tasks) => {
     return '';
 };
 
-OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusMode, showTime, showParticipants) => {
+OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants) => {
     const dayKey = dayDate.toISODate();
     const dayTasks = tasksByDate[dayKey] || [];
 
@@ -40,6 +40,46 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusM
     if (dayTaskClass) {
         card.classList.add(dayTaskClass);
     }
+
+    // --- Логика массовых операций (перемещение) ---
+    card.addEventListener('click', (e) => {
+        if (OJSC.state.bulkMode && OJSC.state.selectedTasks.length > 0) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const newDate = card.dataset.date;
+            if (!newDate) return;
+
+            // 1. Сохраняем позицию скролла в момент клика
+            const scroller = card.closest('.cm-scroller, .markdown-preview-view');
+            if (scroller) {
+                OJSC.state.setScrollPosition(scroller.scrollTop);
+            }
+
+            // 2. Оптимистичное обновление UI
+            const targetTaskList = card.querySelector('.ojsc-task-list');
+            if (targetTaskList) {
+                OJSC.state.selectedTasks.forEach(task => {
+                    const el = document.querySelector(`.ojsc-task-item[data-file-path="${CSS.escape(task.file.path)}"]`);
+                    if (el) {
+                        el.classList.remove('ojsc-task-item-selected');
+                        el.classList.add('ojsc-task-item-saving');
+                        targetTaskList.appendChild(el);
+                    }
+                });
+            }
+
+            // 3. Вызываем новый обработчик, который повторяет логику onTaskDrop
+            onBulkTaskDrop(OJSC.state.selectedTasks, newDate);
+
+            // 4. Немедленно выключаем режим массовых операций и убираем классы
+            // Это ключевой момент. Первая же перерисовка от Dataview "увидит", что
+            // режим выключен, и использует сохраненную позицию скролла, а затем очистит ее.
+            OJSC.state.setBulkMode(false);
+            document.querySelector('.ojsc-container')?.classList.remove('ojsc-bulk-mode');
+            document.querySelector('.ojsc-bulk-mode-btn')?.classList.remove('active');
+        }
+    });
 
     // --- Логика Drag-and-Drop (Drop Zone) ---
     card.addEventListener('dragover', (e) => {
@@ -75,7 +115,13 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusM
 
     if (['month', '3months', 'year'].includes(viewType)) {
         header.classList.add('ojsc-clickable-day');
-        header.onclick = () => {
+        header.onclick = (e) => {
+            // В режиме массовых операций клик по заголовку должен "проваливаться"
+            // до слушателя на самой карточке `.ojsc-day-card`, который и выполнит перенос.
+            // В обычном режиме - переход на день.
+            if (OJSC.state.bulkMode) {
+                return;
+            }
             OJSC.state.setPreviousView(viewType);
             OJSC.renderCalendar(dv, dayDate, '1day', statusMode);
         };
@@ -151,9 +197,43 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, statusM
 
             const li = document.createElement('li');
             li.className = 'ojsc-task-item';
+            li.dataset.filePath = task.file.path; // <-- Add data-attribute
             li.setAttribute('draggable', 'true');
 
+            // --- Логика массовых операций (выделение) ---
+            li.addEventListener('click', (e) => {
+                if (OJSC.state.bulkMode) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const filePath = task.file.path;
+                    let currentSelectedTasks = OJSC.state.selectedTasks;
+                    const isSelected = currentSelectedTasks.some(t => t.file.path === filePath);
+
+                    if (isSelected) {
+                        // Снять выделение
+                        currentSelectedTasks = currentSelectedTasks.filter(t => t.file.path !== filePath);
+                        li.classList.remove('ojsc-task-item-selected');
+                    } else {
+                        // Выделить
+                        currentSelectedTasks.push(task); // Store the whole task object
+                        li.classList.add('ojsc-task-item-selected');
+                    }
+                    OJSC.state.setSelectedTasks(currentSelectedTasks);
+                }
+            });
+
+            // Восстанавливаем состояние выделения при перерисовке
+            if (OJSC.state.bulkMode && OJSC.state.selectedTasks.some(t => t.file.path === task.file.path)) {
+                li.classList.add('ojsc-task-item-selected');
+            }
+
             li.addEventListener('dragstart', (e) => {
+                // Отключаем нативный d-n-d в режиме массовых операций
+                if (OJSC.state.bulkMode) {
+                    e.preventDefault();
+                    return;
+                }
                 window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
             });
 

@@ -328,3 +328,75 @@
 .ojsc-scroll-to-top:hover {
     background-color: #777;
 }
+
+/* --- Bulk Operations Mode --- */
+.ojsc-bulk-mode-btn {
+    position: fixed;
+    bottom: 60px;
+    left: 30px; /* Position on the left */
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    border: none;
+    outline: none;
+    background-color: #555;
+    color: white;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 20px; /* Adjusted for the icon */
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Always visible */
+    opacity: 1;
+    visibility: visible;
+    transition: background-color 0.3s ease;
+}
+
+.ojsc-bulk-mode-btn:hover {
+    background-color: #777;
+}
+
+.ojsc-bulk-mode-btn.active {
+    background-color: var(--text-accent);
+}
+
+/* Visual indicator for the entire calendar when in bulk mode */
+.ojsc-container.ojsc-bulk-mode {
+    background-color: rgba(var(--text-accent-rgb), 0.05);
+}
+
+/* Make the highlighting much more prominent */
+.ojsc-bulk-mode .ojsc-calendar-header,
+.ojsc-bulk-mode .ojsc-weekday,
+.ojsc-bulk-mode .ojsc-day-card {
+    border: 1px dashed var(--text-accent) !important;
+    transition: border 0.3s ease;
+}
+
+.ojsc-bulk-mode .ojsc-month-grid-card.ojsc-other-month {
+    opacity: 0.6;
+}
+
+/* Style for selected task items in bulk mode */
+.ojsc-task-item.ojsc-task-item-selected {
+    background-color: var(--text-accent) !important;
+    color: var(--text-on-accent) !important;
+    border-left-color: var(--text-on-accent) !important;
+}
+
+.ojsc-task-item.ojsc-task-item-selected .internal-link,
+.ojsc-task-item.ojsc-task-item-selected .ojsc-task-time {
+    color: var(--text-on-accent) !important;
+}
+
+/* Change cursor for tasks in bulk mode */
+.ojsc-bulk-mode .ojsc-task-item {
+    cursor: pointer;
+}
+
+/* Change cursor for day cards in bulk mode */
+.ojsc-bulk-mode .ojsc-day-card {
+    cursor: crosshair; /* Indicate it's a drop target */
+}
