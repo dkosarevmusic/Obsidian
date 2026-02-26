@@ -57,11 +57,18 @@
     background-color: var(--background-secondary); 
     border-radius: 6px; 
 }
-.ojsc-controls-wrapper { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.ojsc-controls-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Растягиваем группы по ширине */
+    gap: 8px;
+}
 .ojsc-main-nav-group, .ojsc-view-controls-group { 
     display: flex; 
     gap: 5px; 
-    align-items: center; /* Главное правило для вертикального выравнивания */
+    align-items: center; /* Выравнивание элементов внутри группы по вертикали */
+    justify-content: center; /* Выравнивание элементов внутри группы по горизонтали */
+    flex-wrap: wrap; /* Перенос кнопок, если не помещаются */
 }
 .ojsc-calendar-header select, .ojsc-calendar-header button { 
     background-color: var(--background-modifier-form-field); 
@@ -221,20 +228,7 @@
 }
 
 /* --- Адаптивность для мобильных устройств --- */
-@media (max-width: 650px) {
-    .ojsc-controls-wrapper {
-        flex-direction: column; /* Все контролы в столбец */
-        gap: 8px;
-    }
-    .ojsc-view-controls-group {
-        order: 2; /* Селекторы идут после кнопок навигации */
-        justify-content: center; /* Центрируем селекторы */
-    }
-    .ojsc-main-nav-group {
-        order: 1; /* Кнопки навигации идут первыми под заголовком */
-        justify-content: space-between; /* Распределяем кнопки по ширине */
-    }
-}
+/* Стили для мобильных устройств теперь совпадают с основными */
 
 /* Day card header color coding for task areas */
 
