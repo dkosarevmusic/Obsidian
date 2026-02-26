@@ -5,7 +5,7 @@
 if (!window.OJSC) window.OJSC = {};
 if (!OJSC.ui) OJSC.ui = {};
 
-OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showParticipants) => {
+OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showParticipants, showWikilinks) => {
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
 
@@ -73,6 +73,18 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showPartic
         OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
     };
 
+    // --- Wikilinks Toggle Button ---
+    const wikilinksToggleButton = document.createElement('button');
+    wikilinksToggleButton.textContent = 'Проект';
+    if (showWikilinks) {
+        wikilinksToggleButton.classList.add('ojsc-button-active');
+    }
+    wikilinksToggleButton.onclick = () => {
+        const newShowWikilinks = !showWikilinks;
+        OJSC.state.setShowWikilinks(newShowWikilinks);
+        OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
+    };
+
 
     // --- Navigation Buttons ---
     const createNavButton = (text, onClick) => {
@@ -115,6 +127,7 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showPartic
     viewControlsGroup.appendChild(statusModeSelector);
     viewControlsGroup.appendChild(timeToggleButton);
     viewControlsGroup.appendChild(participantsToggleButton);
+    viewControlsGroup.appendChild(wikilinksToggleButton);
     controlsWrapper.appendChild(viewControlsGroup);
     headerEl.appendChild(controlsWrapper);
     return headerEl;

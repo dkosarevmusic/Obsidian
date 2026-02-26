@@ -20,7 +20,7 @@ const getDayTaskClass = (tasks) => {
     return '';
 };
 
-OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants) => {
+OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks) => {
     const dayKey = dayDate.toISODate();
     const dayTasks = tasksByDate[dayKey] || [];
 
@@ -178,6 +178,23 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
                     participantsDiv.appendChild(participantLink);
                 });
                 li.appendChild(participantsDiv);
+            }
+
+            if (task.wikilinks && (viewType === '1day' || showWikilinks)) {
+                const wikilinksDiv = document.createElement('div');
+                wikilinksDiv.className = 'ojsc-task-wikilinks';
+
+                const wikilinks = Array.isArray(task.wikilinks) ? task.wikilinks : [task.wikilinks];
+                wikilinks.forEach(p => {
+                    if (!p || !p.path) return; // Add guard clause for invalid participant data
+                    const wikilinkLink = document.createElement('a');
+                    wikilinkLink.className = 'internal-link';
+                    wikilinkLink.href = p.path;
+                    // Use display name if available, otherwise fallback to path
+                    wikilinkLink.textContent = p.display || p.path.split('/').pop().replace('.md', '');
+                    wikilinksDiv.appendChild(wikilinkLink);
+                });
+                li.appendChild(wikilinksDiv);
             }
             taskList.appendChild(li);
         });

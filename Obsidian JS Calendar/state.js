@@ -24,7 +24,8 @@ OJSC.state = {
         const statusMode = localStorage.getItem('ojsc_lastStatusMode') || 'work';
         const showTime = this.getShowTime();
         const showParticipants = this.getShowParticipants();
-        return { viewType, viewDate, statusMode, showTime, showParticipants };
+        const showWikilinks = this.getShowWikilinks();
+        return { viewType, viewDate, statusMode, showTime, showParticipants, showWikilinks };
     },
 
     /**
@@ -53,6 +54,14 @@ OJSC.state = {
 
     setShowParticipants(showParticipants) {
         localStorage.setItem('ojsc_showParticipants', String(showParticipants));
+    },
+
+    getShowWikilinks() {
+        return localStorage.getItem('ojsc_showWikilinks') === 'true';
+    },
+
+    setShowWikilinks(showWikilinks) {
+        localStorage.setItem('ojsc_showWikilinks', String(showWikilinks));
     },
 
     getPreviousView() {

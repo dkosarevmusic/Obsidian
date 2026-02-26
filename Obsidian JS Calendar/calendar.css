@@ -310,6 +310,28 @@
     border-radius: 3px;
 }
 
+/* --- Wikilinks Toggle Feature Styles --- */
+.ojsc-task-wikilinks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.ojsc-task-wikilinks .internal-link {
+    font-size: 0.9em;
+    color: var(--text-accent);
+    background-color: hsla(270, 60%, 70%, 0.2);
+    padding: 1px 4px;
+    border-radius: 3px;
+}
+
+.ojsc-hide-wikilinks .ojsc-task-wikilinks {
+    display: none;
+}
+
+
 /* --- Main Action Buttons (Scroll, Bulk Mode) --- */
 .ojsc-scroll-to-top,
 .ojsc-bulk-mode-btn {

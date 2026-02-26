@@ -5,7 +5,7 @@
 if (!window.OJSC) window.OJSC = {};
 if (!OJSC.ui) OJSC.ui = {};
 
-OJSC.ui.createMonthGrid = (monthDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants) => {
+OJSC.ui.createMonthGrid = (monthDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks) => {
     const monthContainer = document.createElement('div');
     monthContainer.className = 'ojsc-month-container';
 
@@ -29,7 +29,7 @@ OJSC.ui.createMonthGrid = (monthDate, tasksByDate, viewType, dv, onTaskDrop, onB
     const endDay = monthDate.endOf('month').endOf('week');
 
     while (currentDay <= endDay) {
-        const card = OJSC.ui.createDayCard(currentDay, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants);
+        const card = OJSC.ui.createDayCard(currentDay, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks);
         card.classList.add('ojsc-month-grid-card');
         if (currentDay.month !== monthDate.month) {
             card.classList.add('ojsc-other-month');
