@@ -122,8 +122,8 @@ OJSC.ui.createControlsPanel = (dv, viewDate, viewType, statusMode, showTime, sho
 
     // Populate groups
     mainNavGroup.append(
-        createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType, statusMode)), 
-        createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType, statusMode))
+        createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType, statusMode, { scrollToTop: true })), 
+        createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType, statusMode, { scrollToTop: true }))
     );
     mainNavGroup.appendChild(viewSelector);
     

@@ -4,6 +4,26 @@
 */
 
 OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
+    // Distinguish between a fresh file opening and a Dataview auto-refresh.
+    // If the container already has content, it's likely an auto-refresh.
+    const isAutoRefresh = dv.container.hasChildNodes();
+    
+    if (viewDate === undefined) { // Called without arguments, i.e., initial load
+        const lastState = OJSC.state.load(); // Load last used viewType/statusMode
+        if (isAutoRefresh) {
+            // This is an auto-refresh, so preserve the last viewed date.
+            viewDate = lastState.viewDate;
+            viewType = lastState.viewType;
+            statusMode = lastState.statusMode;
+        } else {
+            // This is a new file opening, so reset to "Today".
+            viewDate = luxon.DateTime.now();
+            viewType = lastState.viewType;
+            statusMode = lastState.statusMode;
+            options.scrollToToday = true;
+        }
+    }
+
     // --- One-time setup for cache invalidation ---
     if (!window.OJSC._cacheInvalidatorRegistered) {
         dv.app.vault.on('modify', () => OJSC.services.data.clearCache());
@@ -279,6 +299,8 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     if (savedScroll !== null) {
         if (scroller) scroller.scrollTo({ top: savedScroll, behavior: 'auto' });
         OJSC.state.setScrollPosition(null);
+    } else if (options.scrollToTop) {
+        if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (['month', '3months', 'year'].includes(viewType)) {
         let cardToScrollTo = null;
         if (didViewTypeChange && previousViewTypeFromStorage === '1day') {
@@ -287,7 +309,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
             cardToScrollTo = rootEl.querySelector('.ojsc-today');
         }
         if (cardToScrollTo) {
-            setTimeout(() => cardToScrollTo.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' }), 150);
+            setTimeout(() => cardToScrollTo.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' }), 300);
         }
     } else {
         if (scroller) scroller.scrollTo({ top: 0, behavior: 'auto' });
