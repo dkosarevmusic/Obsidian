@@ -47,45 +47,6 @@
     padding-right: 5px;
 }
 
-.ojsc-calendar-header { 
-    display: flex; 
-    flex-direction: column; /* Заголовок и контролы теперь в столбце */
-    align-items: stretch; /* Растягиваем на всю ширину */
-    margin-bottom: 5px; 
-    gap: 8px; /* Отступ между заголовком и панелью управления */
-    padding: 8px 12px; 
-    background-color: var(--background-secondary); 
-    border-radius: 6px; 
-}
-.ojsc-controls-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; /* Растягиваем группы по ширине */
-    gap: 8px;
-}
-.ojsc-main-nav-group, 
-.ojsc-mode-selectors-group,
-.ojsc-display-toggles-group { 
-    display: flex; 
-    gap: 8px; 
-    align-items: center; /* Выравнивание элементов внутри группы по вертикали */
-    justify-content: center; /* Выравнивание элементов внутри группы по горизонтали */
-    flex-wrap: wrap; /* Перенос кнопок, если не помещаются */
-}
-.ojsc-calendar-header select, .ojsc-calendar-header button { 
-    background-color: var(--background-modifier-form-field); 
-    color: var(--text-normal); 
-    border: 1px solid var(--background-modifier-border); 
-    border-radius: 4px; 
-    padding: 4px; 
-    height: 32px;
-    box-sizing: border-box;
-}
-.ojsc-calendar-header select {
-    text-align: center;
-    text-align-last: center;
-}
-.ojsc-calendar-header h2 { margin: 0; text-transform: capitalize; color: white; text-align: center; }
 .ojsc-container .ojsc-multi-month-header { 
     text-align: center; 
     text-transform: capitalize; 
@@ -104,11 +65,10 @@
 .ojsc-day-card {
     border: 1px solid var(--background-modifier-border);
     border-radius: 6px;
-    /* Возвращаем небольшой боковой отступ для общего вида, но будем его компенсировать. */
     padding: 8px 4px;
     background-color: var(--background-secondary);
     flex: 1;
-    min-width: 0; /* Предотвращает переполнение контентом */
+    min-width: 0;
     display: flex;
     flex-direction: column;
 }
@@ -123,23 +83,17 @@
 .ojsc-day-card-header {
     font-weight: bold;
     margin-bottom: 4px;
-    /* Заголовку теперь нужен меньший отступ, так как у родителя есть свой. */
     padding: 0 4px;
 }
 .ojsc-day-card .ojsc-task-list {
     list-style: none;
     padding: 0;
-    /* Используем отрицательный margin, чтобы "выйти" за пределы padding родителя.
-       Это позволяет списку задач занимать всю ширину, убирая лишний отступ слева. */
     margin: 4px -4px 0 -4px;
     font-size: 0.9em;
 }
 .ojsc-day-card .ojsc-task-item {
     margin-bottom: 4px;
-    /* Устанавливаем симметричные отступы для текста внутри задачи. */
-    /* Уменьшаем отрицательный отступ, чтобы сдвинуть элемент немного правее. */
     margin-left: 4px;
-    /* Добавляем внешний отступ справа, чтобы сдвинуть правый край плашки левее. */
     margin-right: 4px;
     padding: 1px 3px;
     border-radius: 4px;
@@ -152,7 +106,7 @@
 .ojsc-weekdays-header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 5px; /* Отступ между плашками */
+    gap: 5px;
     margin-bottom: 5px;
 }
 .ojsc-weekday {
@@ -183,133 +137,68 @@
 .ojsc-month-grid-card.ojsc-other-month {
     opacity: 0.5;
 }
-/* Индикация текущего дня в сеточных видах (месяц, год).
-   Вместо круга, который влияет на размер ячейки, просто выделяем цифру цветом и жирностью. */
 .ojsc-today-number {
     color: var(--text-accent);
-    font-weight: 700; /* Делаем цифру жирнее для акцента */
-    padding: 0 2px; /* Небольшой отступ, чтобы не прилипало к краю */
+    font-weight: 700;
+    padding: 0 2px;
 }
 .ojsc-clickable-day {
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;
     border-radius: 4px;
-    background-color: var(--background-modifier-form-field); /* Постоянное выделение */
-    margin: -2px; /* Компенсируем padding родителя, чтобы ховер был красивее */
-    padding: 2px; /* Возвращаем внутренний отступ */
+    background-color: var(--background-modifier-form-field);
+    margin: -2px;
+    padding: 2px;
 }
 .ojsc-clickable-day:hover {
     background-color: var(--background-modifier-hover);
 }
 
-/* --- Кастомные сдвиги для разных режимов --- */
-/* Для месячного вида, компенсируем padding: 4px у .ojsc-month-grid-card */
 .ojsc-month-grid .ojsc-task-item {
-    margin-left: 4px; /* Сдвиг вправо на 1px */
+    margin-left: 4px;
 }
-
-/* --- Адаптивность для мобильных устройств --- */
-/* Стили для мобильных устройств теперь совпадают с основными */
 
 /* Day card header color coding for task areas */
+.ojsc-day-work .ojsc-clickable-day { box-shadow: inset 0 3px 0 0 hsl(30, 100%, 50%); }
+.ojsc-day-skills .ojsc-clickable-day { box-shadow: inset 0 3px 0 0 hsl(220, 100%, 50%); }
+.ojsc-day-art .ojsc-clickable-day { box-shadow: inset 0 3px 0 0 hsl(280, 100%, 50%); }
+.ojsc-day-work .ojsc-day-card-header:not(.ojsc-clickable-day) { border-top: 3px solid hsl(30, 100%, 50%); padding-top: 3px; }
+.ojsc-day-skills .ojsc-day-card-header:not(.ojsc-clickable-day) { border-top: 3px solid hsl(220, 100%, 50%); padding-top: 3px; }
+.ojsc-day-art .ojsc-day-card-header:not(.ojsc-clickable-day) { border-top: 3px solid hsl(280, 100%, 50%); padding-top: 3px; }
 
-/* For grid views (month, year) - "clickable plates" */
-.ojsc-day-work .ojsc-clickable-day {
-    box-shadow: inset 0 3px 0 0 hsl(30, 100%, 50%);
-}
-
-.ojsc-day-skills .ojsc-clickable-day {
-    box-shadow: inset 0 3px 0 0 hsl(220, 100%, 50%);
-}
-
-.ojsc-day-art .ojsc-clickable-day {
-    box-shadow: inset 0 3px 0 0 hsl(280, 100%, 50%);
-}
-
-/* For 1-day view header */
-.ojsc-day-work .ojsc-day-card-header:not(.ojsc-clickable-day) {
-    border-top: 3px solid hsl(30, 100%, 50%);
-    padding-top: 3px; /* Add padding to prevent text from touching the line */
-}
-.ojsc-day-skills .ojsc-day-card-header:not(.ojsc-clickable-day) {
-    border-top: 3px solid hsl(220, 100%, 50%);
-    padding-top: 3px;
-}
-.ojsc-day-art .ojsc-day-card-header:not(.ojsc-clickable-day) {
-    border-top: 3px solid hsl(280, 100%, 50%);
-    padding-top: 3px;
-}
-
-/* --- Time Toggle Feature Styles --- */
-
-/* Active state for the 'Time' button */
-.ojsc-calendar-header button.ojsc-button-active {
+/* Generic active state for toggle buttons */
+.ojsc-controls-panel .ojsc-button-active,
+.ojsc-bulk-mode-btn-menu.active {
     background-color: var(--text-accent);
     color: var(--text-on-accent);
     border-color: var(--text-accent);
 }
 
-/* Layout for tasks with time to stack time and text */
-.ojsc-task-with-time .internal-link {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-}
-
-/* Style for the task time text */
-.ojsc-task-time {
-    color: var(--text-accent);
-    font-weight: 500;
-}
-
-/* --- Participants Toggle Feature Styles --- */
+.ojsc-task-with-time .internal-link,
 .ojsc-task-item .internal-link {
     display: flex;
     flex-direction: column;
     line-height: 1.2;
 }
-
-.ojsc-task-participants {
+.ojsc-task-time { color: var(--text-accent); font-weight: 500; }
+.ojsc-task-participants, .ojsc-task-wikilinks {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
     margin-top: 2px;
     margin-bottom: 2px;
 }
-
-.ojsc-task-participants .internal-link {
+.ojsc-task-participants .internal-link, .ojsc-task-wikilinks .internal-link {
     font-size: 0.9em;
     color: var(--text-accent);
     background-color: hsla(270, 60%, 70%, 0.2);
     padding: 1px 4px;
     border-radius: 3px;
 }
+.ojsc-hide-wikilinks .ojsc-task-wikilinks { display: none; }
 
-/* --- Wikilinks Toggle Feature Styles --- */
-.ojsc-task-wikilinks {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-}
-
-.ojsc-task-wikilinks .internal-link {
-    font-size: 0.9em;
-    color: var(--text-accent);
-    background-color: hsla(270, 60%, 70%, 0.2);
-    padding: 1px 4px;
-    border-radius: 3px;
-}
-
-.ojsc-hide-wikilinks .ojsc-task-wikilinks {
-    display: none;
-}
-
-
-/* --- Main Action Buttons (Scroll, Bulk Mode) --- */
-.ojsc-scroll-to-top,
-.ojsc-bulk-mode-btn {
+/* --- OLD FLOATING BUTTONS --- */
+.ojsc-scroll-to-top, .ojsc-bulk-mode-btn {
     position: fixed;
     z-index: 1000;
     width: 48px;
@@ -317,7 +206,7 @@
     background-color: #555;
     color: white;
     cursor: pointer;
-    border-radius: 50%; /* Reverted to circle */
+    border-radius: 50%;
     border: none;
     font-size: 20px;
     line-height: 1;
@@ -326,50 +215,22 @@
     justify-content: center;
     transition: all 0.3s ease;
 }
+.ojsc-scroll-to-top { bottom: 20px; right: 20px; opacity: 0; visibility: hidden; }
+.ojsc-bulk-mode-btn { bottom: 20px; left: 20px; } /* This will be removed */
+.ojsc-scroll-to-top.visible { opacity: 1; visibility: visible; }
+.ojsc-scroll-to-top:hover, .ojsc-bulk-mode-btn:hover { background-color: #777; }
+.ojsc-bulk-mode-btn.active { background-color: var(--text-accent); }
 
-.ojsc-scroll-to-top {
-    bottom: 60px;
-    right: 30px;
-    opacity: 0;
-    visibility: hidden;
-}
-
-.ojsc-bulk-mode-btn {
-    bottom: 60px;
-    left: 30px;
-}
-
-.ojsc-scroll-to-top.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-.ojsc-scroll-to-top:hover,
-.ojsc-bulk-mode-btn:hover {
-    background-color: #777; /* Subtle hover effect */
-}
-
-.ojsc-bulk-mode-btn.active {
-    background-color: var(--text-accent);
-}
-
-
-/* --- Bulk Operations Status Buttons --- */
-/* Container for bulk action buttons */
+/* Bulk Operations Status Buttons */
 .ojsc-bulk-actions-container {
     position: fixed;
-    bottom: 60px;
-    left: 88px;
+    bottom: 20px;
+    left: 88px; /* New position relative to main action btn */
     z-index: 1000;
     display: flex;
     gap: 10px;
 }
-
-/* Base style for all bulk action buttons */
-.ojsc-bulk-set-in-progress-btn,
-.ojsc-bulk-set-done-btn,
-.ojsc-bulk-set-cancel-btn,
-.ojsc-bulk-set-postpone-btn {
+.ojsc-bulk-set-in-progress-btn, .ojsc-bulk-set-done-btn, .ojsc-bulk-set-cancel-btn, .ojsc-bulk-set-postpone-btn {
     width: 44px;
     height: 44px;
     border: 1px solid var(--background-modifier-border);
@@ -387,88 +248,43 @@
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease, border-color 0.3s ease;
 }
-
-.ojsc-bulk-set-in-progress-btn.visible,
-.ojsc-bulk-set-done-btn.visible,
-.ojsc-bulk-set-cancel-btn.visible,
-.ojsc-bulk-set-postpone-btn.visible {
+.ojsc-bulk-set-in-progress-btn.visible, .ojsc-bulk-set-done-btn.visible, .ojsc-bulk-set-cancel-btn.visible, .ojsc-bulk-set-postpone-btn.visible {
     opacity: 1;
     visibility: visible;
 }
-
-.ojsc-bulk-set-in-progress-btn:hover,
-.ojsc-bulk-set-done-btn:hover,
-.ojsc-bulk-set-cancel-btn:hover,
-.ojsc-bulk-set-postpone-btn:hover {
-    border-color: var(--text-accent); /* Subtle border highlight on hover */
+.ojsc-bulk-set-in-progress-btn:hover, .ojsc-bulk-set-done-btn:hover, .ojsc-bulk-set-cancel-btn:hover, .ojsc-bulk-set-postpone-btn:hover {
+    border-color: var(--text-accent);
 }
-
-/* Individual button colors and font sizes */
-.ojsc-bulk-set-in-progress-btn {
-    color: gold;
-}
-
-.ojsc-bulk-set-done-btn,
-.ojsc-bulk-set-cancel-btn {
-    font-size: 22px;
-}
-
-.ojsc-bulk-set-postpone-btn {
-    color: #2196F3;
-}
-
+.ojsc-bulk-set-in-progress-btn { color: gold; }
+.ojsc-bulk-set-done-btn, .ojsc-bulk-set-cancel-btn { font-size: 22px; }
+.ojsc-bulk-set-postpone-btn { color: #2196F3; }
 
 /* Visual indicator for the entire calendar when in bulk mode */
-.ojsc-container.ojsc-bulk-mode {
-    background-color: rgba(var(--text-accent-rgb), 0.05);
-}
-
-/* Make the highlighting much more prominent */
-.ojsc-bulk-mode .ojsc-calendar-header,
-.ojsc-bulk-mode .ojsc-weekday,
-.ojsc-bulk-mode .ojsc-day-card {
-    border: 1px dashed var(--text-accent);
-    transition: border 0.3s ease;
-}
-
-.ojsc-bulk-mode .ojsc-month-grid-card.ojsc-other-month {
-    opacity: 0.6;
-}
+.ojsc-container.ojsc-bulk-mode { background-color: rgba(var(--text-accent-rgb), 0.05); }
+.ojsc-bulk-mode .ojsc-day-card { border: 1px dashed var(--text-accent); transition: border 0.3s ease; }
+.ojsc-bulk-mode .ojsc-month-grid-card.ojsc-other-month { opacity: 0.6; }
 
 /* --- Task Item Area Colors --- */
-/* Generated based on OJSC.config.areaColors and threshold logic */
 .ojsc-task-item.ojsc-area-Work { background-color: hsla(30,100%,50%,0.1); border-left: 3px solid hsl(30,100%,50%); }
 .ojsc-task-item.ojsc-area-Work .internal-link { color: hsl(30,100%,75%); }
-
 .ojsc-task-item.ojsc-area-Skills { background-color: hsla(220,100%,50%,0.1); border-left: 3px solid hsl(220,100%,50%); }
 .ojsc-task-item.ojsc-area-Skills .internal-link { color: hsl(220,100%,75%); }
-
 .ojsc-task-item.ojsc-area-Optimization { background-color: hsla(0,0%,100%,0.2); border-left: 3px solid hsl(0,0%,100%); }
 .ojsc-task-item.ojsc-area-Optimization .internal-link { color: hsl(0,0%,100%); }
-
 .ojsc-task-item.ojsc-area-Matter { background-color: hsla(120,100%,50%,0.1); border-left: 3px solid hsl(120,100%,50%); }
 .ojsc-task-item.ojsc-area-Matter .internal-link { color: hsl(120,100%,75%); }
-
 .ojsc-task-item.ojsc-area-Health { background-color: hsla(150,72%,42%,0.1); border-left: 3px solid hsl(150,72%,42%); }
 .ojsc-task-item.ojsc-area-Health .internal-link { color: hsl(150,72%,75%); }
-
 .ojsc-task-item.ojsc-area-Housekeep { background-color: hsla(75,100%,50%,0.1); border-left: 3px solid hsl(75,100%,50%); }
 .ojsc-task-item.ojsc-area-Housekeep .internal-link { color: hsl(75,100%,75%); }
-
 .ojsc-task-item.ojsc-area-Art { background-color: hsla(280,100%,50%,0.1); border-left: 3px solid hsl(280,100%,50%); }
 .ojsc-task-item.ojsc-area-Art .internal-link { color: hsl(280,100%,75%); }
-
 .ojsc-task-item.ojsc-area-Spirit { background-color: hsla(330,100%,88%,0.2); border-left: 3px solid hsl(330,100%,88%); }
 .ojsc-task-item.ojsc-area-Spirit .internal-link { color: hsl(330,100%,88%); }
-
 .ojsc-task-item.ojsc-area-Social { background-color: hsla(200,100%,70%,0.2); border-left: 3px solid hsl(200,100%,70%); }
 .ojsc-task-item.ojsc-area-Social .internal-link { color: hsl(200,100%,70%); }
-
 .ojsc-task-item.ojsc-area-Fun { background-color: hsla(60,100%,50%,0.1); border-left: 3px solid hsl(60,100%,50%); }
 .ojsc-task-item.ojsc-area-Fun .internal-link { color: hsl(60,100%,75%); }
-
-
-
 
 /* Style for selected task items in bulk mode */
 .ojsc-task-item.ojsc-task-item-selected {
@@ -476,32 +292,178 @@
     color: var(--text-on-accent);
     border-left-color: var(--text-on-accent);
 }
-
 .ojsc-task-item.ojsc-task-item-selected .internal-link,
 .ojsc-task-item.ojsc-task-item-selected .ojsc-task-time {
     color: var(--text-on-accent);
 }
+.ojsc-bulk-mode .ojsc-task-item { cursor: pointer; }
+.ojsc-bulk-mode .ojsc-day-card { cursor: crosshair; }
 
-/* Change cursor for tasks in bulk mode */
-.ojsc-bulk-mode .ojsc-task-item {
+/* Task Category Colors */
+.ojsc-task-item.ojsc-task-category-now { border-right: 3px solid red; }
+.ojsc-task-item.ojsc-task-category-later { border-right: 3px solid blue; }
+.ojsc-task-item.ojsc-task-category-probably { border-right: 3px solid orange; }
+.ojsc-task-item.ojsc-task-category-dont { border-right: 3px solid purple; }
+
+
+/* --- NEW FLOATING UI --- */
+.ojsc-main-action-btn {
+    position: fixed;
+    z-index: 1000; /* Base layer for floating controls */
+    bottom: 20px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+    background-color: var(--background-modifier-interactive);
+    color: var(--text-normal);
     cursor: pointer;
+    border-radius: 50%;
+    border: 1px solid var(--background-modifier-border);
+    font-size: 24px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+.ojsc-main-action-btn:hover {
+    background-color: var(--background-modifier-hover);
+    border-color: var(--text-accent);
+    opacity: 1; /* Enforce no transparency */
 }
 
-/* Change cursor for day cards in bulk mode */
-.ojsc-bulk-mode .ojsc-day-card {
-    cursor: crosshair; /* Indicate it's a drop target */
+/* Base class for individual floating menu buttons */
+.ojsc-floating-menu-btn {
+    position: fixed;
+    z-index: 1001; /* Appear on top of main button */
+    bottom: 20px;
+    width: 44px;
+    height: 44px;
+    background-color: var(--background-modifier-form-field);
+    color: var(--text-normal);
+    border: 1px solid var(--background-modifier-border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    transition: all 0.2s ease-out;
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0.7);
+}
+.ojsc-floating-menu-btn.visible {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}
+.ojsc-floating-menu-btn:hover {
+    background-color: var(--background-modifier-hover);
+    border-color: var(--text-accent);
 }
 
-/* --- Task Category Colors --- */
-.ojsc-task-item.ojsc-task-category-now {
-    border-right: 3px solid red;
+/* Individual positions */
+.ojsc-today-btn {
+    left: 80px; /* 20px base + 48px btn + 12px gap */
+    border-radius: 50%;
 }
-.ojsc-task-item.ojsc-task-category-later {
-    border-right: 3px solid blue;
+.ojsc-controls-toggle-btn {
+    left: 132px; /* 80px + 44px + 8px gap */
+    border-radius: 8px;
 }
-.ojsc-task-item.ojsc-task-category-probably {
-    border-right: 3px solid orange;
+.ojsc-bulk-mode-btn-menu {
+    left: 184px; /* 132px + 44px + 8px gap */
+    border-radius: 8px;
 }
-.ojsc-task-item.ojsc-task-category-dont {
-    border-right: 3px solid purple;
+
+.ojsc-back-btn {
+    position: fixed;
+    z-index: 1001; /* Same layer as menu buttons */
+    bottom: 20px;
+    left: 236px; /* 184px + 44px + 8px gap */
+    height: 44px;
+    padding: 0 12px;
+    background-color: var(--background-modifier-form-field);
+    color: var(--text-normal);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s ease-out;
+}
+.ojsc-back-btn:hover {
+    background-color: var(--background-modifier-hover);
+    border-color: var(--text-accent);
+}
+
+.ojsc-floating-panel {
+    position: fixed;
+    z-index: 1002; /* Highest layer */
+    background-color: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border-hover);
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    padding: 8px;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.2s ease-out;
+}
+.ojsc-floating-panel.visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.ojsc-controls-panel {
+    bottom: 78px; /* Position it above the floating buttons */
+    left: 20px;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.ojsc-controls-panel h2 {
+    margin: 0; 
+    text-transform: capitalize; 
+    color: var(--text-normal);
+    text-align: center;
+    font-size: 1.2em;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--background-modifier-border);
+}
+.ojsc-controls-panel .ojsc-controls-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+}
+.ojsc-controls-panel .ojsc-main-nav-group,
+.ojsc-controls-panel .ojsc-mode-selectors-group,
+.ojsc-controls-panel .ojsc-display-toggles-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.ojsc-controls-panel select, .ojsc-controls-panel button {
+    background-color: var(--background-modifier-form-field);
+    color: var(--text-normal);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    height: 32px;
+    box-sizing: border-box;
+    flex-grow: 1; /* Allow items to grow */
+}
+.ojsc-controls-panel select {
+    text-align: center;
+    -moz-text-align-last: center;
+    text-align-last: center;
+}
+.ojsc-controls-panel .ojsc-main-nav-group button {
+    min-width: 40px;
 }
