@@ -63,9 +63,11 @@
     align-items: stretch; /* Растягиваем группы по ширине */
     gap: 8px;
 }
-.ojsc-main-nav-group, .ojsc-view-controls-group { 
+.ojsc-main-nav-group, 
+.ojsc-mode-selectors-group,
+.ojsc-display-toggles-group { 
     display: flex; 
-    gap: 5px; 
+    gap: 8px; 
     align-items: center; /* Выравнивание элементов внутри группы по вертикали */
     justify-content: center; /* Выравнивание элементов внутри группы по горизонтали */
     flex-wrap: wrap; /* Перенос кнопок, если не помещаются */
@@ -150,21 +152,7 @@
     opacity: 0.5; /* Оставляем только полупрозрачность для консистентности */
     /* border-style: dashed; - Убираем пунктирную рамку */
 }
-/* Стиль для подсветки "важных" задач. Накладывается поверх цвета Area. */
-.ojsc-task-item.ojsc-task-item-important {
-    position: relative;
-}
-.ojsc-task-item.ojsc-task-item-important::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 3px;
-    bottom: 0;
-    background-color: hsl(0, 80%, 50%);
-    z-index: 1; /* Places it above the text content */
-    pointer-events: none; /* Allows clicks to pass through */
-}
+
 
 /* Стили для сеток (месяц, год) */
 .ojsc-month-container { margin-bottom: 20px; }
@@ -486,21 +474,19 @@
 .ojsc-task-item.ojsc-area-Fun { background-color: hsla(60,100%,50%,0.1); border-left: 3px solid hsl(60,100%,50%); }
 .ojsc-task-item.ojsc-area-Fun .internal-link { color: hsl(60,100%,75%); }
 
-/* Style for important tasks without an area */
-.ojsc-task-item.ojsc-task-important-no-area { background-color: hsla(0, 80%, 50%, 0.2); border-left: 3px solid hsl(0, 80%, 50%); }
-.ojsc-task-item.ojsc-task-important-no-area .internal-link { color: hsl(0, 80%, 75%); }
+
 
 
 /* Style for selected task items in bulk mode */
 .ojsc-task-item.ojsc-task-item-selected {
-    background-color: var(--text-accent) !important;
-    color: var(--text-on-accent) !important;
-    border-left-color: var(--text-on-accent) !important;
+    background-color: var(--text-accent);
+    color: var(--text-on-accent);
+    border-left-color: var(--text-on-accent);
 }
 
 .ojsc-task-item.ojsc-task-item-selected .internal-link,
 .ojsc-task-item.ojsc-task-item-selected .ojsc-task-time {
-    color: var(--text-on-accent) !important;
+    color: var(--text-on-accent);
 }
 
 /* Change cursor for tasks in bulk mode */
@@ -511,4 +497,18 @@
 /* Change cursor for day cards in bulk mode */
 .ojsc-bulk-mode .ojsc-day-card {
     cursor: crosshair; /* Indicate it's a drop target */
+}
+
+/* --- Task Category Colors --- */
+.ojsc-task-item.ojsc-task-category-now {
+    border-right: 3px solid red;
+}
+.ojsc-task-item.ojsc-task-category-later {
+    border-right: 3px solid blue;
+}
+.ojsc-task-item.ojsc-task-category-probably {
+    border-right: 3px solid orange;
+}
+.ojsc-task-item.ojsc-task-category-dont {
+    border-right: 3px solid purple;
 }

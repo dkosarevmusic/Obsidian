@@ -20,9 +20,14 @@ const getDayTaskClass = (tasks) => {
     return '';
 };
 
-OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks) => {
+OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks, categoryFilter) => {
     const dayKey = dayDate.toISODate();
-    const dayTasks = tasksByDate[dayKey] || [];
+    let dayTasks = tasksByDate[dayKey] || [];
+
+    // Фильтруем задачи по категории, если фильтр не 'all'
+    if (categoryFilter && categoryFilter !== 'all') {
+        dayTasks = dayTasks.filter(task => OJSC.utils.task.getTaskCategory(task) === categoryFilter);
+    }
 
     if (!window.OJSC.dragContext) window.OJSC.dragContext = {};
 
@@ -145,20 +150,17 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
             textSpan.textContent = task[OJSC.config.summaryField] || task.file.name;
             link.appendChild(textSpan);
 
-            const taskStatus = Array.isArray(task.status) ? task.status : [String(task.status)];
-            const isImportant = taskStatus.includes('important');
             const area = Array.isArray(task.Area) ? task.Area[0] : task.Area;
 
-            if (isImportant && !area) {
-                li.classList.add('ojsc-task-important-no-area');
-            } else {
-                if (area) {
-                    // Добавляем класс для каждой Area, чтобы можно было стилизовать в CSS
-                    li.classList.add(`ojsc-area-${area.replace(/\s+/g, '-')}`);
-                }
-                if (isImportant) {
-                    li.classList.add('ojsc-task-item-important');
-                }
+            if (area) {
+                // Добавляем класс для каждой Area, чтобы можно было стилизовать в CSS
+                li.classList.add(`ojsc-area-${area.replace(/\s+/g, '-')}`);
+            }
+
+            // Добавляем класс категории (Now, Later, etc.)
+            const category = OJSC.utils.task.getTaskCategory(task);
+            if (category) {
+                li.classList.add(`ojsc-task-category-${category}`);
             }
 
             li.appendChild(link);

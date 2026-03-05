@@ -25,7 +25,8 @@ OJSC.state = {
         const showTime = this.getShowTime();
         const showParticipants = this.getShowParticipants();
         const showWikilinks = this.getShowWikilinks();
-        return { viewType, viewDate, statusMode, showTime, showParticipants, showWikilinks };
+        const categoryFilter = this.getCategoryFilter();
+        return { viewType, viewDate, statusMode, showTime, showParticipants, showWikilinks, categoryFilter };
     },
 
     /**
@@ -38,6 +39,14 @@ OJSC.state = {
         localStorage.setItem('ojsc_lastViewType', viewType);
         localStorage.setItem('ojsc_lastViewDate', viewDate.toISODate());
         localStorage.setItem('ojsc_lastStatusMode', statusMode);
+    },
+
+    getCategoryFilter() {
+        return localStorage.getItem('ojsc_categoryFilter') || 'all';
+    },
+
+    setCategoryFilter(category) {
+        localStorage.setItem('ojsc_categoryFilter', category);
     },
 
     getShowTime() {

@@ -18,7 +18,7 @@ OJSC.config = {
     statusModes: {
         "work": {
             name: "В работе",
-            statuses: ["important", "imschedule", "imw", "in progress"]
+            statuses: ["imschedule", "imw", "in progress"]
         },
         "done": {
             name: "Готовые",

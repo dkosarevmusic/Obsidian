@@ -18,7 +18,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     }
     
     const lastState = OJSC.state.load();
-    const { showTime, showParticipants, showWikilinks } = lastState;
+    const { showTime, showParticipants, showWikilinks, categoryFilter } = lastState;
     const previousViewTypeFromStorage = lastState.viewType;
 
     if (viewType === undefined || viewType === null || statusMode === undefined || statusMode === null) {
@@ -59,7 +59,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
         }).catch(e => console.error("OJSC: Failed to load calendar.css. Ensure it is at 'JS Scripts/cal/calendar.css'", e));
     }
 
-    const headerEl = OJSC.ui.createHeader(dv, viewDate, viewType, statusMode, showTime, showParticipants, showWikilinks);
+    const headerEl = OJSC.ui.createHeader(dv, viewDate, viewType, statusMode, showTime, showParticipants, showWikilinks, categoryFilter);
     rootEl.appendChild(headerEl);
 
     const bodyFragment = document.createDocumentFragment();
@@ -117,15 +117,15 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     };
 
     if (viewType === '1day') {
-        bodyFragment.appendChild(OJSC.ui.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks));
+        bodyFragment.appendChild(OJSC.ui.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks, categoryFilter));
     } else if (viewType === 'month') {
-        bodyFragment.appendChild(OJSC.ui.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks));
+        bodyFragment.appendChild(OJSC.ui.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks, categoryFilter));
     } else if (viewType === '3months') {
         const createMonthView = (monthDate) => {
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL yyyy');
-            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks);
+            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks, categoryFilter);
             return [monthHeader, monthGrid];
         };
         for (let i = 0; i < 3; i++) {
@@ -136,7 +136,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
             const monthHeader = document.createElement('h3');
             monthHeader.className = 'ojsc-multi-month-header';
             monthHeader.textContent = monthDate.setLocale('ru').toFormat('LLLL');
-            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks);
+            const monthGrid = OJSC.ui.createMonthGrid(monthDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks, categoryFilter);
             return [monthHeader, monthGrid];
         };
         for (let i = 0; i < 12; i++) {

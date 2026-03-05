@@ -5,7 +5,7 @@
 if (!window.OJSC) window.OJSC = {};
 if (!OJSC.ui) OJSC.ui = {};
 
-OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showParticipants, showWikilinks) => {
+OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showParticipants, showWikilinks, categoryFilter) => {
     const headerEl = document.createElement('div');
     headerEl.className = 'ojsc-calendar-header';
 
@@ -44,9 +44,29 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showPartic
     }
     statusModeSelector.onchange = (e) => {
         const newStatusMode = e.target.value;
-        // Перерисовываем календарь с новым режимом статусов,
-        // сохраняя текущую дату и вид.
         OJSC.renderCalendar(dv, viewDate, viewType, newStatusMode);
+    };
+    
+    // --- Category Filter Selector ---
+    const categoryFilterSelector = document.createElement('select');
+    const categories = {
+        'all': 'Все категории',
+        'now': 'Now',
+        'later': 'Later',
+        'probably': 'Probably',
+        'dont': 'Dont'
+    };
+    for (const [value, text] of Object.entries(categories)) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = text;
+        if (value === categoryFilter) option.selected = true;
+        categoryFilterSelector.appendChild(option);
+    }
+    categoryFilterSelector.onchange = (e) => {
+        const newCategoryFilter = e.target.value;
+        OJSC.state.setCategoryFilter(newCategoryFilter);
+        OJSC.renderCalendar(dv, viewDate, viewType, statusMode);
     };
 
     // --- Time Toggle Button ---
@@ -104,31 +124,51 @@ OJSC.ui.createHeader = (dv, viewDate, viewType, statusMode, showTime, showPartic
     const controlsWrapper = document.createElement('div');
     controlsWrapper.className = 'ojsc-controls-wrapper';
 
+    // 1. Создаем все группы
     const mainNavGroup = document.createElement('div');
     mainNavGroup.className = 'ojsc-main-nav-group';
 
-    mainNavGroup.append(createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType, statusMode)), createNavButton('Сегодня', () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType, statusMode, { scrollToToday: true })), createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType, statusMode)));
+    const modeSelectorsGroup = document.createElement('div');
+    modeSelectorsGroup.className = 'ojsc-mode-selectors-group';
 
+    const displayTogglesGroup = document.createElement('div');
+    displayTogglesGroup.className = 'ojsc-display-toggles-group';
+
+    // 2. Наполняем первую группу (навигация + выбор вида)
+    mainNavGroup.append(
+        createNavButton('<', () => OJSC.renderCalendar(dv, viewDate.minus(navStep), viewType, statusMode)), 
+        createNavButton('Сегодня', () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType, statusMode, { scrollToToday: true })), 
+        createNavButton('>', () => OJSC.renderCalendar(dv, viewDate.plus(navStep), viewType, statusMode))
+    );
     mainNavGroup.appendChild(viewSelector);
-
+    
+    // Кнопка "Назад" также относится к навигации по видам
     const previousView = OJSC.state.getPreviousView();
     if (viewType === '1day' && previousView) {
         const backButton = document.createElement('button');
         backButton.textContent = 'Назад';
         backButton.onclick = () => {
             OJSC.state.setPreviousView(null);
-            const lastState = OJSC.state.load(); // Загружаем последнюю дату для того вида
+            const lastState = OJSC.state.load();
             OJSC.renderCalendar(dv, lastState.viewDate, previousView, statusMode);
         };
         mainNavGroup.appendChild(backButton);
     }
 
+    // 3. Наполняем вторую группу (селекторы режимов)
+    modeSelectorsGroup.appendChild(statusModeSelector);
+    modeSelectorsGroup.appendChild(categoryFilterSelector);
+
+    // 4. Наполняем третью группу (переключатели)
+    displayTogglesGroup.appendChild(timeToggleButton);
+    displayTogglesGroup.appendChild(participantsToggleButton);
+    displayTogglesGroup.appendChild(wikilinksToggleButton);
+
+    // 5. Добавляем все группы в обертку
     controlsWrapper.appendChild(mainNavGroup);
-    viewControlsGroup.appendChild(statusModeSelector);
-    viewControlsGroup.appendChild(timeToggleButton);
-    viewControlsGroup.appendChild(participantsToggleButton);
-    viewControlsGroup.appendChild(wikilinksToggleButton);
-    controlsWrapper.appendChild(viewControlsGroup);
+    controlsWrapper.appendChild(modeSelectorsGroup);
+    controlsWrapper.appendChild(displayTogglesGroup);
+    
     headerEl.appendChild(controlsWrapper);
     return headerEl;
 };
