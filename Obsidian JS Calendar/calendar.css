@@ -215,8 +215,8 @@
     justify-content: center;
     transition: all 0.3s ease;
 }
-.ojsc-scroll-to-top { bottom: 20px; right: 20px; opacity: 0; visibility: hidden; }
-.ojsc-bulk-mode-btn { bottom: 20px; left: 20px; } /* This will be removed */
+.ojsc-scroll-to-top { bottom: 40px; right: 20px; opacity: 0; visibility: hidden; }
+.ojsc-bulk-mode-btn { bottom: 40px; left: 20px; } /* This will be removed */
 .ojsc-scroll-to-top.visible { opacity: 1; visibility: visible; }
 .ojsc-scroll-to-top:hover, .ojsc-bulk-mode-btn:hover { background-color: #777; }
 .ojsc-bulk-mode-btn.active { background-color: var(--text-accent); }
@@ -224,7 +224,7 @@
 /* Bulk Operations Status Buttons */
 .ojsc-bulk-actions-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 40px;
     left: 88px; /* New position relative to main action btn */
     z-index: 1000;
     display: flex;
@@ -310,7 +310,7 @@
 .ojsc-main-action-btn {
     position: fixed;
     z-index: 1000; /* Base layer for floating controls */
-    bottom: 20px;
+    bottom: 40px;
     left: 20px;
     width: 48px;
     height: 48px;
@@ -335,7 +335,7 @@
 .ojsc-floating-menu-btn {
     position: fixed;
     z-index: 1001; /* Appear on top of main button */
-    bottom: 20px;
+    bottom: 40px;
     width: 44px;
     height: 44px;
     background-color: var(--background-modifier-form-field);
@@ -385,7 +385,7 @@
 .ojsc-back-btn {
     position: fixed;
     z-index: 1001; /* Same layer as menu buttons */
-    bottom: 20px;
+    bottom: 40px;
     left: 80px; /* Default: 20px base + 48px main btn + 12px gap */
     height: 44px;
     padding: 0 12px;
@@ -430,7 +430,7 @@
 }
 
 .ojsc-controls-panel {
-    bottom: 78px; /* Position it above the floating buttons */
+    bottom: 98px; /* Position it above the floating buttons */
     left: 20px;
     max-width: 350px;
     display: flex;
