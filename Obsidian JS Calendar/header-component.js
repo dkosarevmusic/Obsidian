@@ -174,7 +174,7 @@ OJSC.ui.createFloatingActionButtons = (dv, viewType, statusMode) => {
     const controlsToggleButton = document.createElement('button');
     controlsToggleButton.className = 'ojsc-controls-toggle-btn ojsc-floating-menu-btn';
     controlsToggleButton.title = 'Показать/скрыть элементы управления';
-    controlsToggleButton.innerHTML = '🔩';
+    controlsToggleButton.innerHTML = '⚙️';
 
     // 3. Bulk Operations Button
     const bulkOpsButton = document.createElement('button');

@@ -367,11 +367,11 @@
     border-radius: 50%;
 }
 .ojsc-controls-toggle-btn {
-    left: 132px; /* 80px + 44px + 8px gap */
+    left: 184px; /* 132px + 44px + 8px gap */
     border-radius: 8px;
 }
 .ojsc-bulk-mode-btn-menu {
-    left: 184px; /* 132px + 44px + 8px gap */
+    left: 132px; /* 80px + 44px + 8px gap */
     border-radius: 8px;
 }
 
