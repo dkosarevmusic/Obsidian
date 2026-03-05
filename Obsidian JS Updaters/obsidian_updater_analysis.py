@@ -14,6 +14,7 @@ from obsidian_updater_core import (
     AnalysisResult,
     FRONTMATTER_RE,
     DATAVIEWJS_BLOCK_RE,
+    INLINE_SELECT_RE,
     format_yaml_value
 )
 
@@ -27,6 +28,7 @@ def analyze_file(file_path: str, special_names: List[str], target_types: List[st
         area, file_type_str = "[No Area]", "[No Type]"
         status_is_list = False
         status_is_not_string = False
+        status_is_important = False
         original_status_value = None
         has_target_type, has_non_target_type = False, False
 
@@ -38,7 +40,8 @@ def analyze_file(file_path: str, special_names: List[str], target_types: List[st
                     if status_val := frontmatter.get('status'):
                         status_is_list = isinstance(status_val, list)
                         status_is_not_string = not isinstance(status_val, str)
-                        if status_is_list or status_is_not_string:
+                        status_is_important = (status_val == 'important')
+                        if status_is_list or status_is_not_string or status_is_important:
                              original_status_value = status_val
 
                     if file_type := frontmatter.get('type'):
@@ -53,6 +56,8 @@ def analyze_file(file_path: str, special_names: List[str], target_types: List[st
                 return AnalysisResult(file_path, is_target=False, error=f"Ошибка YAML: {e}")
 
         is_target = is_special_name or has_target_type
+        
+        has_inline_select_string = bool(INLINE_SELECT_RE.search(content))
 
         block_count = 0
         separators_found_count = 0
@@ -68,6 +73,8 @@ def analyze_file(file_path: str, special_names: List[str], target_types: List[st
             separators_found_count=separators_found_count,
             status_is_list=status_is_list,
             status_is_not_string=status_is_not_string,
+            status_is_important=status_is_important,
+            has_inline_select_string=has_inline_select_string,
             original_status_value=original_status_value
         )
 

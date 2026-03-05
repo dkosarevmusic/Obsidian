@@ -1,4 +1,381 @@
-# 🔍 Отчёт о проверке поля 'status' (2025-11-29 13:55:47)
-🔍 Всего проанализировано: **1888** файлов.
-⚠️ Найдено с некорректным типом `status`: **0** файлов.
+# 🔄 Отчёт о рефакторинге статуса 'important' (2026-03-05 13:06:28)
+🔍 Всего проанализировано: **2195** файлов.
+✅ Найдено для модификации: **275** файлов.
+
+### 🛠️ Метаданные (Frontmatter) изменены (75 файлов)
+_Статус `important` заменен на `in progress` и добавлены поля `important: true`, `urgent: true`._
+
+#### Area: [No Area]
+- `Templates\utility_Budget Entity Control.md`
+
+#### Area: Matter
+- `Life Manager\MDs\MrFrenkie Content.md`
+- `Life Manager\MDs\Telegram Premium.md`
+- `Life Manager\MDs\Билайн.md`
+- `Life Manager\MDs\Влажные салфетки 1.md`
+- `Life Manager\MDs\Влажные салфетки 2.md`
+- `Life Manager\MDs\Дакара ЗП1-2.md`
+- `Life Manager\MDs\Дакара ЗП3-4.md`
+- `Life Manager\MDs\Дезодорант.md`
+- `Life Manager\MDs\Жевачка 1.md`
+- `Life Manager\MDs\Жевачка 2.md`
+- `Life Manager\MDs\ЗП ВМРП1.md`
+- `Life Manager\MDs\ЗП ВМРП2.md`
+- `Life Manager\MDs\Квартира 2.md`
+- `Life Manager\MDs\Колеса 1.md`
+- `Life Manager\MDs\Колеса 2.md`
+- `Life Manager\MDs\Котлеты 1-1.md`
+- `Life Manager\MDs\Котлеты 1-2.md`
+- `Life Manager\MDs\Котлеты 2-1.md`
+- `Life Manager\MDs\Котлеты 2-2.md`
+- `Life Manager\MDs\Крупа 1.md`
+- `Life Manager\MDs\Крупа 2.md`
+- `Life Manager\MDs\Масло 1.md`
+- `Life Manager\MDs\Масло 2.md`
+- `Life Manager\MDs\Металлическая губка.md`
+- `Life Manager\MDs\Мешки для пылесоса.md`
+- `Life Manager\MDs\Мусорные пакеты с завязками.md`
+- `Life Manager\MDs\Мясо 1-1.md`
+- `Life Manager\MDs\Мясо 1-2.md`
+- `Life Manager\MDs\Мясо 2-1.md`
+- `Life Manager\MDs\Мясо 2-2.md`
+- `Life Manager\MDs\Мясо 3.md`
+- `Life Manager\MDs\Мясо 4.md`
+- `Life Manager\MDs\Мясо 5.md`
+- `Life Manager\MDs\Мясо 6.md`
+- `Life Manager\MDs\Пакеты для еды.md`
+- `Life Manager\MDs\Подряд.md`
+- `Life Manager\MDs\Продуктовый рандом 1.md`
+- `Life Manager\MDs\Продуктовый рандом 10.md`
+- `Life Manager\MDs\Продуктовый рандом 11.md`
+- `Life Manager\MDs\Продуктовый рандом 12.md`
+- `Life Manager\MDs\Продуктовый рандом 2.md`
+- `Life Manager\MDs\Продуктовый рандом 3.md`
+- `Life Manager\MDs\Продуктовый рандом 4.md`
+- `Life Manager\MDs\Продуктовый рандом 5.md`
+- `Life Manager\MDs\Продуктовый рандом 6.md`
+- `Life Manager\MDs\Продуктовый рандом 7.md`
+- `Life Manager\MDs\Продуктовый рандом 8.md`
+- `Life Manager\MDs\Продуктовый рандом 9.md`
+- `Life Manager\MDs\Сахар 1.md`
+- `Life Manager\MDs\Сбер 1.md`
+- `Life Manager\MDs\Сбер 2.md`
+- `Life Manager\MDs\Сбер 4.md`
+- `Life Manager\MDs\Сладкое 1.md`
+- `Life Manager\MDs\Сладкое 2.md`
+- `Life Manager\MDs\Сладкое 3.md`
+- `Life Manager\MDs\Сладкое 4.md`
+- `Life Manager\MDs\Специи 1.md`
+- `Life Manager\MDs\Специи 2.md`
+- `Life Manager\MDs\Туалетная бумага.md`
+- `Life Manager\MDs\Хоум банк.md`
+- `Life Manager\MDs\Чай-кофе 1.md`
+- `Life Manager\MDs\Чай-кофе 2.md`
+- `Life Manager\MDs\Эпл.md`
+
+#### Area: Work
+- `Life Manager\MDs\Live Sound Job.md`
+- `Life Manager\MDs\ВМРП.md`
+- `Life Manager\MDs\КНС 1.md`
+- `Life Manager\MDs\КНС 2.md`
+- `Life Manager\MDs\КНС 3.md`
+- `Life Manager\MDs\КНС 4.md`
+- `Life Manager\MDs\КНС 5.md`
+- `Life Manager\MDs\КНС 6.md`
+- `Life Manager\MDs\КНС 7.md`
+- `Life Manager\MDs\КНС 8.md`
+- `Life Manager\MDs\КНС.md`
+
+### 🖋️ Строка `INPUT[inlineSelect(...)]` обновлена (268 файлов)
+_Опция `option(important)` удалена из списка._
+
+#### Area: [No Area]
+- `Life Manager\MDs\Dashboard dev.md`
+- `Life Manager\MDs\Eisenhower Matrix integration.md`
+- `Life Manager\MDs\JS Calendar dev.md`
+- `Life Manager\MDs\Project dev.md`
+- `Life Manager\MDs\Templates dev.md`
+- `Life Manager\MDs\Time KanBan Dev.md`
+- `Life Manager\MDs\Today View dev.md`
+- `Templates\big_Project Template.md`
+- `Templates\medium_Task template.md`
+- `Templates\medium_Taskhub template.md`
+- `Templates\medium_Tasktable template.md`
+- `Templates\utility_Budget Entity Control.md`
+- `Templates\utility_Dated Task Control.md`
+- `Templates\utility_Status Control.md`
+
+#### Area: Art
+- `Life Manager\MDs\DKS Deimos.md`
+- `Life Manager\MDs\DKS Singles.md`
+- `Life Manager\MDs\DKS Sirens.md`
+- `Life Manager\MDs\Streaming Setup.md`
+- `Life Manager\MDs\Мышь Project.md`
+- `Life Manager\MDs\Мышь-русалка.md`
+- `Life Manager\MDs\Обиженый.md`
+- `Life Manager\MDs\Посмотреть тексты Каринэ.md`
+
+#### Area: Fun
+- `.trash\Океанариум 2026.md`
+- `Life Manager\MDs\Dead Space Trilogy 1-3.md`
+- `Life Manager\MDs\Frankenstein 2025.md`
+- `Life Manager\MDs\Karaoke Library.md`
+- `Life Manager\MDs\Karaoke night ikra.md`
+- `Life Manager\MDs\Music Library Tasks.md`
+- `Life Manager\MDs\Release Calendars.md`
+- `Life Manager\MDs\Scott Pilgrim.md`
+- `Life Manager\MDs\Sinners.md`
+- `Life Manager\MDs\Stranger Things 1-5.md`
+- `Life Manager\MDs\The Soul.md`
+- `Life Manager\MDs\The Substance.md`
+- `Life Manager\MDs\Tron Legacy.md`
+- `Life Manager\MDs\Whiplash.md`
+- `Life Manager\MDs\YouTube.md`
+- `Life Manager\MDs\Встреча клуба Разговорный + Темы.md`
+- `Life Manager\MDs\Голосование за тему Разговорного.md`
+- `Life Manager\MDs\Голосование по посещению Разговорного.md`
+- `Life Manager\MDs\Зверополис 2.md`
+- `Life Manager\MDs\Зверополис.md`
+- `Life Manager\MDs\Китайский самовар с Карине.md`
+- `Life Manager\MDs\Клуб Разговорный.md`
+- `Life Manager\MDs\Наша Маша и волшебный Орех.md`
+- `Life Manager\MDs\Пять ночей с Фредди 2.md`
+
+#### Area: Health
+- `.trash\Прием ортопеда 6. Постоянная коронка ЛН6.md`
+- `Life Manager\MDs\Гигиена зубов 2026.md`
+- `Life Manager\MDs\Кишечная инфекция 2026 повторный приём терапевта.md`
+- `Life Manager\MDs\Консультация по имплантату после возврата временной коронки.md`
+- `Life Manager\MDs\Консультация по левому колену 2025 2.md`
+- `Life Manager\MDs\Контроль АЛТ АСТ и Билирубина.md`
+- `Life Manager\MDs\Коррекция постоянной коронки ЛН6.md`
+- `Life Manager\MDs\Нестабильность дыхания носа. Гилифанов.md`
+- `Life Manager\MDs\Перепроверяем ЛН7.md`
+- `Life Manager\MDs\Подобрать ингалятор.md`
+- `Life Manager\MDs\Прием ортопеда 2 ЛН6 (временная коронка).md`
+- `Life Manager\MDs\Прием ортопеда 3 ЛН6. Коррекция.md`
+- `Life Manager\MDs\Прием ортопеда 4. ЛН6. Сканирование.md`
+- `Life Manager\MDs\Прием ортопеда 5. Постоянная коронка.md`
+- `Life Manager\MDs\Проверить боль в области импланта.md`
+- `Life Manager\MDs\Травматолог-ортопед после растяжения спины.md`
+
+#### Area: Housekeep
+- `.trash\Мешки для пылесоса.md`
+- `Life Manager\MDs\Батарейка для умной кнопки CR2032.md`
+- `Life Manager\MDs\Батарейки 2450 для датчиков движения.md`
+- `Life Manager\MDs\Батарейки для весов 3хААА.md`
+- `Life Manager\MDs\Доместос зк12.md`
+- `Life Manager\MDs\ЖКХ Енисейская 19.md`
+- `Life Manager\MDs\Замазать щель в ванной зк12.md`
+- `Life Manager\MDs\Кнопки канцелярские.md`
+- `Life Manager\MDs\Коврик для обуви.md`
+- `Life Manager\MDs\Коврик для стиральной машины.md`
+- `Life Manager\MDs\Купить средство для удаления наклеек.md`
+- `Life Manager\MDs\Микрофибра для окон.md`
+- `Life Manager\MDs\Мусорные пакеты для Карине.md`
+- `Life Manager\MDs\Наполнить мыло КНС.md`
+- `Life Manager\MDs\Настроить приложение для проточного фильтра.md`
+- `Life Manager\MDs\Обувница.md`
+- `Life Manager\MDs\Организовать стол Каринэ.md`
+- `Life Manager\MDs\Отнести туалетку в КНС.md`
+- `Life Manager\MDs\Перевернуть матрас horizontal.md`
+- `Life Manager\MDs\План уборки.md`
+- `Life Manager\MDs\Покупки к новому году 2025.md`
+- `Life Manager\MDs\Принести машинку для катышков.md`
+- `Life Manager\MDs\Салфетки для уборк для Каринэ.md`
+- `Life Manager\MDs\Салфетки для уборки для Каринэ.md`
+- `Life Manager\MDs\Салфетки для уборки.md`
+- `Life Manager\MDs\Сгонялка для воды.md`
+- `Life Manager\MDs\Снять показания счетчиков.md`
+- `Life Manager\MDs\Средство от засоров.md`
+- `Life Manager\MDs\Фильтр кувшин Аквафор Гарри.md`
+- `Life Manager\MDs\Чистим увлажнитель.md`
+
+#### Area: Matter
+- `Life Manager\MDs\MrFrenkie Content.md`
+- `Life Manager\MDs\Random finance.md`
+- `Life Manager\MDs\Restaurant Big.md`
+- `Life Manager\MDs\Some place 1.md`
+- `Life Manager\MDs\Some place 2.md`
+- `Life Manager\MDs\Telegram Premium.md`
+- `Life Manager\MDs\Xiaomi Hair Clipper.md`
+- `Life Manager\MDs\ZK12.md`
+- `Life Manager\MDs\Беруши Alpine MusicSafe Pro.md`
+- `Life Manager\MDs\Билайн.md`
+- `Life Manager\MDs\Вклад для Каринэ.md`
+- `Life Manager\MDs\Влажные салфетки 1.md`
+- `Life Manager\MDs\Влажные салфетки 2.md`
+- `Life Manager\MDs\Дакара ЗП1-2.md`
+- `Life Manager\MDs\Дакара ЗП3-4.md`
+- `Life Manager\MDs\Дезодорант.md`
+- `Life Manager\MDs\Держатель для телефона Ugreen LP263.md`
+- `Life Manager\MDs\Енисейская. По-комнатный ремонт.md`
+- `Life Manager\MDs\Жевачка 1.md`
+- `Life Manager\MDs\Жевачка 2.md`
+- `Life Manager\MDs\ЗП ВМРП1.md`
+- `Life Manager\MDs\ЗП ВМРП2.md`
+- `Life Manager\MDs\Квартира 2.md`
+- `Life Manager\MDs\Колеса 1.md`
+- `Life Manager\MDs\Колеса 2.md`
+- `Life Manager\MDs\Котлеты 1-1.md`
+- `Life Manager\MDs\Котлеты 1-2.md`
+- `Life Manager\MDs\Котлеты 2-1.md`
+- `Life Manager\MDs\Котлеты 2-2.md`
+- `Life Manager\MDs\Крупа 1.md`
+- `Life Manager\MDs\Крупа 2.md`
+- `Life Manager\MDs\Кухня. Енисейская.md`
+- `Life Manager\MDs\Масло 1.md`
+- `Life Manager\MDs\Масло 2.md`
+- `Life Manager\MDs\Металлическая губка.md`
+- `Life Manager\MDs\Микроволновка маме.md`
+- `Life Manager\MDs\Мясо 1-1.md`
+- `Life Manager\MDs\Мясо 1-2.md`
+- `Life Manager\MDs\Мясо 2-1.md`
+- `Life Manager\MDs\Мясо 2-2.md`
+- `Life Manager\MDs\Мясо 3.md`
+- `Life Manager\MDs\Мясо 4.md`
+- `Life Manager\MDs\Мясо 5.md`
+- `Life Manager\MDs\Мясо 6.md`
+- `Life Manager\MDs\Подряд.md`
+- `Life Manager\MDs\Подставки для кружек.md`
+- `Life Manager\MDs\Продуктовый рандом 1.md`
+- `Life Manager\MDs\Продуктовый рандом 10.md`
+- `Life Manager\MDs\Продуктовый рандом 11.md`
+- `Life Manager\MDs\Продуктовый рандом 12.md`
+- `Life Manager\MDs\Продуктовый рандом 2.md`
+- `Life Manager\MDs\Продуктовый рандом 3.md`
+- `Life Manager\MDs\Продуктовый рандом 4.md`
+- `Life Manager\MDs\Продуктовый рандом 5.md`
+- `Life Manager\MDs\Продуктовый рандом 6.md`
+- `Life Manager\MDs\Продуктовый рандом 7.md`
+- `Life Manager\MDs\Продуктовый рандом 8.md`
+- `Life Manager\MDs\Продуктовый рандом 9.md`
+- `Life Manager\MDs\Сахар 1.md`
+- `Life Manager\MDs\Сбер 1.md`
+- `Life Manager\MDs\Сбер 2.md`
+- `Life Manager\MDs\Сбер 4.md`
+- `Life Manager\MDs\Сетевой фильтр Pilot S-MAX.md`
+- `Life Manager\MDs\Сладкое 1.md`
+- `Life Manager\MDs\Сладкое 2.md`
+- `Life Manager\MDs\Сладкое 3.md`
+- `Life Manager\MDs\Сладкое 4.md`
+- `Life Manager\MDs\Специи 1.md`
+- `Life Manager\MDs\Специи 2.md`
+- `Life Manager\MDs\Таймер кухонный.md`
+- `Life Manager\MDs\Термощуп Aceline KT500.md`
+- `Life Manager\MDs\Туалетная бумага.md`
+- `Life Manager\MDs\Хоум банк.md`
+- `Life Manager\MDs\Чай-кофе 1.md`
+- `Life Manager\MDs\Чай-кофе 2.md`
+- `Life Manager\MDs\Шумомер UNI-T UТ353ВТ.md`
+- `Life Manager\MDs\Эпл.md`
+
+#### Area: Optimization
+- `.trash\Custom Obsidian Vaults.md`
+- `Life Manager\MDs\Amnezia VPN 6mo.md`
+- `Life Manager\MDs\Custom Obsidian Vaults.md`
+- `Life Manager\MDs\FEFU Design Vault.md`
+- `Life Manager\MDs\Kaspersky WhoCalls.md`
+- `Life Manager\MDs\MagistrKornelius Vault.md`
+- `Life Manager\MDs\Note. Don't Act.md`
+- `Life Manager\MDs\Obsidian Features.md`
+- `Life Manager\MDs\Obsidian Optimization.md`
+- `Life Manager\MDs\Obsidian Plugins.md`
+- `Life Manager\MDs\Obsidian Головного Мозга.md`
+
+#### Area: Skills
+- `.trash\3 семестр. 250 Картин.md`
+- `Life Manager\MDs\02. Video Software Learn.md`
+- `Life Manager\MDs\ArchViz Learn.md`
+- `Life Manager\MDs\ArchViz Learning Roadmap.md`
+- `Life Manager\MDs\Audio Setup Tasks.md`
+- `Life Manager\MDs\Basics of Digital Painting with Ctrl+Paint.md`
+- `Life Manager\MDs\Behringer X32.md`
+- `Life Manager\MDs\Cooking Learn.md`
+- `Life Manager\MDs\Creative Process Diary.md`
+- `Life Manager\MDs\Creativity Learn.md`
+- `Life Manager\MDs\DISCHARGE Playlist AI Recreation.md`
+- `Life Manager\MDs\Erotic Massage Books.md`
+- `Life Manager\MDs\Live Mixing Resources.md`
+- `Life Manager\MDs\Music Sound-Design Sources.md`
+- `Life Manager\MDs\Paint Learn.md`
+- `Life Manager\MDs\Photoshop Random Learn.md`
+- `Life Manager\MDs\Rich Voice. D.KOSAREV. Подготовить песни к первому уроку.md`
+- `Life Manager\MDs\Rich Voice. D.KOSAREV. Урок 1.md`
+- `Life Manager\MDs\Rich Voice. D.KOSAREV. Урок 2.md`
+- `Life Manager\MDs\Rich Voice. D.KOSAREV.md`
+- `Life Manager\MDs\Rich Voice. Каринэ. Подготовить песни к первому уроку.md`
+- `Life Manager\MDs\Rich Voice. Каринэ. Урок 1.md`
+- `Life Manager\MDs\Rich Voice. Каринэ. Урок 2.md`
+- `Life Manager\MDs\Rich Voice. Каринэ. Урок 3.md`
+- `Life Manager\MDs\Rich Voice. Каринэ. Урок 4.md`
+- `Life Manager\MDs\Rich Voice. Каринэ.md`
+- `Life Manager\MDs\Songs Mastering. D.KOSAREV.md`
+- `Life Manager\MDs\Songs Mastering. Каринэ.md`
+- `Life Manager\MDs\Vocal Learn.md`
+- `Life Manager\MDs\Vocal Training Tasks.md`
+- `Life Manager\MDs\Выбрать песни для занятий 1.md`
+- `Life Manager\MDs\Звук для упражнений трель и квинтовая сирена.md`
+- `Life Manager\MDs\Кулинарные передачи и книги.md`
+- `Life Manager\MDs\Подготовить расписания дз.md`
+
+#### Area: Social
+- `Life Manager\MDs\Appointments.md`
+- `Life Manager\MDs\People.md`
+- `Life Manager\MDs\Бабушка.md`
+- `Life Manager\MDs\Витя.md`
+- `Life Manager\MDs\Каринэ.md`
+- `Life Manager\MDs\Лейла.md`
+- `Life Manager\MDs\Олег.md`
+- `Life Manager\MDs\Первый раз на FUN.Завод.md`
+- `Life Manager\MDs\Юля Витина.md`
+- `Life Manager\MDs\Юля.md`
+
+#### Area: Spirit
+- `Life Manager\MDs\Декабрь 2025. Доорганизовываемся и творим.md`
+- `Life Manager\MDs\Ноябрь 2025. Take control of yourself.md`
+- `Life Manager\MDs\Февраль 2026. Времени мало. Начинаем работать.md`
+- `Life Manager\MDs\Январь 2026. Решаем что будет дальше.md`
+
+#### Area: Work
+- `Life Manager\MDs\Агутин 10. Лазо + Cherry Waves.md`
+- `Life Manager\MDs\Агутин 2. Coin.md`
+- `Life Manager\MDs\Агутин 3. Вечер шансона Progolos.md`
+- `Life Manager\MDs\Агутин 4. Finch Day.md`
+- `Life Manager\MDs\Агутин 5. Radioband.md`
+- `Life Manager\MDs\Агутин 6. Aura.md`
+- `Life Manager\MDs\Агутин 7. Flashback.md`
+- `Life Manager\MDs\Агутин 9. Breaking Band + Maze.md`
+- `Life Manager\MDs\Агутин.md`
+- `Life Manager\MDs\Дакара 10.md`
+- `Life Manager\MDs\Дакара 11.md`
+- `Life Manager\MDs\Дакара 8.md`
+- `Life Manager\MDs\Дакара 9.md`
+- `Life Manager\MDs\Дакара акты январь 2026.md`
+- `Life Manager\MDs\Дакара барабаны 1.md`
+- `Life Manager\MDs\Дакара барабаны 10.md`
+- `Life Manager\MDs\Дакара барабаны 11.md`
+- `Life Manager\MDs\Дакара барабаны 12.md`
+- `Life Manager\MDs\Дакара барабаны 14.md`
+- `Life Manager\MDs\Дакара барабаны 2.md`
+- `Life Manager\MDs\Дакара барабаны 3.md`
+- `Life Manager\MDs\Дакара барабаны 4.md`
+- `Life Manager\MDs\Дакара барабаны 5.md`
+- `Life Manager\MDs\Дакара барабаны 6.md`
+- `Life Manager\MDs\Дакара барабаны 7.md`
+- `Life Manager\MDs\Дакара барабаны 8.md`
+- `Life Manager\MDs\Дакара барабаны 9.md`
+- `Life Manager\MDs\Завладеть плейлистом в Дакаре.md`
+- `Life Manager\MDs\Изучение настроек X32Rack в Агутин.md`
+- `Life Manager\MDs\Изучить усиливающую аппаратуру в Дакара.md`
+- `Life Manager\MDs\КНС 1.md`
+- `Life Manager\MDs\КНС 2.md`
+- `Life Manager\MDs\КНС 3.md`
+- `Life Manager\MDs\КНС 5.md`
+- `Life Manager\MDs\КНС 6.md`
+- `Life Manager\MDs\КНС 7.md`
+- `Life Manager\MDs\КНС 8.md`
+- `Life Manager\MDs\Прописать бэйклайн для двух джембе.md`
+- `Life Manager\MDs\Утвердить 03.26 в Дакаре.md`
+- `Life Manager\MDs\Уточнить сроки отпуска 2026.md`
 

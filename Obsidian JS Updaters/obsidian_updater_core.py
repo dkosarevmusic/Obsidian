@@ -10,6 +10,8 @@ FRONTMATTER_RE = re.compile(r'^---\s*\n(.*?\n)---\s*\n', re.DOTALL)
 DATAVIEWJS_BLOCK_RE = re.compile(r"(```dataviewjs.*?\n```)(\s*---\s*\n)?", re.DOTALL)
 # Регулярное выражение для операции удаления: находит блок, ТОЛЬКО если за ним есть разделитель
 SEPARATOR_REMOVAL_RE = re.compile(r"(```dataviewjs.*?\n```)\s*---\s*\n", re.DOTALL)
+# Регулярное выражение для поиска строки inlineSelect
+INLINE_SELECT_RE = re.compile(r"INPUT\[inlineSelect\(.*?\):status\]")
 
 
 @dataclass
@@ -25,6 +27,8 @@ class AnalysisResult:
     separators_found_count: int = 0
     status_is_list: bool = False
     status_is_not_string: bool = False
+    status_is_important: bool = False
+    has_inline_select_string: bool = False
     original_status_value: Optional[any] = None
     error: Optional[str] = None
 

@@ -16,6 +16,7 @@ from obsidian_updater_reporting import (
     generate_remove_report,
     generate_status_fix_report,
     generate_status_check_report,
+    generate_refactor_important_status_report,
 )
 from obsidian_updater_fileops import archive_and_modify_files
 
@@ -229,6 +230,85 @@ def handle_status_check_operation(script_dir: str, vault_path: str):
 
     generate_status_check_report(files_with_invalid_status, error_files, full_report_path, vault_path, total_files_scanned=len(all_files))
 
+
+def handle_refactor_important_status_operation(script_dir: str, vault_path: str):
+    """Обрабатывает операцию рефакторинга статуса 'important'."""
+    config_path = os.path.join(script_dir, SEPARATOR_CONFIG_NAME)
+    if not os.path.exists(config_path):
+        print(f"❌ Ошибка: Конфигурационный файл '{SEPARATOR_CONFIG_NAME}' не найден. Он нужен для определения имени файла отчета.")
+        return
+
+    if not (config := load_config(config_path)):
+        return
+
+    full_report_path = os.path.join(script_dir, config.get("report_file_name", "default_report.md"))
+
+    print("Начинаю анализ файлов для рефакторинга статуса 'important'...")
+    all_files, error_files = run_analysis(vault_path, special_names=[], target_types=None, return_all_files=True)
+
+    files_to_modify = [res for res in all_files if res.status_is_important or res.has_inline_select_string]
+    
+    print(f"Всего проанализировано: {len(all_files)} файлов.")
+    print(f"Найдено {len(files_to_modify)} файлов для модификации.")
+
+    while (mode := input("\nВыберите режим выполнения:\n1. 📝 Только сгенерировать отчёт\n2. 🚀 Выполнить рефакторинг и сгенерировать отчёт\nВведите 1 или 2: ")) not in ['1', '2']:
+        print("Неверный ввод. Пожалуйста, введите 1 или 2.")
+
+    if mode == '1':
+        print("\n--- Режим: Только отчёт ---")
+        generate_refactor_important_status_report(files_to_modify, error_files, full_report_path, vault_path, total_files_scanned=len(all_files))
+
+    elif mode == '2':
+        print("\n--- Режим: Рефакторинг и отчёт ---")
+        if not files_to_modify:
+            print("ℹ️ Нет файлов, требующих рефакторинга.")
+            generate_refactor_important_status_report([], error_files, full_report_path, vault_path, total_files_scanned=len(all_files))
+            return
+
+        print(f"\n⚠️ ВНИМАНИЕ: Будет предпринята попытка изменить {len(files_to_modify)} файлов.")
+        confirm = input("Вы уверены, что хотите продолжить? (введите 'yes'): ").lower()
+        if confirm != 'yes':
+            print("🚫 Операция отменена пользователем.")
+            return
+
+        def refactor_important_status(content: str) -> Tuple[str, int]:
+            made_change = False
+
+            # Шаг 1: Обновление Frontmatter
+            fm_match = FRONTMATTER_RE.match(content)
+            if fm_match:
+                fm_text = fm_match.group(1)
+                try:
+                    frontmatter = yaml.safe_load(fm_text)
+                    if isinstance(frontmatter, dict) and frontmatter.get('status') == 'important':
+                        frontmatter['status'] = 'in progress'
+                        frontmatter['important'] = True
+                        frontmatter['urgent'] = True
+                        
+                        new_fm_text = yaml.dump(frontmatter, sort_keys=False, allow_unicode=True, default_flow_style=False)
+                        new_content_fm = content.replace(fm_text, new_fm_text, 1)
+                        if new_content_fm != content:
+                            content = new_content_fm
+                            made_change = True
+                except yaml.YAMLError:
+                    pass  # Игнорируем ошибки YAML, чтобы не повредить файл
+
+            # Шаг 2: Обновление строки inlineSelect (исправленная логика)
+            original_content_for_re = content
+            # Сначала удаляем ", option(important)"
+            content, num_subs1 = re.subn(r', *option\(important\)', '', content)
+            # Затем удаляем "option(important), "
+            content, num_subs2 = re.subn(r'option\(important\), *', '', content)
+            
+            if num_subs1 > 0 or num_subs2 > 0:
+                made_change = True
+            
+            return content, 1 if made_change else 0
+
+        archive_and_modify_files(files_to_modify, vault_path, refactor_important_status)
+        generate_refactor_important_status_report(files_to_modify, error_files, full_report_path, vault_path, total_files_scanned=len(all_files))
+
+
 def main():
     """Главная функция скрипта."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -259,9 +339,10 @@ def main():
     print("2. 🧹 Удалить разделители '---' после код-блоков")
     print("3. 🛠️  Исправить поле 'status' (из списка в строку)")
     print("4. 🔍 Проверить тип поля 'status' (должен быть строкой)")
+    print("5. 🏭 Рефакторинг статуса 'important'")
     
-    while (choice := input("Введите 1, 2, 3 или 4: ")) not in ['1', '2', '3', '4']:
-        print("Неверный ввод. Пожалуйста, введите 1, 2, 3 или 4.")
+    while (choice := input("Введите 1, 2, 3, 4 или 5: ")) not in ['1', '2', '3', '4', '5']:
+        print("Неверный ввод. Пожалуйста, введите 1, 2, 3, 4 или 5.")
 
     if choice == '1':
         print("\n--- Операция: Замена код-блоков ---")
@@ -275,6 +356,9 @@ def main():
     elif choice == '4':
         print("\n--- Операция: Проверка типа поля 'status' ---")
         handle_status_check_operation(script_dir, vault_path)
+    elif choice == '5':
+        print("\n--- Операция: Рефакторинг статуса 'important' ---")
+        handle_refactor_important_status_operation(script_dir, vault_path)
 
 if __name__ == "__main__":
     main()
