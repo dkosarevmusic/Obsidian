@@ -375,11 +375,18 @@
     border-radius: 8px;
 }
 
+/* 
+  The back button is positioned dynamically.
+  Default position is next to the main action button.
+  If the floating menu is visible, it moves to the end of the menu.
+  This relies on the .ojsc-back-btn being a sibling that comes after
+  the .ojsc-controls-toggle-btn in the DOM.
+*/
 .ojsc-back-btn {
     position: fixed;
     z-index: 1001; /* Same layer as menu buttons */
     bottom: 20px;
-    left: 236px; /* 184px + 44px + 8px gap */
+    left: 80px; /* Default: 20px base + 48px main btn + 12px gap */
     height: 44px;
     padding: 0 12px;
     background-color: var(--background-modifier-form-field);
@@ -393,6 +400,11 @@
     font-size: 16px;
     transition: all 0.2s ease-out;
 }
+
+.ojsc-controls-toggle-btn.visible ~ .ojsc-back-btn {
+    left: 236px; /* Position after open menu: 184px + 44px + 8px gap */
+}
+
 .ojsc-back-btn:hover {
     border-color: var(--text-accent);
     opacity: 1; /* Enforce no transparency */
