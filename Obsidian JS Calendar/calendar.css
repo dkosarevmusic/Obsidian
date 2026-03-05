@@ -327,7 +327,6 @@
     transition: all 0.2s ease;
 }
 .ojsc-main-action-btn:hover {
-    background-color: var(--background-modifier-hover);
     border-color: var(--text-accent);
     opacity: 1; /* Enforce no transparency */
 }
@@ -358,8 +357,8 @@
     transform: scale(1);
 }
 .ojsc-floating-menu-btn:hover {
-    background-color: var(--background-modifier-hover);
     border-color: var(--text-accent);
+    opacity: 1; /* Enforce no transparency */
 }
 
 /* Individual positions */
@@ -395,8 +394,8 @@
     transition: all 0.2s ease-out;
 }
 .ojsc-back-btn:hover {
-    background-color: var(--background-modifier-hover);
     border-color: var(--text-accent);
+    opacity: 1; /* Enforce no transparency */
 }
 
 .ojsc-floating-panel {
