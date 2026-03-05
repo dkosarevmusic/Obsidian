@@ -147,13 +147,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-/* Стиль для элемента, который перетаскивается на мобильных */
-.ojsc-task-item.ojsc-dragging {
-    opacity: 0.5; /* Оставляем только полупрозрачность для консистентности */
-    /* border-style: dashed; - Убираем пунктирную рамку */
-}
-
-
 /* Стили для сеток (месяц, год) */
 .ojsc-month-container { margin-bottom: 20px; }
 .ojsc-weekdays-header {

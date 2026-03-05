@@ -228,8 +228,20 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
         OJSC.state.setSelectedTasks(currentSelectedTasks);
     });
 
-    // Drag and Drop для мыши
+    // Drag and Drop для мыши. Также предотвращает срабатывание на сенсорных экранах.
+    let pointerType = 'mouse'; // По умолчанию считаем, что это мышь
+
+    taskList.addEventListener('pointerdown', (e) => {
+        pointerType = e.pointerType;
+    }, true);
+
     taskList.addEventListener('dragstart', (e) => {
+        // Блокируем drag-and-drop, если он был инициирован сенсорным вводом
+        if (pointerType === 'touch') {
+            e.preventDefault();
+            return;
+        }
+        
         if (OJSC.state.bulkMode) {
             e.preventDefault();
             return;
@@ -243,68 +255,8 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
 
     taskList.addEventListener('dragend', () => {
         window.OJSC.dragContext = {};
+        pointerType = 'mouse'; // Сбрасываем тип после окончания перетаскивания
     });
-
-    // Drag and Drop для тач-устройств
-    let touchTimer = null;
-    let lastTouchTarget = null;
-
-    const handleGlobalTouchMove = (e) => {
-        e.preventDefault();
-        if (!window.OJSC.dragContext.element) return;
-        const touch = e.touches[0];
-        const target = document.elementFromPoint(touch.clientX, touch.clientY);
-        const dropZone = target ? target.closest('.ojsc-day-card') : null;
-        if (lastTouchTarget && lastTouchTarget !== dropZone) {
-            lastTouchTarget.classList.remove('ojsc-drop-target');
-        }
-        if (dropZone) dropZone.classList.add('ojsc-drop-target');
-        lastTouchTarget = dropZone;
-    };
-
-    const handleGlobalTouchEnd = (e) => {
-        document.removeEventListener('touchmove', handleGlobalTouchMove);
-        document.removeEventListener('touchend', handleGlobalTouchEnd);
-        if (window.OJSC.dragContext.element) {
-            const { element, task, oldDateKey } = window.OJSC.dragContext;
-            element.classList.remove('ojsc-dragging');
-            if (lastTouchTarget) {
-                lastTouchTarget.classList.remove('ojsc-drop-target');
-                const newDate = lastTouchTarget.dataset.date;
-                const targetTaskList = lastTouchTarget.querySelector('.ojsc-task-list');
-                if (targetTaskList) {
-                    targetTaskList.appendChild(element);
-                    onTaskDrop(task.file.path, newDate, task, oldDateKey);
-                }
-            }
-        }
-        window.OJSC.dragContext = {};
-        lastTouchTarget = null;
-    };
-    
-    const cancelTouchTimer = () => {
-        if (touchTimer) {
-            clearTimeout(touchTimer);
-            touchTimer = null;
-        }
-    };
-
-    taskList.addEventListener('touchstart', (e) => {
-        const li = e.target.closest('.ojsc-task-item');
-        if (!li) return;
-        e.stopPropagation();
-        touchTimer = setTimeout(() => {
-            const task = dayTasks.find(t => t.file.path === li.dataset.filePath);
-            if (!task) return;
-            window.OJSC.dragContext = { element: li, task: task, oldDateKey: dayKey };
-            li.classList.add('ojsc-dragging');
-            document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
-            document.addEventListener('touchend', handleGlobalTouchEnd);
-        }, 500);
-    });
-    
-    taskList.addEventListener('touchmove', cancelTouchTimer);
-    taskList.addEventListener('touchend', cancelTouchTimer);
 
     card.appendChild(taskList);
     return card;
