@@ -478,3 +478,32 @@
 .ojsc-controls-panel .ojsc-main-nav-group button {
     min-width: 40px;
 }
+
+/* --- Touch Screen Fixes --- */
+/* Disable hover effects on devices that don't support hover (e.g., touch screens)
+   to prevent "sticky" hover states after tapping a button. */
+@media (hover: none) {
+    .ojsc-main-action-btn:hover,
+    .ojsc-floating-menu-btn:hover,
+    .ojsc-back-btn:hover {
+        border-color: var(--background-modifier-border);
+    }
+}
+
+/* --- Mobile-specific Adjustments --- */
+@media (max-width: 768px) {
+    /* Move floating buttons lower on smaller screens */
+    .ojsc-main-action-btn,
+    .ojsc-floating-menu-btn,
+    .ojsc-back-btn,
+    .ojsc-scroll-to-top,
+    .ojsc-bulk-mode-btn,
+    .ojsc-bulk-actions-container {
+        bottom: 20px;
+    }
+
+    /* Adjust control panel position accordingly */
+    .ojsc-controls-panel {
+        bottom: 78px;
+    }
+}
