@@ -242,15 +242,16 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
             menuButtons.forEach(btn => btn.classList.remove('visible'));
         });
     }
-    
-    // Close menus when clicking outside
-    document.addEventListener('click', (e) => {
-        const allFloatingButtons = [...menuButtons, mainActionBtn, controlsPanel, backButton];
-        if (allFloatingButtons.every(el => el && !el.contains(e.target))) {
-            menuButtons.forEach(btn => btn?.classList.remove('visible'));
-            controlsPanel?.classList.remove('visible');
-        }
-    }, { once: true });
+
+    // Close menus when clicking on an empty area of the calendar
+    rootEl.addEventListener('click', (e) => {
+        // The click handlers on the buttons use e.stopPropagation(),
+        // so this event will only be triggered by clicks on the calendar's
+        // background or other non-interactive elements within the container.
+        // Therefore, any click that reaches here should close the menus.
+        menuButtons.forEach(btn => btn?.classList.remove('visible'));
+        controlsPanel?.classList.remove('visible');
+    });
 
     // Set initial state from memory
     if (OJSC.state.bulkMode) {
