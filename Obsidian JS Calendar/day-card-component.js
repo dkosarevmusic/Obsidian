@@ -112,7 +112,6 @@ OJSC.ui.createDayCard = (dayDate, tasksByDate, viewType, dv, onTaskDrop, onBulkT
     if (viewType === '1day') {
         let headerText = dayDate.setLocale('ru').toFormat('cccc, d.MM.yyyy');
         header.textContent = headerText.charAt(0).toUpperCase() + headerText.slice(1);
-        header.style.textAlign = 'left';
     }
 
     card.appendChild(header);

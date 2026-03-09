@@ -63,7 +63,7 @@ OJSC.ui.createControlsPanel = (dv, viewDate, viewType, statusMode, showTime, sho
     }
     viewSelector.onchange = (e) => {
         const newViewType = e.target.value;
-        if (newViewType === '1day') OJSC.state.setPreviousView(viewType);
+        if (newViewType === '1day' || newViewType === 'overview') OJSC.state.setPreviousView(viewType);
         else OJSC.state.setPreviousView(null);
         OJSC.renderCalendar(dv, viewDate, newViewType, statusMode);
     };
@@ -163,25 +163,50 @@ OJSC.ui.createFloatingActionButtons = (dv, viewType, statusMode) => {
 
     // Individual, floating menu buttons (hidden by default)
     
-    // 1. Today Button
+    // --- View Mode Buttons ---
+    
+    // 1. Overview Button
+    const overviewButton = document.createElement('button');
+    overviewButton.className = 'ojsc-overview-btn ojsc-floating-menu-btn ojsc-menu-group-up';
+    overviewButton.title = 'Today View';
+    overviewButton.innerHTML = '🗒️'; // Spiral notepad for overview
+    overviewButton.onclick = () => OJSC.renderCalendar(dv, luxon.DateTime.now(), 'overview', statusMode);
+    if (viewType === 'overview') {
+        overviewButton.classList.add('active');
+    }
+
+    // 2. Calendar Button
+    const calendarButton = document.createElement('button');
+    calendarButton.className = 'ojsc-calendar-btn ojsc-floating-menu-btn ojsc-menu-group-up';
+    calendarButton.title = 'Календарь';
+    calendarButton.innerHTML = '📅'; // Calendar icon
+    calendarButton.onclick = () => OJSC.renderCalendar(dv, luxon.DateTime.now(), '3months', statusMode, { scrollToToday: true });
+    // Highlight if it's any of the calendar views
+    if (['1day', 'month', '3months', 'year'].includes(viewType)) {
+        calendarButton.classList.add('active');
+    }
+
+    // 3. Today Button
     const todayButton = document.createElement('button');
-    todayButton.className = 'ojsc-today-btn ojsc-floating-menu-btn';
+    todayButton.className = 'ojsc-today-btn ojsc-floating-menu-btn ojsc-menu-group-right';
     todayButton.title = 'Сегодня';
     todayButton.innerHTML = '🎯'; 
     todayButton.onclick = () => OJSC.renderCalendar(dv, luxon.DateTime.now(), viewType, statusMode, { scrollToToday: true });
     
-    // 2. Controls Toggle Button
+    // 4. Controls Toggle Button
     const controlsToggleButton = document.createElement('button');
-    controlsToggleButton.className = 'ojsc-controls-toggle-btn ojsc-floating-menu-btn';
+    controlsToggleButton.className = 'ojsc-controls-toggle-btn ojsc-floating-menu-btn ojsc-menu-group-right';
     controlsToggleButton.title = 'Показать/скрыть элементы управления';
     controlsToggleButton.innerHTML = '⚙️';
 
-    // 3. Bulk Operations Button
+    // 5. Bulk Operations Button
     const bulkOpsButton = document.createElement('button');
-    bulkOpsButton.className = 'ojsc-bulk-mode-btn-menu ojsc-floating-menu-btn';
+    bulkOpsButton.className = 'ojsc-bulk-mode-btn-menu ojsc-floating-menu-btn ojsc-menu-group-right';
     bulkOpsButton.title = 'Режим массовых операций';
     bulkOpsButton.innerHTML = '📋';
 
+    fragment.appendChild(overviewButton);
+    fragment.appendChild(calendarButton);
     fragment.appendChild(todayButton);
     fragment.appendChild(controlsToggleButton);
     fragment.appendChild(bulkOpsButton);
@@ -224,7 +249,7 @@ OJSC.ui.getViewParameters = (viewDate, viewType) => {
  */
 OJSC.ui.createBackButton = (dv, viewType, statusMode) => {
     const previousView = OJSC.state.getPreviousView();
-    if (viewType === '1day' && previousView) {
+    if ((viewType === '1day' || viewType === 'overview') && previousView) {
         const backButton = document.createElement('button');
         backButton.className = 'ojsc-back-btn';
         backButton.textContent = 'Назад';
@@ -236,4 +261,107 @@ OJSC.ui.createBackButton = (dv, viewType, statusMode) => {
         return backButton;
     }
     return null;
+};/**
+ * @file overview-component.js
+ * @description Creates the overview view that lists tasks in groups.
+ */
+if (!window.OJSC) window.OJSC = {};
+if (!OJSC.ui) OJSC.ui = {};
+
+/**
+ * Creates the entire overview container with all its task groups.
+ * @param {object} dv - Dataview API.
+ * @param {Array<object>} tasks - All tasks to be processed.
+ * @param {object} options - Display options like showTime, showParticipants, etc.
+ * @returns {HTMLElement} The overview container element.
+ */
+OJSC.ui.createOverviewView = (dv, tasks, options) => {
+    const overviewContainer = document.createElement('div');
+    overviewContainer.className = 'ojsc-overview-container';
+
+    // This is the main header for the whole view, which is no longer styled like a day card header.
+    const header = document.createElement('h1');
+    header.className = 'ojsc-overview-header';
+    header.textContent = 'Today View';
+    overviewContainer.appendChild(header);
+
+    // --- Helper function to create a group with day cards ---
+    const createGroupWithDayCards = (title, taskArray, category) => {
+        if (!taskArray || taskArray.length === 0) return null;
+
+        const groupEl = document.createElement('div');
+        groupEl.className = 'ojsc-overview-group';
+
+        const groupHeader = document.createElement('h3');
+        groupHeader.className = 'ojsc-overview-group-header';
+        if (category) {
+            groupHeader.classList.add(`ojsc-group-category-${category}`);
+        }
+        groupHeader.textContent = title;
+        groupEl.appendChild(groupHeader);
+
+        const tasksByDate = OJSC.services.data.groupTasksByDate(taskArray);
+        // Sort dates chronologically
+        const sortedDates = Object.keys(tasksByDate).sort((a, b) => a.localeCompare(b));
+
+        sortedDates.forEach(dateStr => {
+            const dayCard = OJSC.ui.createDayCard(
+                luxon.DateTime.fromISO(dateStr),
+                tasksByDate,
+                '1day', // Use '1day' view to get the detailed card style
+                dv,
+                () => {}, () => {}, // Pass empty functions for drag/drop
+                'work', // Assume 'work' status mode for styling context
+                options.showTime,
+                options.showParticipants,
+                options.showWikilinks,
+                'all' // No category filter within the card itself
+            );
+            // Add a margin to each day card within the group for spacing
+            dayCard.style.marginBottom = '10px';
+            
+            // Add border to header, per user request
+            const header = dayCard.querySelector('.ojsc-day-card-header');
+            if (header) {
+                header.classList.add('ojsc-bordered-day-header');
+            }
+            
+            groupEl.appendChild(dayCard);
+        });
+
+        return groupEl;
+    };
+
+    const today = luxon.DateTime.now().startOf('day');
+
+    // Filter tasks into their respective buckets
+    const overdueTasks = tasks.filter(t => luxon.DateTime.fromISO(t[OJSC.config.dateField]) < today);
+    const todayTasks = tasks.filter(t => luxon.DateTime.fromISO(t[OJSC.config.dateField]).hasSame(today, 'day'));
+
+    const missedNow = overdueTasks.filter(t => OJSC.utils.task.getTaskCategory(t) === 'now');
+    const missedLater = overdueTasks.filter(t => OJSC.utils.task.getTaskCategory(t) === 'later');
+    const missedProbably = overdueTasks.filter(t => OJSC.utils.task.getTaskCategory(t) === 'probably');
+    const missedDontAndOthers = overdueTasks.filter(t => {
+        const category = OJSC.utils.task.getTaskCategory(t);
+        return category === 'dont' || category === null;
+    });
+
+    // --- Render Groups ---
+    const groups = [
+        { title: 'Overdue: Now', tasks: missedNow, category: 'now' },
+        { title: "Today's Tasks", tasks: todayTasks, category: 'today' },
+        { title: 'Overdue: Later', tasks: missedLater, category: 'later' },
+        { title: 'Overdue: Probably', tasks: missedProbably, category: 'probably' },
+        { title: "Overdue: Don't & Others", tasks: missedDontAndOthers, category: 'dont' }
+    ];
+
+    groups.forEach(({ title, tasks, category }) => {
+        const groupElement = createGroupWithDayCards(title, tasks, category);
+        if (groupElement) {
+            overviewContainer.appendChild(groupElement);
+        }
+    });
+
+    return overviewContainer;
 };
+

@@ -107,8 +107,13 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     };
 
     // --- RENDER BODY ---
-    if (viewType === '1day') {
-        bodyFragment.appendChild(OJSC.ui.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks, categoryFilter));
+    if (viewType === '1day' || viewType === 'overview') {
+        if (viewType === '1day') {
+            bodyFragment.appendChild(OJSC.ui.createDayCard(viewDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks, categoryFilter));
+        } else if (viewType === 'overview') {
+            const overviewOptions = { showTime, showParticipants, showWikilinks };
+            bodyFragment.appendChild(OJSC.ui.createOverviewView(dv, tasks, overviewOptions));
+        }
     } else if (viewType === 'month') {
         bodyFragment.appendChild(OJSC.ui.createMonthGrid(viewDate, tasksByDate, viewType, dv, onTaskDrop, onBulkTaskDrop, statusMode, showTime, showParticipants, showWikilinks, categoryFilter));
     } else if (viewType === '3months' || viewType === 'year') {
@@ -148,6 +153,8 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
 
     // --- Get references to new elements ---
     const mainActionBtn = container.querySelector('.ojsc-main-action-btn');
+    const overviewBtn = container.querySelector('.ojsc-overview-btn');
+    const calendarBtn = container.querySelector('.ojsc-calendar-btn');
     const todayBtn = container.querySelector('.ojsc-today-btn');
     const controlsToggleBtn = container.querySelector('.ojsc-controls-toggle-btn');
     const bulkModeMenuBtn = container.querySelector('.ojsc-bulk-mode-btn-menu');
@@ -231,7 +238,7 @@ OJSC.renderCalendar = (dv, viewDate, viewType, statusMode, options = {}) => {
     bulkSetPostponeBtn.addEventListener('click', createStatusUpdateHandler(OJSC.state.selectedTasks, 'postpone'));
 
     // --- Floating UI Interaction Logic ---
-    const menuButtons = [todayBtn, controlsToggleBtn, bulkModeMenuBtn];
+    const menuButtons = [overviewBtn, calendarBtn, todayBtn, controlsToggleBtn, bulkModeMenuBtn];
 
     if(mainActionBtn) {
         mainActionBtn.addEventListener('click', (e) => {

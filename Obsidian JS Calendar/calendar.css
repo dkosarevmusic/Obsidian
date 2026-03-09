@@ -154,6 +154,15 @@
     background-color: var(--background-modifier-hover);
 }
 
+.ojsc-bordered-day-header {
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 4px;
+    background-color: var(--background-modifier-form-field);
+    margin: -2px;
+    padding: 2px;
+    text-align: right;
+}
+
 .ojsc-month-grid .ojsc-task-item {
     margin-left: 4px;
 }
@@ -507,3 +516,129 @@
         bottom: 158px;
     }
 }
+
+/* --- Overview View Styles --- */
+.ojsc-overview-container {
+    padding: 10px 0;
+}
+
+.ojsc-overview-header {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: var(--text-normal);
+}
+
+.ojsc-overview-group {
+    margin-bottom: 20px;
+}
+
+.ojsc-overview-group .ojsc-overview-group-header {
+    text-align: center;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    background-color: var(--background-secondary);
+    color: var(--text-accent);
+    padding: 6px 0;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+/* Adjust spacing inside overview day cards */
+.ojsc-overview-group .ojsc-day-card {
+    padding-top: 4px; /* Reduce space above header */
+}
+.ojsc-overview-group .ojsc-day-card .ojsc-task-list {
+    margin-top: 8px; /* Add space below header to compensate and increase gap */
+}
+
+/* Color coding for overview group headers */
+.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-now { color: red; }
+.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-later { color: blue; }
+.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-probably { color: orange; }
+.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-dont { color: purple; }
+
+
+/* Active state for new view mode buttons */
+.ojsc-overview-btn.active,
+.ojsc-calendar-btn.active {
+    background-color: var(--text-accent);
+    color: var(--text-on-accent);
+    border-color: var(--text-accent);
+}
+
+/* --- Floating Button Group Positions --- */
+
+/* Shared styles for all menu buttons */
+.ojsc-floating-menu-btn {
+    border-radius: 8px;
+}
+
+/* --- Group that goes UP (Slider Look) --- */
+.ojsc-menu-group-up {
+    left: 22px; /* Center-align with the 48px main button */
+}
+
+/* Glue the buttons together (Swapped) */
+.ojsc-overview-btn { /* Top button */
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: none;
+}
+.ojsc-calendar-btn { /* Bottom button */
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Individual positions for the UP group (glued and swapped) */
+.ojsc-calendar-btn.visible { /* bottom */
+    bottom: 80px;
+    transition-delay: 0.0s;
+}
+.ojsc-overview-btn.visible { /* top */
+    bottom: 124px;
+    transition-delay: 0.05s;
+}
+
+
+/* --- Group that goes RIGHT --- */
+.ojsc-menu-group-right {
+    bottom: 22px; /* Center-align with the 48px main button */
+}
+
+/* Individual positions for the RIGHT group */
+.ojsc-today-btn.visible {
+    left: 80px; /* 20(base) + 48(main) + 12(gap) */
+    transition-delay: 0.0s;
+}
+.ojsc-bulk-mode-btn-menu.visible {
+    left: 132px; /* 80 + 44 + 8 */
+    transition-delay: 0.05s;
+}
+.ojsc-controls-toggle-btn.visible {
+    left: 184px; /* 132 + 44 + 8 */
+    transition-delay: 0.1s;
+}
+
+/* Reset any leftover vertical positioning for the right group */
+.ojsc-menu-group-right.visible {
+    bottom: 22px; /* Vertically align with the main button's center */
+}
+
+/* Override old horizontal positions to clean up */
+.ojsc-today-btn,
+.ojsc-controls-toggle-btn,
+.ojsc-bulk-mode-btn-menu {
+   left: auto; /* Let the new rules handle it */
+}
+
+/* Reposition back button to not interfere with the new layout */
+.ojsc-back-btn {
+    left: 80px;
+}
+
+/* Move back button if the RIGHT group is visible, positioning it after the last button in that group */
+.ojsc-controls-toggle-btn.visible ~ .ojsc-back-btn {
+    left: 236px; /* 184px (controls toggle left) + 44px (btn width) + 8px (gap) */
+}
+
