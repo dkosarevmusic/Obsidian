@@ -499,74 +499,6 @@
     }
 }
 
-/* --- Mobile-specific Adjustments --- */
-@media (max-width: 600px) {
-    /* Move floating buttons higher on smaller screens */
-    .ojsc-main-action-btn,
-    .ojsc-floating-menu-btn,
-    .ojsc-back-btn,
-    .ojsc-scroll-to-top,
-    .ojsc-bulk-mode-btn,
-    .ojsc-bulk-actions-container {
-        bottom: 100px;
-    }
-
-    /* Adjust control panel position accordingly */
-    .ojsc-controls-panel {
-        bottom: 158px;
-    }
-}
-
-/* --- Overview View Styles --- */
-.ojsc-overview-container {
-    padding: 10px 0;
-}
-
-.ojsc-overview-header {
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    color: var(--text-normal);
-}
-
-.ojsc-overview-group {
-    margin-bottom: 20px;
-}
-
-.ojsc-overview-group .ojsc-overview-group-header {
-    text-align: center;
-    text-transform: capitalize;
-    margin-bottom: 10px;
-    background-color: var(--background-secondary);
-    color: var(--text-accent);
-    padding: 6px 0;
-    border-radius: 6px;
-    font-weight: bold;
-}
-
-/* Adjust spacing inside overview day cards */
-.ojsc-overview-group .ojsc-day-card {
-    padding-top: 4px; /* Reduce space above header */
-}
-.ojsc-overview-group .ojsc-day-card .ojsc-task-list {
-    margin-top: 8px; /* Add space below header to compensate and increase gap */
-}
-
-/* Color coding for overview group headers */
-.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-now { color: red; }
-.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-later { color: blue; }
-.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-probably { color: orange; }
-.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-dont { color: purple; }
-
-
-/* Active state for new view mode buttons */
-.ojsc-overview-btn.active,
-.ojsc-calendar-btn.active {
-    background-color: var(--text-accent);
-    color: var(--text-on-accent);
-    border-color: var(--text-accent);
-}
-
 /* --- Floating Button Group Positions --- */
 
 /* Shared styles for all menu buttons */
@@ -640,5 +572,89 @@
 /* Move back button if the RIGHT group is visible, positioning it after the last button in that group */
 .ojsc-controls-toggle-btn.visible ~ .ojsc-back-btn {
     left: 236px; /* 184px (controls toggle left) + 44px (btn width) + 8px (gap) */
+}
+
+/* --- Mobile-specific Adjustments --- */
+@media (max-width: 600px) {
+    /* Move floating buttons higher on smaller screens */
+    .ojsc-main-action-btn,
+    .ojsc-floating-menu-btn,
+    .ojsc-back-btn,
+    .ojsc-scroll-to-top,
+    .ojsc-bulk-mode-btn,
+    .ojsc-bulk-actions-container {
+        bottom: 100px;
+    }
+
+    /* Adjust control panel position accordingly */
+    .ojsc-controls-panel {
+        bottom: 158px;
+    }
+
+    /* --- Adjust floating button group positions on mobile --- */
+
+    /* Recalculate UP group positions based on the new 100px bottom */
+    .ojsc-calendar-btn.visible {
+        bottom: 160px; /* 100px base + 48px main btn height + 12px gap */
+    }
+    .ojsc-overview-btn.visible {
+        bottom: 204px; /* 160px (calendar btn bottom) + 44px (calendar btn height) */
+    }
+
+    /* Recalculate RIGHT group vertical alignment */
+    .ojsc-menu-group-right,
+    .ojsc-menu-group-right.visible {
+        bottom: 102px; /* 100px base + (48px main btn / 2) - (44px menu btn / 2) */
+    }
+}
+
+/* --- Overview View Styles --- */
+.ojsc-overview-container {
+    padding: 10px 0;
+}
+
+.ojsc-overview-header {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: var(--text-normal);
+}
+
+.ojsc-overview-group {
+    margin-bottom: 20px;
+}
+
+.ojsc-overview-group .ojsc-overview-group-header {
+    text-align: center;
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    background-color: var(--background-secondary);
+    color: var(--text-accent);
+    padding: 6px 0;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+/* Adjust spacing inside overview day cards */
+.ojsc-overview-group .ojsc-day-card {
+    padding-top: 4px; /* Reduce space above header */
+}
+.ojsc-overview-group .ojsc-day-card .ojsc-task-list {
+    margin-top: 8px; /* Add space below header to compensate and increase gap */
+}
+
+/* Color coding for overview group headers */
+.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-now { color: red; }
+.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-later { color: blue; }
+.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-probably { color: orange; }
+.ojsc-overview-group .ojsc-overview-group-header.ojsc-group-category-dont { color: purple; }
+
+
+/* Active state for new view mode buttons */
+.ojsc-overview-btn.active,
+.ojsc-calendar-btn.active {
+    background-color: var(--text-accent);
+    color: var(--text-on-accent);
+    border-color: var(--text-accent);
 }
 
